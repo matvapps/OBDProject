@@ -1,4 +1,4 @@
-package com.obdelm327pro;
+package com.carzis;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
@@ -15,9 +15,9 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -30,19 +30,19 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.matvapps.dashboarddevices.Speedometer;
-import com.github.matvapps.dashboarddevices.Tachometer;
-import com.obdelm327pro.model.DashboardItem;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestActivity extends AppCompatActivity {
-    private static final String TAG = "TestActivity.class";
+public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
 
     public static final int MESSAGE_STATE_CHANGE = 1;
 
@@ -101,17 +101,8 @@ public class TestActivity extends AppCompatActivity {
     final List<Double> avgconsumption = new ArrayList<Double>();
     final List<String> troubleCodesArray = new ArrayList<String>();
     MenuItem itemtemp;
-//    GaugeSpeed speed;
-//    GaugeRpm rpm;
-
-    private DashboardItemsAdapter dashboardItemsAdapter;
-
-
-    private Speedometer speedometer;
-    private Tachometer tachometer;
-    private RecyclerView deviceList;
-
-
+    GaugeSpeed speed;
+    GaugeRpm rpm;
     BluetoothDevice currentdevice;
     boolean commandmode = false, initialized = false, m_getPids = false, tryconnect = false, defaultStart = false;
     String devicename = null, deviceprotocol = null;
@@ -143,10 +134,10 @@ public class TestActivity extends AppCompatActivity {
     String trysend = null;
     private PowerManager.WakeLock wl;
     private Menu menu;
-//    private EditText mOutEditText;
-//    private Button mSendButton, mPidsButton, mTroublecodes, mClearTroublecodes, mClearlist;
-//    private ListView mConversationView;
-//    private TextView engineLoad, Fuel, voltage, coolantTemperature, Status, Loadtext, Volttext, Temptext, Centertext, Info, Airtemp_text, airTemperature, Maf_text, Maf;
+    private EditText mOutEditText;
+    private Button mSendButton, mPidsButton, mTroublecodes, mClearTroublecodes, mClearlist;
+    private ListView mConversationView;
+    private TextView engineLoad, Fuel, voltage, coolantTemperature, Status, Loadtext, Volttext, Temptext, Centertext, Info, Airtemp_text, airTemperature, Maf_text, Maf;
     private String mConnectedDeviceName = "Ecu";
     private int rpmval = 0, intakeairtemp = 0, ambientairtemp = 0, coolantTemp = 0,
             engineoiltemp = 0, b1s1temp = 0, Enginetype = 0, FaceColor = 0,
@@ -174,7 +165,7 @@ public class TestActivity extends AppCompatActivity {
 
                     switch (msg.arg1) {
                         case ObdWifiManager.STATE_CONNECTED:
-//                            Status.setText(getString(R.string.title_connected_to, "ELM327 WIFI"));
+                            Status.setText(getString(R.string.title_connected_to, "ELM327 WIFI"));
                             try {
                                 itemtemp = menu.findItem(R.id.menu_connect_wifi);
                                 itemtemp.setTitle(R.string.disconnectwifi);
@@ -186,13 +177,11 @@ public class TestActivity extends AppCompatActivity {
 
                             break;
                         case ObdWifiManager.STATE_CONNECTING:
-//                            Status.setText(R.string.title_connecting);
-                            Log.d(TAG, "INFO: try connect wifi");
-//                            Toast.makeText(TestActivity.this, "INFO:  try connect wifi", Toast.LENGTH_SHORT).show();
-//                            Info.setText(R.string.tryconnectwifi);
+                            Status.setText(R.string.title_connecting);
+                            Info.setText(R.string.tryconnectwifi);
                             break;
                         case ObdWifiManager.STATE_NONE:
-//                            Status.setText(R.string.title_not_connected);
+                            Status.setText(R.string.title_not_connected);
                             itemtemp = menu.findItem(R.id.menu_connect_wifi);
                             itemtemp.setTitle(R.string.connectwifi);
                             if (mWifiService != null)mWifiService.disconnect();
@@ -217,11 +206,9 @@ public class TestActivity extends AppCompatActivity {
 
                     String tmpmsg = clearMsg(msg);
 
-                    Log.d(TAG, "INFO: " + tmpmsg);
-//                    Toast.makeText(TestActivity.this, "INFO: " + tmpmsg, Toast.LENGTH_SHORT).show();
-//                    Info.setText(tmpmsg);
+                    Info.setText(tmpmsg);
 
-                    if (tmpmsg.contains(TestActivity.RSP_ID.NODATA.response) || tmpmsg.contains(TestActivity.RSP_ID.ERROR.response)) {
+                    if (tmpmsg.contains(RSP_ID.NODATA.response) || tmpmsg.contains(RSP_ID.ERROR.response)) {
 
                         try{
                             String command = tmpmsg.substring(0,4);
@@ -268,18 +255,12 @@ public class TestActivity extends AppCompatActivity {
                     switch (msg.arg1) {
                         case BluetoothService.STATE_CONNECTED:
 
-
-                            Log.d(TAG, "Status: " + getString(R.string.title_connected_to, mConnectedDeviceName));
-                            Log.d(TAG, "INFO: " + getString(R.string.title_connected));
-//                            Toast.makeText(TestActivity.this, "Status: " + getString(R.string.title_connected_to, mConnectedDeviceName), Toast.LENGTH_SHORT).show();
-//                            Toast.makeText(TestActivity.this, "INFO: " + getString(R.string.title_connected), Toast.LENGTH_SHORT).show();
-
-//                            Status.setText(getString(R.string.title_connected_to, mConnectedDeviceName));
-//                            Info.setText(R.string.title_connected);
+                            Status.setText(getString(R.string.title_connected_to, mConnectedDeviceName));
+                            Info.setText(R.string.title_connected);
                             try {
                                 itemtemp = menu.findItem(R.id.menu_connect_bt);
                                 itemtemp.setTitle(R.string.disconnectbt);
-//                                Info.setText(R.string.title_connected);
+                                Info.setText(R.string.title_connected);
                             } catch (Exception e) {
                             }
 
@@ -289,14 +270,14 @@ public class TestActivity extends AppCompatActivity {
 
                             break;
                         case BluetoothService.STATE_CONNECTING:
-//                            Status.setText(R.string.title_connecting);
-//                            Info.setText(R.string.tryconnectbt);
+                            Status.setText(R.string.title_connecting);
+                            Info.setText(R.string.tryconnectbt);
                             break;
                         case BluetoothService.STATE_LISTEN:
 
                         case BluetoothService.STATE_NONE:
 
-//                            Status.setText(R.string.title_not_connected);
+                            Status.setText(R.string.title_not_connected);
                             itemtemp = menu.findItem(R.id.menu_connect_bt);
                             itemtemp.setTitle(R.string.connectbt);
                             if (tryconnect) {
@@ -325,7 +306,7 @@ public class TestActivity extends AppCompatActivity {
 
                     String tmpmsg = clearMsg(msg);
 
-//                    Info.setText(tmpmsg);
+                    Info.setText(tmpmsg);
 
                     /*if (tmpmsg.contains(RSP_ID.NODATA.response) || tmpmsg.contains(RSP_ID.ERROR.response)) {
 
@@ -370,7 +351,7 @@ public class TestActivity extends AppCompatActivity {
         if (index != -1)
         {
             commandslist.remove(index);
-//            Info.setText("Removed pid: " + pid);
+            Info.setText("Removed pid: " + pid);
         }
     }
 
@@ -410,7 +391,7 @@ public class TestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
+        setContentView(R.layout.activity_gauges);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -430,49 +411,35 @@ public class TestActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        Status = (TextView) findViewById(R.id.Status);
+        engineLoad = (TextView) findViewById(R.id.Load);
+        Fuel = (TextView) findViewById(R.id.Fuel);
+        coolantTemperature = (TextView) findViewById(R.id.Temp);
+        voltage = (TextView) findViewById(R.id.Volt);
+        Loadtext = (TextView) findViewById(R.id.Load_text);
+        Temptext = (TextView) findViewById(R.id.Temp_text);
+        Volttext = (TextView) findViewById(R.id.Volt_text);
+        Centertext = (TextView) findViewById(R.id.Center_text);
+        Info = (TextView) findViewById(R.id.info);
+        Airtemp_text = (TextView) findViewById(R.id.Airtemp_text);
+        airTemperature = (TextView) findViewById(R.id.Airtemp);
+        Maf_text = (TextView) findViewById(R.id.Maf_text);
+        Maf = (TextView) findViewById(R.id.Maf);
+        speed = (GaugeSpeed) findViewById(R.id.GaugeSpeed);
+        rpm = (GaugeRpm) findViewById(R.id.GaugeRpm);
 
-        dashboardItemsAdapter = new DashboardItemsAdapter();
+        mOutEditText = (EditText) findViewById(R.id.edit_text_out);
+        mPidsButton = (Button) findViewById(R.id.button_pids);
+        mSendButton = (Button) findViewById(R.id.button_send);
+        mClearTroublecodes = (Button) findViewById(R.id.button_clearcodes);
+        mClearlist = (Button) findViewById(R.id.button_clearlist);
+        mTroublecodes = (Button) findViewById(R.id.button_troublecodes);
+        mConversationView = (ListView) findViewById(R.id.in);
 
-        List<DashboardItem> devices = new ArrayList<>();
-        devices.add(new DashboardItem(0, DashboardItem.DashboardDevice.INTAKE_TEMP));
-        devices.add(new DashboardItem(0, DashboardItem.DashboardDevice.VOLTAGE));
-        devices.add(new DashboardItem(0, DashboardItem.DashboardDevice.OIL_PRESSURE));
-
-        speedometer = findViewById(R.id.pointerSpeedometer);
-        tachometer = findViewById(R.id.pointerTachometer);
-        deviceList = findViewById(R.id.devices_list);
-
-        deviceList.setAdapter(dashboardItemsAdapter);
-        dashboardItemsAdapter.setItems(devices);
-
-
-//        Status = (TextView) findViewById(R.id.Status);
-//        engineLoad = (TextView) findViewById(R.id.Load);
-//        Fuel = (TextView) findViewById(R.id.Fuel);
-//        coolantTemperature = (TextView) findViewById(R.id.Temp);
-//        voltage = (TextView) findViewById(R.id.Volt);
-//        Loadtext = (TextView) findViewById(R.id.Load_text);
-//        Temptext = (TextView) findViewById(R.id.Temp_text);
-//        Volttext = (TextView) findViewById(R.id.Volt_text);
-//        Centertext = (TextView) findViewById(R.id.Center_text);
-//        Info = (TextView) findViewById(R.id.info);
-//        Airtemp_text = (TextView) findViewById(R.id.Airtemp_text);
-//        airTemperature = (TextView) findViewById(R.id.Airtemp);
-//        Maf_text = (TextView) findViewById(R.id.Maf_text);
-//        Maf = (TextView) findViewById(R.id.Maf);
-//        speed = (GaugeSpeed) findViewById(R.id.GaugeSpeed);
-//        rpm = (GaugeRpm) findViewById(R.id.GaugeRpm);
-//        mOutEditText = (EditText) findViewById(R.id.edit_text_out);
-//        mPidsButton = (Button) findViewById(R.id.button_pids);
-//        mSendButton = (Button) findViewById(R.id.button_send);
-//        mClearTroublecodes = (Button) findViewById(R.id.button_clearcodes);
-//        mClearlist = (Button) findViewById(R.id.button_clearlist);
-//        mTroublecodes = (Button) findViewById(R.id.button_troublecodes);
-//        mConversationView = (ListView) findViewById(R.id.in);
 
         troubleCodes = new TroubleCodes();
 
-//        invisiblecmd();
+        invisiblecmd();
 
         //ATZ reset all
         //ATDP Describe the current Protocol
@@ -522,76 +489,76 @@ public class TestActivity extends AppCompatActivity {
             }
         };
 
-//        mConversationView.setAdapter(mConversationArrayAdapter);
-//
-//        mPidsButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                String sPIDs = "0100";
-//                m_getPids = false;
-//                sendEcuMessage(sPIDs);
-//            }
-//        });
-//        // Initialize the send button with a listener that for click events
-//
-//        mSendButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                // Send a message using content of the edit text widget
-//                String message = mOutEditText.getText().toString();
-//                sendEcuMessage(message);
-//            }
-//        });
-//
-//        mClearTroublecodes.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                String clearCodes = "04";
-//                sendEcuMessage(clearCodes);
-//            }
-//        });
-//
-//        mClearlist.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                mConversationArrayAdapter.clear();
-//            }
-//        });
-//
-//        mTroublecodes.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//
-//                String troubleCodes = "03";
-//                sendEcuMessage(troubleCodes);
-//            }
-//        });
-//
-//        mOutEditText.setOnEditorActionListener(mWriteListener);
+        mConversationView.setAdapter(mConversationArrayAdapter);
 
-//        RelativeLayout rlayout = (RelativeLayout) findViewById(R.id.mainscreen);
-//        rlayout.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                try {
-//                    ActionBar actionBar = getSupportActionBar();
-////                    RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) Status.getLayoutParams();
-//                    if (actionbar) {
-//                        //toolbar.setVisibility(View.GONE);
-//                        actionBar.hide();
-//                        actionbar = false;
-//
-////                        lp.setMargins(0, 5, 0, 0);
-//                    } else {
-//                        //toolbar.setVisibility(View.VISIBLE);
-//                        actionBar.show();
-//                        actionbar = true;
-////                        lp.setMargins(0, 0, 0, 0);
-//                    }
-//
-//                    setgaugesize();
-////                    Status.setLayoutParams(lp);
-//
-//                } catch (Exception e) {
-//                }
-//            }
-//        });
+        mPidsButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String sPIDs = "0100";
+                m_getPids = false;
+                sendEcuMessage(sPIDs);
+            }
+        });
+        // Initialize the send button with a listener that for click events
+
+        mSendButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Send a message using content of the edit text widget
+                String message = mOutEditText.getText().toString();
+                sendEcuMessage(message);
+            }
+        });
+
+        mClearTroublecodes.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String clearCodes = "04";
+                sendEcuMessage(clearCodes);
+            }
+        });
+
+        mClearlist.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mConversationArrayAdapter.clear();
+            }
+        });
+
+        mTroublecodes.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                String troubleCodes = "03";
+                sendEcuMessage(troubleCodes);
+            }
+        });
+
+        mOutEditText.setOnEditorActionListener(mWriteListener);
+
+        RelativeLayout rlayout = (RelativeLayout) findViewById(R.id.mainscreen);
+        rlayout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                try {
+                    ActionBar actionBar = getSupportActionBar();
+                    RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) Status.getLayoutParams();
+                    if (actionbar) {
+                        //toolbar.setVisibility(View.GONE);
+                        actionBar.hide();
+                        actionbar = false;
+
+                        lp.setMargins(0, 5, 0, 0);
+                    } else {
+                        //toolbar.setVisibility(View.VISIBLE);
+                        actionBar.show();
+                        actionbar = true;
+                        lp.setMargins(0, 0, 0, 0);
+                    }
+
+                    setgaugesize();
+                    Status.setLayoutParams(lp);
+
+                } catch (Exception e) {
+                }
+            }
+        });
 
         getPreferences();
 
@@ -706,7 +673,7 @@ public class TestActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_CONNECT_DEVICE:
                 // When DeviceListActivity returns with a device to connect
-                if (resultCode == TestActivity.RESULT_OK) {
+                if (resultCode == MainActivity.RESULT_OK) {
                     connectDevice(data);
                 }
                 break;
@@ -715,7 +682,7 @@ public class TestActivity extends AppCompatActivity {
 
                 if (mBtService == null) setupChat();
 
-                if (resultCode == TestActivity.RESULT_OK) {
+                if (resultCode == MainActivity.RESULT_OK) {
                     serverIntent = new Intent(this, DeviceListActivity.class);
                     startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
                 } else {
@@ -818,62 +785,62 @@ public class TestActivity extends AppCompatActivity {
 
     private void getPreferences() {
 
-        SharedPreferences preferences = PreferenceManager
-                .getDefaultSharedPreferences(getBaseContext());
+            SharedPreferences preferences = PreferenceManager
+                    .getDefaultSharedPreferences(getBaseContext());
 
-        FaceColor = Integer.parseInt(preferences.getString("FaceColor", "0"));
+            FaceColor = Integer.parseInt(preferences.getString("FaceColor", "0"));
 
-//        rpm.setFace(FaceColor);
-//        speed.setFace(FaceColor);
+            rpm.setFace(FaceColor);
+            speed.setFace(FaceColor);
 
-        Enginedisplacement = Integer.parseInt(preferences.getString("Enginedisplacement", "1400"));
-        Enginetype = Integer.parseInt(preferences.getString("EngineType", "0"));
+            Enginedisplacement = Integer.parseInt(preferences.getString("Enginedisplacement", "1400"));
+            Enginetype = Integer.parseInt(preferences.getString("EngineType", "0"));
 
-        Enginedisplacement = Enginedisplacement / 1000;
+            Enginedisplacement = Enginedisplacement / 1000;
 
-        //Toast.makeText(this,String.valueOf(Enginedisplacement),Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this,String.valueOf(Enginedisplacement),Toast.LENGTH_SHORT).show();
 
-        m_dedectPids = Integer.parseInt(preferences.getString("DedectPids", "0"));
+            m_dedectPids = Integer.parseInt(preferences.getString("DedectPids", "0"));
 
-        if (m_dedectPids == 0) {
+            if (m_dedectPids == 0) {
 
-            commandslist.clear();
+                commandslist.clear();
 
-            int i = 0;
+                int i = 0;
 
-            commandslist.add(i, VOLTAGE);
+                commandslist.add(i, VOLTAGE);
 
-            if (preferences.getBoolean("checkboxENGINE_RPM", true)) {
-                commandslist.add(i, ENGINE_RPM);
-                i++;
+                if (preferences.getBoolean("checkboxENGINE_RPM", true)) {
+                    commandslist.add(i, ENGINE_RPM);
+                    i++;
+                }
+
+                if (preferences.getBoolean("checkboxVEHICLE_SPEED", true)) {
+                    commandslist.add(i, VEHICLE_SPEED);
+                    i++;
+                }
+
+                if (preferences.getBoolean("checkboxENGINE_LOAD", true)) {
+                    commandslist.add(i, ENGINE_LOAD);
+                    i++;
+                }
+
+                if (preferences.getBoolean("checkboxENGINE_COOLANT_TEMP", true)) {
+                    commandslist.add(i, ENGINE_COOLANT_TEMP);
+                    i++;
+                }
+
+                if (preferences.getBoolean("checkboxINTAKE_AIR_TEMP", true)) {
+                    commandslist.add(i, INTAKE_AIR_TEMP);
+                    i++;
+                }
+
+                if (preferences.getBoolean("checkboxMAF_AIR_FLOW", true)) {
+                    commandslist.add(i, MAF_AIR_FLOW);
+                }
+
+                whichCommand = 0;
             }
-
-            if (preferences.getBoolean("checkboxVEHICLE_SPEED", true)) {
-                commandslist.add(i, VEHICLE_SPEED);
-                i++;
-            }
-
-            if (preferences.getBoolean("checkboxENGINE_LOAD", true)) {
-                commandslist.add(i, ENGINE_LOAD);
-                i++;
-            }
-
-            if (preferences.getBoolean("checkboxENGINE_COOLANT_TEMP", true)) {
-                commandslist.add(i, ENGINE_COOLANT_TEMP);
-                i++;
-            }
-
-            if (preferences.getBoolean("checkboxINTAKE_AIR_TEMP", true)) {
-                commandslist.add(i, INTAKE_AIR_TEMP);
-                i++;
-            }
-
-            if (preferences.getBoolean("checkboxMAF_AIR_FLOW", true)) {
-                commandslist.add(i, MAF_AIR_FLOW);
-            }
-
-            whichCommand = 0;
-        }
     }
 
     private void setDefaultOrientation() {
@@ -894,69 +861,69 @@ public class TestActivity extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindow().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-//        Status.setTextSize(sttxtsize);
-//        Fuel.setTextSize(txtsize + 2);
-//        coolantTemperature.setTextSize(txtsize);
-//        engineLoad.setTextSize(txtsize);
-//        voltage.setTextSize(txtsize);
-//        Temptext.setTextSize(txtsize);
-//        Loadtext.setTextSize(txtsize);
-//        Volttext.setTextSize(txtsize);
-//        Airtemp_text.setTextSize(txtsize);
-//        airTemperature.setTextSize(txtsize);
-//        Maf_text.setTextSize(txtsize);
-//        Maf.setTextSize(txtsize);
-//        Info.setTextSize(sttxtsize);
+        Status.setTextSize(sttxtsize);
+        Fuel.setTextSize(txtsize + 2);
+        coolantTemperature.setTextSize(txtsize);
+        engineLoad.setTextSize(txtsize);
+        voltage.setTextSize(txtsize);
+        Temptext.setTextSize(txtsize);
+        Loadtext.setTextSize(txtsize);
+        Volttext.setTextSize(txtsize);
+        Airtemp_text.setTextSize(txtsize);
+        airTemperature.setTextSize(txtsize);
+        Maf_text.setTextSize(txtsize);
+        Maf.setTextSize(txtsize);
+        Info.setTextSize(sttxtsize);
     }
 
     public void invisiblecmd() {
-//        mConversationView.setVisibility(View.INVISIBLE);
-//        mOutEditText.setVisibility(View.INVISIBLE);
-//        mSendButton.setVisibility(View.INVISIBLE);
-//        mPidsButton.setVisibility(View.INVISIBLE);
-//        mTroublecodes.setVisibility(View.INVISIBLE);
-//        mClearTroublecodes.setVisibility(View.INVISIBLE);
-//        mClearlist.setVisibility(View.INVISIBLE);
-//        rpm.setVisibility(View.VISIBLE);
-//        speed.setVisibility(View.VISIBLE);
-//        engineLoad.setVisibility(View.VISIBLE);
-//        Fuel.setVisibility(View.VISIBLE);
-//        voltage.setVisibility(View.VISIBLE);
-//        coolantTemperature.setVisibility(View.VISIBLE);
-//        Loadtext.setVisibility(View.VISIBLE);
-//        Volttext.setVisibility(View.VISIBLE);
-//        Temptext.setVisibility(View.VISIBLE);
-//        Centertext.setVisibility(View.VISIBLE);
-//        Info.setVisibility(View.VISIBLE);
-//        Airtemp_text.setVisibility(View.VISIBLE);
-//        airTemperature.setVisibility(View.VISIBLE);
-//        Maf_text.setVisibility(View.VISIBLE);
-//        Maf.setVisibility(View.VISIBLE);
+        mConversationView.setVisibility(View.INVISIBLE);
+        mOutEditText.setVisibility(View.INVISIBLE);
+        mSendButton.setVisibility(View.INVISIBLE);
+        mPidsButton.setVisibility(View.INVISIBLE);
+        mTroublecodes.setVisibility(View.INVISIBLE);
+        mClearTroublecodes.setVisibility(View.INVISIBLE);
+        mClearlist.setVisibility(View.INVISIBLE);
+        rpm.setVisibility(View.VISIBLE);
+        speed.setVisibility(View.VISIBLE);
+        engineLoad.setVisibility(View.VISIBLE);
+        Fuel.setVisibility(View.VISIBLE);
+        voltage.setVisibility(View.VISIBLE);
+        coolantTemperature.setVisibility(View.VISIBLE);
+        Loadtext.setVisibility(View.VISIBLE);
+        Volttext.setVisibility(View.VISIBLE);
+        Temptext.setVisibility(View.VISIBLE);
+        Centertext.setVisibility(View.VISIBLE);
+        Info.setVisibility(View.VISIBLE);
+        Airtemp_text.setVisibility(View.VISIBLE);
+        airTemperature.setVisibility(View.VISIBLE);
+        Maf_text.setVisibility(View.VISIBLE);
+        Maf.setVisibility(View.VISIBLE);
     }
 
     public void visiblecmd() {
-//        rpm.setVisibility(View.INVISIBLE);
-//        speed.setVisibility(View.INVISIBLE);
-//        engineLoad.setVisibility(View.INVISIBLE);
-//        Fuel.setVisibility(View.INVISIBLE);
-//        voltage.setVisibility(View.INVISIBLE);
-//        coolantTemperature.setVisibility(View.INVISIBLE);
-//        Loadtext.setVisibility(View.INVISIBLE);
-//        Volttext.setVisibility(View.INVISIBLE);
-//        Temptext.setVisibility(View.INVISIBLE);
-//        Centertext.setVisibility(View.INVISIBLE);
-//        Info.setVisibility(View.INVISIBLE);
-//        Airtemp_text.setVisibility(View.INVISIBLE);
-//        airTemperature.setVisibility(View.INVISIBLE);
-//        Maf_text.setVisibility(View.INVISIBLE);
-//        Maf.setVisibility(View.INVISIBLE);
-//        mConversationView.setVisibility(View.VISIBLE);
-//        mOutEditText.setVisibility(View.VISIBLE);
-//        mSendButton.setVisibility(View.VISIBLE);
-//        mPidsButton.setVisibility(View.VISIBLE);
-//        mTroublecodes.setVisibility(View.VISIBLE);
-//        mClearTroublecodes.setVisibility(View.VISIBLE);
-//        mClearlist.setVisibility(View.VISIBLE);
+        rpm.setVisibility(View.INVISIBLE);
+        speed.setVisibility(View.INVISIBLE);
+        engineLoad.setVisibility(View.INVISIBLE);
+        Fuel.setVisibility(View.INVISIBLE);
+        voltage.setVisibility(View.INVISIBLE);
+        coolantTemperature.setVisibility(View.INVISIBLE);
+        Loadtext.setVisibility(View.INVISIBLE);
+        Volttext.setVisibility(View.INVISIBLE);
+        Temptext.setVisibility(View.INVISIBLE);
+        Centertext.setVisibility(View.INVISIBLE);
+        Info.setVisibility(View.INVISIBLE);
+        Airtemp_text.setVisibility(View.INVISIBLE);
+        airTemperature.setVisibility(View.INVISIBLE);
+        Maf_text.setVisibility(View.INVISIBLE);
+        Maf.setVisibility(View.INVISIBLE);
+        mConversationView.setVisibility(View.VISIBLE);
+        mOutEditText.setVisibility(View.VISIBLE);
+        mSendButton.setVisibility(View.VISIBLE);
+        mPidsButton.setVisibility(View.VISIBLE);
+        mTroublecodes.setVisibility(View.VISIBLE);
+        mClearTroublecodes.setVisibility(View.VISIBLE);
+        mClearlist.setVisibility(View.VISIBLE);
     }
 
     private void setgaugesize() {
@@ -973,17 +940,17 @@ public class TestActivity extends AppCompatActivity {
             lp.addRule(RelativeLayout.BELOW, findViewById(R.id.Load).getId());
             lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             lp.setMargins(0, 0, 50, 0);
-            tachometer.setLayoutParams(lp);
-            tachometer.getLayoutParams().height = height;
-            tachometer.getLayoutParams().width = (int) (width - 100) / 2;
+            rpm.setLayoutParams(lp);
+            rpm.getLayoutParams().height = height;
+            rpm.getLayoutParams().width = (int) (width - 100) / 2;
 
             lp = new RelativeLayout.LayoutParams(height, height);
             lp.addRule(RelativeLayout.BELOW, findViewById(R.id.Load).getId());
             lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             lp.setMargins(50, 0, 0, 0);
-            speedometer.setLayoutParams(lp);
-            speedometer.getLayoutParams().height = height;
-            speedometer.getLayoutParams().width = (int) (width - 100) / 2;
+            speed.setLayoutParams(lp);
+            speed.getLayoutParams().height = height;
+            speed.getLayoutParams().width = (int) (width - 100) / 2;
 
         } else if (width < height) {
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, width);
@@ -991,42 +958,37 @@ public class TestActivity extends AppCompatActivity {
             lp.addRule(RelativeLayout.BELOW, findViewById(R.id.Fuel).getId());
             lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
             lp.setMargins(25, 5, 25, 5);
-            speedometer.setLayoutParams(lp);
-            speedometer.getLayoutParams().width = (int) (width - 50);
+            speed.setLayoutParams(lp);
+            speed.getLayoutParams().width = (int) (width - 50);
 
             lp = new RelativeLayout.LayoutParams(width, width);
             lp.addRule(RelativeLayout.BELOW, findViewById(R.id.GaugeSpeed).getId());
             //lp.addRule(RelativeLayout.ABOVE,findViewById(R.id.info).getId());
             lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
             lp.setMargins(25, 5, 25, 5);
-            tachometer.setLayoutParams(lp);
-            tachometer.getLayoutParams().width = (int) (width - 50);
+            rpm.setLayoutParams(lp);
+            rpm.getLayoutParams().width = (int) (width - 50);
         }
     }
 
     public void resetgauges() {
 
-        Log.d(TAG, "Speedometer: change speed to " + 240);
-//        Toast.makeText(this, "Speedometer: " + 240, Toast.LENGTH_SHORT).show();
-        speedometer.speedTo(240, 1200);
-
-        Log.d(TAG, "Tachometer: change rpm to : " + 7000);
-//        Toast.makeText(this, "Tachometer: " + 7000, Toast.LENGTH_SHORT).show();
-        tachometer.speedTo(7000, 1200);
+        speed.setTargetValue(220);
+        rpm.setTargetValue(80);
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(1225);
+                    Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        speedometer.speedTo(0, 1100);
-                        tachometer.speedTo(0, 1100);
+                        speed.setTargetValue(0);
+                        rpm.setTargetValue(0);
                     }
                 });
             }
@@ -1035,14 +997,13 @@ public class TestActivity extends AppCompatActivity {
 
     public void resetvalues() {
 
-//        engineLoad.setText("0 %");
-//        voltage.setText("0 V");
-//        coolantTemperature.setText("0 C°");
-        Log.d(TAG, "INFO: " );
-//        Info.setText("");
-//        airTemperature.setText("0 C°");
-//        Maf.setText("0 g/s");
-//        Fuel.setText("0 - 0 l/h");
+        engineLoad.setText("0 %");
+        voltage.setText("0 V");
+        coolantTemperature.setText("0 C°");
+        Info.setText("");
+        airTemperature.setText("0 C°");
+        Maf.setText("0 g/s");
+        Fuel.setText("0 - 0 l/h");
 
         m_getPids = false;
         whichCommand = 0;
@@ -1099,7 +1060,6 @@ public class TestActivity extends AppCompatActivity {
         {
             // Check that we're actually connected before trying anything
             if (mBtService.getState() != BluetoothService.STATE_CONNECTED) {
-                Log.d(TAG, "INFO: " + getString(R.string.not_connected));
                 //Toast.makeText(this, R.string.not_connected, Toast.LENGTH_LONG).show();
                 return;
             }
@@ -1218,9 +1178,7 @@ public class TestActivity extends AppCompatActivity {
             try {
                 analysPIDS(tmpmsg);
             } catch (Exception e) {
-                Log.e(TAG, "ERROR: ", e);
-//                Toast.makeText(this, "INFO: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//                Info.setText("Error : " + e.getMessage());
+                Info.setText("Error : " + e.getMessage());
             }
 
             sendDefaultCommands();
@@ -1229,48 +1187,48 @@ public class TestActivity extends AppCompatActivity {
 
     private void getFaultInfo(String tmpmsg) {
 
-        String substr = "43";
+            String substr = "43";
 
-        int index = tmpmsg.indexOf(substr);
+            int index = tmpmsg.indexOf(substr);
 
-        if (index == -1)
-        {
-            substr = "47";
-            index = tmpmsg.indexOf(substr);
-        }
+            if (index == -1)
+            {
+                substr = "47";
+                index = tmpmsg.indexOf(substr);
+            }
 
-        if (index != -1) {
+            if (index != -1) {
 
-            tmpmsg = tmpmsg.substring(index, tmpmsg.length());
+                tmpmsg = tmpmsg.substring(index, tmpmsg.length());
 
-            if (tmpmsg.substring(0, 2).equals(substr)) {
+                if (tmpmsg.substring(0, 2).equals(substr)) {
 
-                performCalculations(tmpmsg);
+                    performCalculations(tmpmsg);
 
-                String faultCode = null;
-                String faultDesc = null;
+                    String faultCode = null;
+                    String faultDesc = null;
 
-                if (troubleCodesArray.size() > 0) {
+                    if (troubleCodesArray.size() > 0) {
 
-                    for (int i = 0; i < troubleCodesArray.size(); i++) {
-                        faultCode = troubleCodesArray.get(i);
-                        faultDesc = troubleCodes.getFaultCode(faultCode);
+                        for (int i = 0; i < troubleCodesArray.size(); i++) {
+                            faultCode = troubleCodesArray.get(i);
+                            faultDesc = troubleCodes.getFaultCode(faultCode);
 
-                        Log.e(TAG, "Fault Code: " + substr + " : " + faultCode + " desc: " + faultDesc);
+                            Log.e(TAG, "Fault Code: " + substr + " : " + faultCode + " desc: " + faultDesc);
 
-                        if (faultCode != null && faultDesc != null) {
-                            mConversationArrayAdapter.add(mConnectedDeviceName + ":  TroubleCode -> " + faultCode + "\n" + faultDesc);
-                        } else if (faultCode != null && faultDesc == null) {
-                            mConversationArrayAdapter.add(mConnectedDeviceName + ":  TroubleCode -> " + faultCode +
-                                    "\n" + "Definition not found for code: " + faultCode);
+                            if (faultCode != null && faultDesc != null) {
+                                mConversationArrayAdapter.add(mConnectedDeviceName + ":  TroubleCode -> " + faultCode + "\n" + faultDesc);
+                            } else if (faultCode != null && faultDesc == null) {
+                                mConversationArrayAdapter.add(mConnectedDeviceName + ":  TroubleCode -> " + faultCode +
+                                        "\n" + "Definition not found for code: " + faultCode);
+                            }
                         }
+                    } else {
+                        faultCode = "No error found...";
+                        mConversationArrayAdapter.add(mConnectedDeviceName + ":  TroubleCode -> " + faultCode);
                     }
-                } else {
-                    faultCode = "No error found...";
-                    mConversationArrayAdapter.add(mConnectedDeviceName + ":  TroubleCode -> " + faultCode);
                 }
             }
-        }
     }
 
     protected void performCalculations(String fault) {
@@ -1329,14 +1287,14 @@ public class TestActivity extends AppCompatActivity {
         if (deviceprotocol != null && devicename != null) {
             devicename = devicename.replaceAll("STOPPED", "");
             deviceprotocol = deviceprotocol.replaceAll("STOPPED", "");
-//            Status.setText(devicename + " " + deviceprotocol);
+            Status.setText(devicename + " " + deviceprotocol);
         }
     }
 
 
     private void setPidsSupported(String buffer) {
-        Log.d(TAG, "INFO: Trying to get available pids : " + String.valueOf(trycount));
-//        Info.setText("Trying to get available pids : " + String.valueOf(trycount));
+
+        Info.setText("Trying to get available pids : " + String.valueOf(trycount));
         trycount++;
 
         StringBuilder flags = new StringBuilder();
@@ -1459,7 +1417,7 @@ public class TestActivity extends AppCompatActivity {
         }
 
         if (VoltText != null) {
-//            voltage.setText(VoltText);
+            voltage.setText(VoltText);
         }
     }
 
@@ -1477,7 +1435,7 @@ public class TestActivity extends AppCompatActivity {
                 val = A * 100 / 255;
                 int calcLoad = (int) val;
 
-//                engineLoad.setText(Integer.toString(calcLoad) + " %");
+                engineLoad.setText(Integer.toString(calcLoad) + " %");
                 mConversationArrayAdapter.add("Engine Load: " + Integer.toString(calcLoad) + " %");
 
                 String consumption = null;
@@ -1491,7 +1449,7 @@ public class TestActivity extends AppCompatActivity {
                     avgconsumption.add((0.001 * 0.004 * 4 * 1.35 * Enginedisplacement * rpmval * 60 * calcLoad / 20));
 
                 }
-//                Fuel.setText(consumption + " - " + String.format("%10.1f", calculateAverage(avgconsumption)).trim() + " l/h");
+                Fuel.setText(consumption + " - " + String.format("%10.1f", calculateAverage(avgconsumption)).trim() + " l/h");
                 mConversationArrayAdapter.add("Fuel Consumption: " + consumption + " - " + String.format("%10.1f", calculateAverage(avgconsumption)).trim() + " l/h");
 
                 break;
@@ -1501,14 +1459,8 @@ public class TestActivity extends AppCompatActivity {
                 // A-40
                 tempC = A - 40;
                 coolantTemp = tempC;
-//                coolantTemperature.setText(Integer.toString(coolantTemp) + " C°");
+                coolantTemperature.setText(Integer.toString(coolantTemp) + " C°");
                 mConversationArrayAdapter.add("Enginetemp: " + Integer.toString(tempC) + " C°");
-                //TODO:
-                Log.d(TAG, "Enginetemp: " + tempC);
-
-//
-//if (dashboardItemsAdapter != null)
-// dashboardItemsAdapter.updateItem(new DashboardItem(tempC, DashboardItem.DashboardDevice.COOLANT_TEMP));
 
                 break;
 
@@ -1516,9 +1468,6 @@ public class TestActivity extends AppCompatActivity {
 
                 // A
                 mConversationArrayAdapter.add("Intake Man Pressure: " + Integer.toString(A) + " kPa");
-                Log.d(TAG, "Intake Man Pressure: " + A);
-                // TODO
-                dashboardItemsAdapter.updateItem(new DashboardItem(A, DashboardItem.DashboardDevice.OIL_PRESSURE));
 
                 break;
 
@@ -1528,8 +1477,7 @@ public class TestActivity extends AppCompatActivity {
                 val = ((A * 256) + B) / 4;
                 intval = (int) val;
                 rpmval = intval;
-                Log.d(TAG, "Tachometer: " + intval);
-                tachometer.speedTo(intval);
+                rpm.setTargetValue(intval / 100);
 
                 break;
 
@@ -1537,8 +1485,7 @@ public class TestActivity extends AppCompatActivity {
             case 13://PID(0D): KM
 
                 // A
-                Log.d(TAG, "Speedometer : " + A);
-                speedometer.speedTo(A);
+                speed.setTargetValue(A);
 
                 break;
 
@@ -1547,11 +1494,8 @@ public class TestActivity extends AppCompatActivity {
                 // A - 40
                 tempC = A - 40;
                 intakeairtemp = tempC;
-//                airTemperature.setText(Integer.toString(intakeairtemp) + " C°");
+                airTemperature.setText(Integer.toString(intakeairtemp) + " C°");
                 mConversationArrayAdapter.add("Intakeairtemp: " + Integer.toString(intakeairtemp) + " C°");
-                Log.d(TAG, "Intakeairtemp: " + intakeairtemp);
-//                if (dashboardItemsAdapter != null)
-                dashboardItemsAdapter.updateItem(new DashboardItem(intakeairtemp, DashboardItem.DashboardDevice.INTAKE_TEMP));
 
                 break;
 
@@ -1560,8 +1504,7 @@ public class TestActivity extends AppCompatActivity {
                 // ((256*A)+B) / 100  [g/s]
                 val = ((256 * A) + B) / 100;
                 intval = (int) val;
-//                Maf.setText(Integer.toString(intval) + " g/s");
-                Log.d(TAG, "MAF AIR FLOW: " + A);
+                Maf.setText(Integer.toString(intval) + " g/s");
                 mConversationArrayAdapter.add("Maf Air Flow: " + Integer.toString(intval) + " g/s");
 
                 break;
@@ -1581,7 +1524,7 @@ public class TestActivity extends AppCompatActivity {
                 val = ((A * 256) + B) * 0.079;
                 intval = (int) val;
                 mConversationArrayAdapter.add("Fuel Rail Pressure: " + Integer.toString(intval) + " kPa");
-                Log.d(TAG, "Fuel Rail pressure: " + Integer.toString(intval) + " kPa");
+
                 break;
 
             case 49://PID(31)
@@ -1590,7 +1533,7 @@ public class TestActivity extends AppCompatActivity {
                 val = (A * 256) + B;
                 intval = (int) val;
                 mConversationArrayAdapter.add("Distance traveled: " + Integer.toString(intval) + " km");
-                Log.d(TAG, "Distance traveled: " + Integer.toString(intval) + " km");
+
                 break;
 
             case 70://PID(46)
@@ -1599,7 +1542,6 @@ public class TestActivity extends AppCompatActivity {
                 tempC = A - 40;
                 ambientairtemp = tempC;
                 mConversationArrayAdapter.add("Ambientairtemp: " + Integer.toString(ambientairtemp) + " C°");
-                Log.d(TAG, "Ambientairtemp: " + Integer.toString(ambientairtemp) + " C°");
 
                 break;
 
@@ -1609,7 +1551,6 @@ public class TestActivity extends AppCompatActivity {
                 tempC = A - 40;
                 engineoiltemp = tempC;
                 mConversationArrayAdapter.add("Engineoiltemp: " + Integer.toString(engineoiltemp) + " C°");
-                Log.d(TAG, "Engineoiltemp: " + Integer.toString(ambientairtemp) + " C°");
 
                 break;
 
@@ -1654,5 +1595,4 @@ public class TestActivity extends AppCompatActivity {
             return response;
         }
     }
-
 }

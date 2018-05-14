@@ -1,4 +1,4 @@
-package com.obdelm327pro;
+package com.carzis;
 
 /**
  * Created by tbiliyor on 10.11.2016.
@@ -28,9 +28,9 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
-import com.obdelm327pro.R;
 
-public class GaugeSpeed extends View {
+public class GaugeRpm extends View {
+
     private Bitmap faceTexture;
     public static final int SIZE = 300;
     public static final float TOP = 0.0f;
@@ -43,7 +43,7 @@ public class GaugeSpeed extends View {
     public static final boolean SHOW_OUTER_RIM = false;
     public static final boolean SHOW_INNER_RIM = false;
     public static final boolean SHOW_NEEDLE = true;
-    public static final boolean SHOW_SCALE = false;
+    public static final boolean SHOW_SCALE = true;
     public static final boolean SHOW_RANGES = true;
     public static final boolean SHOW_TEXT = true;
 
@@ -58,15 +58,15 @@ public class GaugeSpeed extends View {
 
     public static final float SCALE_POSITION = 0.025f;
     public static final float SCALE_START_VALUE = 0.0f;
-    public static final float SCALE_END_VALUE = 220.0f;
-    public static final float SCALE_START_ANGLE = 30.0f;
-    public static final int SCALE_DIVISIONS = 11;
-    public static final int SCALE_SUBDIVISIONS = 4;
+    public static final float SCALE_END_VALUE = 80.0f;
+    public static final float SCALE_START_ANGLE = 36.0f;
+    public static final int SCALE_DIVISIONS = 8;
+    public static final int SCALE_SUBDIVISIONS = 2;
 
     public static final int[] OUTER_SHADOW_COLORS = { Color.argb(40, 255, 254, 187), Color.argb(20, 255, 247, 219),	Color.argb(5, 255, 255, 255) };
     public static final float[] OUTER_SHADOW_POS = { 0.90f, 0.95f, 0.99f };
 
-    public static final float[] RANGE_VALUES = {50.0f, 110.0f, 190.0f, 220.0f};
+    public static final float[] RANGE_VALUES = { 35.0f, 60.0f, 70.0f, 80.0f };
     public static final int[] RANGE_COLORS = {
             Color.rgb(200, 200, 200),
             Color.rgb(200, 200, 200),
@@ -76,7 +76,7 @@ public class GaugeSpeed extends View {
     public static final int TEXT_SHADOW_COLOR = Color.argb(100, 0, 0, 0);
     public static final int TEXT_VALUE_COLOR = Color.YELLOW;
     public static final int TEXT_UNIT_COLOR = Color.WHITE;
-    public static final float TEXT_VALUE_SIZE = 0.1f;
+    public static final float TEXT_VALUE_SIZE = 0.2f;
     public static final float TEXT_UNIT_SIZE = 0.05f;
 
     // *--------------------------------------------------------------------- *//
@@ -164,17 +164,17 @@ public class GaugeSpeed extends View {
     private long mNeedleLastMoved = -1;
     private boolean mNeedleInitialized;
 
-    public GaugeSpeed(final Context context, final AttributeSet attrs, final int defStyle) {
+    public GaugeRpm(final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
         readAttrs(context, attrs, defStyle);
         init();
     }
 
-    public GaugeSpeed(final Context context, final AttributeSet attrs) {
+    public GaugeRpm(final Context context, final AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public GaugeSpeed(final Context context) {
+    public GaugeRpm(final Context context) {
         this(context, null, 0);
     }
     public void setFace(int mode)
@@ -539,6 +539,7 @@ public class GaugeSpeed extends View {
         paint.setStrokeWidth(0.005f);
         paint.setTextSize(mTextUnitSize);
         paint.setTextAlign(Align.CENTER);
+        paint.setTypeface(Typeface.SANS_SERIF);
         paint.setLinearText(true);
         paint.setShadowLayer(0.01f, 0.002f, 0.002f, mTextShadowColor);
         return paint;
@@ -689,12 +690,13 @@ public class GaugeSpeed extends View {
         canvas.drawOval(mFaceRect, mFaceShadowPaint);
     }
     private void drawText(final Canvas canvas) {
-        mTextUnit="km/h";
+
+        mTextUnit="Rpm_100";
         final String textValue = !TextUtils.isEmpty(mTextValue) ? mTextValue : valueString(mCurrentValue);
-        mTextValuePaint.setTextSize(1.5f);
+        mTextValuePaint.setTextSize(2.0f);
         canvas.save();
         canvas.scale(0.05f, 0.05f);
-        canvas.drawText(textValue,  CENTER + 9.3f ,  CENTER + 13.5f , mTextValuePaint);
+        canvas.drawText(textValue,  CENTER + 9.5f ,  CENTER + 13.5f , mTextValuePaint);
 
         if (!TextUtils.isEmpty(mTextUnit)) {
 
@@ -703,39 +705,7 @@ public class GaugeSpeed extends View {
             canvas.drawText(mTextUnit,  CENTER + 9.5f ,  CENTER + 15f , mTextUnitPaint);
         }
         canvas.restore();
-	        /*final String textValue = !TextUtils.isEmpty(mTextValue) ? mTextValue : valueString(mCurrentValue);
-	        float textValueWidth = mTextValuePaint.measureText(textValue);
-	        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-	        	float tmpTextSize = mTextValuePaint.getTextSize();
-	        	mTextValuePaint.setTextSize(tmpTextSize * 1000);
-	        	textValueWidth = mTextValuePaint.measureText(textValue);
-	        	mTextValuePaint.setTextSize(tmpTextSize);
-	        	textValueWidth = (float) (textValueWidth / 1000);
-	        }
-
-			float textUnitWidth = 0;
-	        if (!TextUtils.isEmpty(mTextUnit)) {
-	        	textUnitWidth = mTextUnitPaint.measureText(mTextUnit);
-
-	        	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-	            	float tmpTextSize = mTextUnitPaint.getTextSize();
-	            	mTextUnitPaint.setTextSize(tmpTextSize * 1000);
-	            	textUnitWidth = mTextUnitPaint.measureText(mTextUnit);
-	            	mTextUnitPaint.setTextSize(tmpTextSize);
-	            	textUnitWidth = (float) (textUnitWidth / 1000);
-	            }
-	        }
-
-	        final float startX = CENTER-0.03f; //- textUnitWidth / 2;
-	        final float startY = CENTER + 0.2f;
-
-	        canvas.drawText(textValue, startX, startY, mTextValuePaint);
-
-	        if (!TextUtils.isEmpty(mTextUnit)) {
-	            canvas.drawText(mTextUnit, CENTER + textValueWidth / 2 + 0.03f, CENTER, mTextUnitPaint);
-	        }*/
     }
-
 
 
     private void drawScale(final Canvas canvas) {
@@ -755,15 +725,15 @@ public class GaugeSpeed extends View {
             final Paint paint = getRangePaint(value);
 
             float mod = value % mDivisionValue;
-            /*if ((Math.abs(mod - 0) < 0.001) || (Math.abs(mod - mDivisionValue) < 0.001)) {
-				// Draw a division tick
-				canvas.drawLine(0.5f, y1, 0.5f, y3, paint);
-				// Draw the text 0.15 away from the division tick
-				drawTextOnCanvasWithMagnifier(canvas, valueString(value), 0.5f, y3 + 0.045f, paint);
-			} else {
-				// Draw a subdivision tick
-				canvas.drawLine(0.5f, y1, 0.5f, y2, paint);
-			}*/
+	            /*if ((Math.abs(mod - 0) < 0.001) || (Math.abs(mod - mDivisionValue) < 0.001)) {
+					// Draw a division tick
+					canvas.drawLine(0.5f, y1, 0.5f, y3, paint);
+					// Draw the text 0.15 away from the division tick
+					drawTextOnCanvasWithMagnifier(canvas, valueString(value), 0.5f, y3 + 0.045f, paint);
+				} else {
+					// Draw a subdivision tick
+					canvas.drawLine(0.5f, y1, 0.5f, y2, paint);
+				}*/
             if ((Math.abs(mod - 0) < 0.001) || (Math.abs(mod - mDivisionValue) < 0.001)) {
                 // Draw a division tick
                 canvas.drawLine(0.5f, y1, 0.5f, y3, paint);
@@ -774,9 +744,9 @@ public class GaugeSpeed extends View {
                 canvas.drawLine(0.5f, y1, 0.5f, y2, paint);
             }
 
-
             canvas.rotate(mSubdivisionAngle, 0.5f, 0.5f);
         }
+
         canvas.restore();
     }
 
@@ -784,7 +754,6 @@ public class GaugeSpeed extends View {
     // and probably some rendering issues with Jelly Bean and above
     // Modified from http://stackoverflow.com/a/14989037/746068
     public static void drawTextOnCanvasWithMagnifier(Canvas canvas, String text, float x, float y, Paint paint) {
-
 
             //workaround
             float originalStrokeWidth = paint.getStrokeWidth();

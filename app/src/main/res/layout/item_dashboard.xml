@@ -8,10 +8,12 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:padding="1dp"
-        android:src="@drawable/temp"/>
+        android:layout_gravity="center"
+        android:layout_marginBottom="3dp"
+        android:src="@drawable/ic_bens"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -24,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textColor="@color/bright_cyan"
             tools:text="23"/>
 
@@ -33,7 +35,9 @@
             android:includeFontPadding="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:maxLines="2"
+            android:textSize="12sp"
             android:textColor="@color/bright_cyan"
             tools:text="°C"/>
 

@@ -1,9 +1,9 @@
-package com.obdelm327pro.util;
+package com.carzis.util;
 
 import android.content.Context;
 
-import com.obdelm327pro.R;
-import com.obdelm327pro.model.DashboardItem;
+import com.carzis.R;
+import com.carzis.model.DashboardItem;
 
 /**
  * Created by Alexandr.

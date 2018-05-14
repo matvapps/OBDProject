@@ -2,7 +2,7 @@
 T�RKAY B�L�YOR turkaybiliyor@hotmail.com
  */
 
-package com.obdelm327pro;
+package com.carzis;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;

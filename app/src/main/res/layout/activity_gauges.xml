@@ -28,12 +28,12 @@
         android:background="@drawable/background"
         tools:context=".MainActivity" >
 
-        <com.obdelm327pro.GaugeSpeed
+        <com.carzis.GaugeSpeed
             android:id="@+id/GaugeSpeed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <com.obdelm327pro.GaugeRpm
+        <com.carzis.GaugeRpm
             android:id="@+id/GaugeRpm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

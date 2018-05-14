@@ -1,4 +1,4 @@
-package com.obdelm327pro.model;
+package com.carzis.model;
 
 /**
  * Created by Alexandr.

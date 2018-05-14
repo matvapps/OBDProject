@@ -2,7 +2,7 @@
 T�RKAY B�L�YOR turkaybiliyor@hotmail.com
  */
 
-package com.obdelm327pro;
+package com.carzis;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -160,7 +160,7 @@ public class DeviceListActivity extends Activity {
 
         // Setup the window
         //requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setContentView(com.obdelm327pro.R.layout.device_list);
+        setContentView(com.carzis.R.layout.device_list);
 
         newDevicesTitle = (TextView) findViewById(R.id.title_new_devices);
 
@@ -168,7 +168,7 @@ public class DeviceListActivity extends Activity {
         setResult(Activity.RESULT_CANCELED);
 
         // Initialize the button to perform device discovery
-        Button scanButton = (Button) findViewById(com.obdelm327pro.R.id.button_scan);
+        Button scanButton = (Button) findViewById(com.carzis.R.id.button_scan);
         scanButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 doDiscovery();

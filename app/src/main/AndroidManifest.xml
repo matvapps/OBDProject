@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.obdelm327pro">
+    package="com.carzis">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -17,19 +17,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.carzis.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".DeviceListActivity"
+            android:name="com.carzis.DeviceListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/select_device" />
         <activity
-            android:name=".Prefs"
+            android:name="com.carzis.Prefs"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/action_settings" />
-        <activity android:name=".TestActivity"
+        <activity android:name="com.carzis.TestActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,6 +37,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="3e459c5883d795574754798ef84d5657881f1df6" />
     </application>
 
 </manifest>

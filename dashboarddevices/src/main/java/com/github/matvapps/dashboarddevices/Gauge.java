@@ -184,7 +184,6 @@ public abstract class Gauge extends View {
 
     private void init() {
         textPaint.setColor(0xFF000000);
-        textPaint.setTextSize(dpTOpx(10f));
         textPaint.setTextAlign(Paint.Align.CENTER);
         speedTextPaint.setColor(0xFF000000);
         speedTextPaint.setTextSize(dpTOpx(18f));
@@ -410,7 +409,7 @@ public abstract class Gauge extends View {
 
         if (unitUnderSpeedText) {
             if (!useUnit) {
-                unitSpeedInterval = -dpTOpx(20);
+                unitSpeedInterval = -dpTOpx(15);
                 speedText = String.valueOf(Integer.parseInt(speedText) / 1000);
             } else {
                 speedUnitTextCanvas.drawText(unit, speedUnitTextBitmap.getWidth() * .5f
@@ -586,7 +585,7 @@ public abstract class Gauge extends View {
      * if {@code speed < minSpeed} speed value will move to {@link #minSpeed}.<br>
      * <p>
      * it is the same {@link #speedTo(float, long)}
-     * with default {@code moveDuration = 200}.
+     * with default {@code moveDuration = 2000}.
      *
      * @param speed current speed to move.
      * @see #speedTo(float, long)
@@ -594,7 +593,7 @@ public abstract class Gauge extends View {
      * @see #realSpeedTo(float)
      */
     public void speedTo(float speed) {
-        speedTo(speed, 200);
+        speedTo(speed, 2000);
     }
 
     /**
@@ -624,13 +623,10 @@ public abstract class Gauge extends View {
         }
 
         isSpeedIncrease = speed > currentSpeed;
-        float delay = 0;
-        if (speedAnimator.isRunning()) {
-            delay = speedAnimator.getDuration() - speedAnimator.getCurrentPlayTime();
-        }
+
+        cancelSpeedAnimator();
         speedAnimator = ValueAnimator.ofFloat(currentSpeed, speed);
         speedAnimator.setInterpolator(new DecelerateInterpolator());
-        speedAnimator.setStartDelay((long) delay);
         speedAnimator.setDuration(moveDuration);
         speedAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -641,8 +637,6 @@ public abstract class Gauge extends View {
         });
         speedAnimator.addListener(animatorListener);
         speedAnimator.start();
-
-
     }
 
     /**

@@ -1,12 +1,10 @@
-package com.obdelm327pro;
+package com.carzis;
 
 /**
  * Created by tbiliyor on 12.01.2017.
  */
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -24,7 +22,6 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class ObdWifiManager {
 

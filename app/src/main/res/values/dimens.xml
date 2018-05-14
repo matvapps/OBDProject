@@ -5,4 +5,6 @@
     <dimen name="activity_vertical_margin">3dp</dimen>
     <dimen name="fab_margin">3dp</dimen>
 
+    <dimen name="devices_grid_item_spacing">8dp</dimen>
+
 </resources>

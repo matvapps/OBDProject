@@ -1,12 +1,12 @@
 /*
 T�RKAY B�L�YOR turkaybiliyor@hotmail.com
  */
-package com.obdelm327pro;
+package com.carzis;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import com.obdelm327pro.R;
-public class Prefs extends PreferenceActivity {		
+
+public class Prefs extends PreferenceActivity {
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); 
