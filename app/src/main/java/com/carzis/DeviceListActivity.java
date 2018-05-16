@@ -1,7 +1,3 @@
-/*
-T�RKAY B�L�YOR turkaybiliyor@hotmail.com
- */
-
 package com.carzis;
 
 import android.app.Activity;

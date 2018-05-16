@@ -41,8 +41,8 @@
     <string name="exit">Exit</string>
     <string name="set_odometer">Set Odometer</string>
     <string name="reset_trip">Reset Trip</string>
-    
-    
+
+
     <!--  DashboardDevices dimen titles -->
     <string name="dimen_title_voltage">V</string>
     <string name="dimen_title_speed">км/\nч</string>
@@ -51,7 +51,6 @@
     <string name="dimen_title_coolant_temp">°C</string>
     <string name="dimen_title_oil_pressure">кг/\nсм2</string>
     <string name="dimen_title_rpm">об/\nмин</string>
-
 
 
 </resources>

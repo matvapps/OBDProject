@@ -1,4 +1,4 @@
-package com.carzis;
+package com.carzis.notused;
 
 /**
  * Created by tbiliyor on 10.11.2016.
@@ -28,6 +28,8 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.carzis.R;
 
 public class GaugeRpm extends View {
 

@@ -26,14 +26,14 @@
         android:orientation="vertical"
         android:gravity="center"
         android:background="@drawable/background"
-        tools:context=".MainActivity" >
+        tools:context=".notused.MainActivity" >
 
-        <com.carzis.GaugeSpeed
+        <com.carzis.notused.GaugeSpeed
             android:id="@+id/GaugeSpeed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <com.carzis.GaugeRpm
+        <com.carzis.notused.GaugeRpm
             android:id="@+id/GaugeRpm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

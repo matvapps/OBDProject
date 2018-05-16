@@ -1,9 +1,5 @@
 package com.carzis;
 
-/**
- * Created by tbiliyor on 09.01.2017.
- */
-
 public class TroubleCodes {
 
     public String getFaultCode(String fault)

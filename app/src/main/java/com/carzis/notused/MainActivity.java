@@ -1,4 +1,4 @@
-package com.carzis;
+package com.carzis.notused;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
@@ -36,6 +36,13 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.carzis.BluetoothService;
+import com.carzis.DeviceListActivity;
+import com.carzis.ObdWifiManager;
+import com.carzis.Prefs;
+import com.carzis.R;
+import com.carzis.TroubleCodes;
 
 import java.util.ArrayList;
 import java.util.List;
