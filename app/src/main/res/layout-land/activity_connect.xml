@@ -11,11 +11,10 @@
         android:id="@+id/pulsator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:pulse_count="4"
-        app:pulse_duration="3000"
+        app:pulse_count="3"
+        app:pulse_duration="2700"
         app:pulse_repeat="0"
-        app:barrierAllowsGoneWidgets="true"
-        app:pulse_color="@color/colorAccent"
+        app:pulse_color="@android:color/white"
         app:pulse_startFromScratch="false"
         app:pulse_interpolator="AccelerateDecelerate">
     </pl.bclogic.pulsator4droid.library.PulsatorLayout>
