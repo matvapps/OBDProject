@@ -4,7 +4,7 @@ package com.carzis.model;
  * Created by Alexandr.
  */
 public class DashboardItem {
-    private int value;
+    private String value;
     private DashboardDevice deviceType;
 
     public enum DashboardDevice {
@@ -18,7 +18,7 @@ public class DashboardItem {
         GAS_AMOUNT
     }
 
-    public DashboardItem(int value, DashboardDevice deviceType) {
+    public DashboardItem(String value, DashboardDevice deviceType) {
         this.value = value;
         this.deviceType = deviceType;
     }
@@ -40,11 +40,11 @@ public class DashboardItem {
         this.deviceType = deviceType;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(String value) {
         this.value = value;
     }
 }

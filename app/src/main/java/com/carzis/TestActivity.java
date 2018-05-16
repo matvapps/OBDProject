@@ -36,18 +36,19 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.carzis.model.DashboardItem;
+import com.carzis.util.custom.GridSpacingItemDecoration;
 import com.crashlytics.android.Crashlytics;
 import com.github.matvapps.dashboarddevices.Speedometer;
 import com.github.matvapps.dashboarddevices.Tachometer;
-import com.carzis.model.DashboardItem;
-import com.carzis.util.custom.GridSpacingItemDecoration;
 
-import io.fabric.sdk.android.Fabric;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import io.fabric.sdk.android.Fabric;
 
 public class TestActivity extends AppCompatActivity {
     private static final String TAG = "TestActivity.class";
@@ -425,7 +426,7 @@ public class TestActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 Calendar calendar = Calendar.getInstance();
-                                SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm", Locale.getDefault());
+                                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                                 String timeString = timeFormat.format(calendar.getTime());
                                 timeText.setText(timeString);
                             }
@@ -437,6 +438,10 @@ public class TestActivity extends AppCompatActivity {
             }
         };
         thread.start();
+    }
+
+    public void forceCrash(View view) {
+        throw new RuntimeException("This is a crash");
     }
 
 
@@ -463,10 +468,10 @@ public class TestActivity extends AppCompatActivity {
         dashboardItemsAdapter = new DashboardItemsAdapter();
 
         List<DashboardItem> devices = new ArrayList<>();
-        devices.add(new DashboardItem(0, DashboardItem.DashboardDevice.INTAKE_TEMP));
-        devices.add(new DashboardItem(0, DashboardItem.DashboardDevice.VOLTAGE));
-        devices.add(new DashboardItem(0, DashboardItem.DashboardDevice.OIL_PRESSURE));
-        devices.add(new DashboardItem(0, DashboardItem.DashboardDevice.GAS_AMOUNT));
+        devices.add(new DashboardItem("0", DashboardItem.DashboardDevice.INTAKE_TEMP));
+        devices.add(new DashboardItem("0", DashboardItem.DashboardDevice.VOLTAGE));
+        devices.add(new DashboardItem("0", DashboardItem.DashboardDevice.OIL_PRESSURE));
+        devices.add(new DashboardItem("0", DashboardItem.DashboardDevice.GAS_AMOUNT));
 
 
         speedometer = findViewById(R.id.pointerSpeedometer);
@@ -1490,7 +1495,9 @@ public class TestActivity extends AppCompatActivity {
         }
 
         if (VoltText != null) {
-            dashboardItemsAdapter.updateItem(new DashboardItem(Integer.parseInt(VoltText), DashboardItem.DashboardDevice.VOLTAGE));
+
+            dashboardItemsAdapter.updateItem(
+                    new DashboardItem(VoltText, DashboardItem.DashboardDevice.VOLTAGE));
 //            voltage.setText(VoltText);
         }
     }
@@ -1546,7 +1553,7 @@ public class TestActivity extends AppCompatActivity {
                 mConversationArrayAdapter.add("Intake Man Pressure: " + Integer.toString(A) + " kPa");
                 Log.d(TAG, "Intake Man Pressure: " + A);
                 // TODO
-                dashboardItemsAdapter.updateItem(new DashboardItem(A, DashboardItem.DashboardDevice.OIL_PRESSURE));
+                dashboardItemsAdapter.updateItem(new DashboardItem(String.valueOf(A), DashboardItem.DashboardDevice.OIL_PRESSURE));
 
                 break;
 
@@ -1614,7 +1621,8 @@ public class TestActivity extends AppCompatActivity {
             case 47: {
 
                 int fuelLevel = A * 100 / 255;
-                dashboardItemsAdapter.updateItem(new DashboardItem(fuelLevel, DashboardItem.DashboardDevice.GAS_AMOUNT));
+                dashboardItemsAdapter.updateItem(
+                        new DashboardItem(String.valueOf(fuelLevel), DashboardItem.DashboardDevice.GAS_AMOUNT));
                 break;
             }
 
@@ -1634,7 +1642,8 @@ public class TestActivity extends AppCompatActivity {
                 ambientairtemp = tempC;
                 mConversationArrayAdapter.add("Ambientairtemp: " + Integer.toString(ambientairtemp) + " C°");
                 Log.d(TAG, "Ambientairtemp: " + Integer.toString(ambientairtemp) + " C°");
-                dashboardItemsAdapter.updateItem(new DashboardItem(ambientairtemp, DashboardItem.DashboardDevice.INTAKE_TEMP));
+                dashboardItemsAdapter.updateItem(
+                        new DashboardItem(String.valueOf(ambientairtemp), DashboardItem.DashboardDevice.INTAKE_TEMP));
 
                 break;
 
