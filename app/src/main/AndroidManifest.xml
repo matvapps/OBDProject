@@ -30,9 +30,13 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/action_settings" />
         <activity
-            android:name=".TestActivity"
-            android:screenOrientation="landscape">
+            android:name=".TestActivity">
 
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <meta-data
@@ -42,11 +46,7 @@
         <activity
             android:name=".ConnectActivity"
             android:screenOrientation="landscape">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

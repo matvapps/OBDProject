@@ -49,7 +49,7 @@
     <string name="dimen_title_gas">%</string>
     <string name="dimen_title_engine_temp">°C</string>
     <string name="dimen_title_coolant_temp">°C</string>
-    <string name="dimen_title_oil_pressure">кг/\nсм2</string>
+    <string name="dimen_title_oil_pressure">кг/см2</string>
     <string name="dimen_title_rpm">об/\nмин</string>
 
 

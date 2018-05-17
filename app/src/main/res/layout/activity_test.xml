@@ -1,23 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
     android:background="#010C1E">
 
-    <LinearLayout
-        android:id="@+id/menu"
-        android:layout_width="220dp"
-        android:visibility="gone"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#0e2cb3"/>
-
-
     <FrameLayout
-        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center">
@@ -28,7 +17,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:background="#010C1E"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:src="@drawable/bg" />
 
         <android.support.constraint.ConstraintLayout
@@ -50,39 +39,28 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:onClick="forceCrash"
+                android:layout_width="wrap_content"
                 android:text="Force Crash!"
-                android:visibility="gone" />
+                android:onClick="forceCrash"
+                android:visibility="gone"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
 
 
             <TextView
                 android:id="@+id/time_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/add_btn"
-                app:layout_constraintStart_toEndOf="@+id/menu_btn"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="16:05" />
-
-            <ImageButton
-                android:id="@+id/add_btn"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/btn_rounded_left"
-                android:padding="13.5dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_topbar_right"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="16:05"
+                android:layout_marginRight="8dp" />
 
         </android.support.constraint.ConstraintLayout>
 
@@ -91,20 +69,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="50dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="40dp"
+            android:orientation="vertical">
 
 
             <com.github.matvapps.dashboarddevices.CustomSpeedometer
                 android:id="@+id/pointerSpeedometer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginEnd="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_weight="2.5"
+                android:layout_weight="2.0"
                 app:dd_indicator="NewCustomIndicator"
                 app:dd_indicatorColor="#36ffffff"
                 app:dd_textSize="15sp"
@@ -112,21 +86,21 @@
 
 
             <FrameLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="0.8">
+                android:layout_marginBottom="32dp">
 
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/devices_list"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:isScrollContainer="false"
-                    app:layoutManager="android.support.v7.widget.GridLayoutManager"
-                    app:spanCount="2" />
+                    android:orientation="horizontal"
+                    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                    app:spanCount="1" />
 
 
             </FrameLayout>
@@ -134,40 +108,37 @@
 
             <com.github.matvapps.dashboarddevices.CustomTachometer
                 android:id="@+id/pointerTachometer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginEnd="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_weight="2.5"
+                android:layout_weight="2.0"
                 app:dd_indicator="NewCustomIndicatorWithCircle"
                 app:dd_indicatorColor="#36ffffff"
                 app:dd_textSize="15sp"
                 app:dd_tickNumber="8"
                 app:dd_use_unit="false" />
-
-
+            
         </LinearLayout>
 
         <FrameLayout
-            android:layout_width="205dp"
-            android:layout_height="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
             android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/group_7" />
+            android:layout_marginLeft="64dp"
+            android:layout_marginRight="64dp"
+            android:background="@drawable/group_7"
+            android:layout_marginBottom="24dp"/>
 
     </FrameLayout>
 
 
-    <!--<TextView-->
-        <!--android:id="@+id/content"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintLeft_toLeftOf="parent"-->
-        <!--app:layout_constraintRight_toRightOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent" />-->
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+</FrameLayout>

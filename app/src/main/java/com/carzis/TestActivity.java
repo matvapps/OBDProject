@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -38,7 +40,10 @@ import android.widget.Toast;
 
 import com.carzis.model.DashboardItem;
 import com.carzis.util.custom.GridSpacingItemDecoration;
+import com.carzis.util.custom.ItemSpacingDecoration;
 import com.crashlytics.android.Crashlytics;
+import com.github.florent37.viewanimator.AnimationListener;
+import com.github.florent37.viewanimator.ViewAnimator;
 import com.github.matvapps.dashboarddevices.Speedometer;
 import com.github.matvapps.dashboarddevices.Tachometer;
 
@@ -121,7 +126,8 @@ public class TestActivity extends AppCompatActivity {
     private RecyclerView deviceList;
     private TextView timeText;
     private ImageButton menuBtn;
-    private View mainView;
+    private View contentView;
+    private View menuView;
 
     BluetoothDevice currentdevice;
     boolean commandmode = false, initialized = false, m_getPids = false, tryconnect = false, defaultStart = false;
@@ -170,6 +176,8 @@ public class TestActivity extends AppCompatActivity {
     private ObdWifiManager mWifiService = null;
 
     StringBuilder inStream = new StringBuilder();
+
+    int pixelSpacing;
 
     // The Handler that gets information back from the BluetoothChatService
     // Array adapter for the conversation thread
@@ -383,15 +391,13 @@ public class TestActivity extends AppCompatActivity {
 
     // The action listener for the EditText widget, to listen for the return key
     private TextView.OnEditorActionListener mWriteListener =
-            new TextView.OnEditorActionListener() {
-                public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
-                    // If the action is a key-up event on the return key, send the message
-                    if (actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_UP) {
-                        String message = view.getText().toString();
-                        sendEcuMessage(message);
-                    }
-                    return true;
+            (view, actionId, event) -> {
+                // If the action is a key-up event on the return key, send the message
+                if (actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_UP) {
+                    String message = view.getText().toString();
+                    sendEcuMessage(message);
                 }
+                return true;
             };
 
     public static boolean isHexadecimal(String text) {
@@ -422,14 +428,11 @@ public class TestActivity extends AppCompatActivity {
                 try {
                     while (!isInterrupted()) {
                         Thread.sleep(1000);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Calendar calendar = Calendar.getInstance();
-                                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                                String timeString = timeFormat.format(calendar.getTime());
-                                timeText.setText(timeString);
-                            }
+                        runOnUiThread(() -> {
+                            Calendar calendar = Calendar.getInstance();
+                            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                            String timeString = timeFormat.format(calendar.getTime());
+                            timeText.setText(timeString);
                         });
                     }
                 } catch (InterruptedException ex) {
@@ -444,13 +447,15 @@ public class TestActivity extends AppCompatActivity {
         throw new RuntimeException("This is a crash");
     }
 
+    public float convertDpToPx(Context context, float dp) {
+        return dp * context.getResources().getDisplayMetrics().density;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-        mainView = LayoutInflater.from(this).inflate(R.layout.activity_test, null, false);
         Fabric.with(this, new Crashlytics());
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -479,28 +484,61 @@ public class TestActivity extends AppCompatActivity {
         deviceList = findViewById(R.id.devices_list);
         timeText = findViewById(R.id.time_text_view);
         menuBtn = findViewById(R.id.menu_btn);
+        contentView = findViewById(R.id.content);
+        menuView = findViewById(R.id.menu);
+
 
         startTimeThread();
 
-        int pixelSpacing = getResources().getDimensionPixelSize(R.dimen.devices_grid_item_spacing);
+        pixelSpacing = getResources().getDimensionPixelSize(R.dimen.devices_grid_item_spacing);
 
-        deviceList.setLayoutManager(new GridLayoutManager(this, 2));
-        deviceList.addItemDecoration(new GridSpacingItemDecoration(2, pixelSpacing, false));
+        int orientation = this.getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            deviceList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            deviceList.addItemDecoration(new ItemSpacingDecoration(pixelSpacing * 2));
+        } else {
+            deviceList.setLayoutManager(new GridLayoutManager(this, 2));
+            deviceList.addItemDecoration(new GridSpacingItemDecoration(2, pixelSpacing, false));
+        }
+
         deviceList.setAdapter(dashboardItemsAdapter);
         dashboardItemsAdapter.setItems(devices);
 
         troubleCodes = new TroubleCodes();
 
-        menuBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        menuBtn.setOnClickListener(view -> {
 
-                BaseInputConnection mInputConnection = new BaseInputConnection(findViewById(R.id.menu_btn), true);
-                KeyEvent kd = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MENU);
-                KeyEvent ku = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MENU);
-                mInputConnection.sendKeyEvent(kd);
-                mInputConnection.sendKeyEvent(ku);
+            if (menuView.getVisibility() == View.VISIBLE) {
+                ViewAnimator
+                        .animate(menuView)
+                        .translationX(-convertDpToPx(this, 220))
+                        .duration(300)
+
+                        .andAnimate(contentView)
+                        .translationX(-convertDpToPx(this, 220))
+                        .duration(300)
+
+                        .onStop(() -> menuView.setVisibility(View.GONE))
+                        .start();
+
+            } else {
+                ViewAnimator
+                        .animate(menuView)
+                        .slideLeft()
+                        .duration(300)
+
+                        .andAnimate(contentView)
+                        .translationX(convertDpToPx(this, 220))
+                        .duration(300)
+
+                        .onStart(() -> menuView.setVisibility(View.VISIBLE))
+                        .start();
             }
+//            BaseInputConnection mInputConnection = new BaseInputConnection(menuBtn, true);
+//            KeyEvent kd = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MENU);
+//            KeyEvent ku = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MENU);
+//            mInputConnection.sendKeyEvent(kd);
+//            mInputConnection.sendKeyEvent(ku);
         });
 
 //        Status = (TextView) findViewById(R.id.Status);
@@ -775,12 +813,31 @@ public class TestActivity extends AppCompatActivity {
 
     ///////////////////////////////////////////////////////////////////////
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+//        setContentView(R.layout.activity_test);
+//
+//        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//
+//            deviceList.setLayoutManager(new GridLayoutManager(this, 2));
+//            deviceList.addItemDecoration(new GridSpacingItemDecoration(2, pixelSpacing, false));
+//            deviceList.setAdapter(dashboardItemsAdapter);
+//            dashboardItemsAdapter.notifyDataSetChanged();
+//
+//        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+//
+////            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//            deviceList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+//            deviceList.removeItemDecoration(new GridSpacingItemDecoration(1, pixelSpacing, false));
+//            deviceList.setAdapter(dashboardItemsAdapter);
+//            dashboardItemsAdapter.notifyDataSetChanged();
+////            deviceList.addItemDecoration(new GridSpacingItemDecoration(1, pixelSpacing, false));
+//        }
 
-        setDefaultOrientation();
-    }
+
+//        setDefaultOrientation();
+//    }
 
     @Override
     public synchronized void onResume() {
@@ -807,7 +864,7 @@ public class TestActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         getPreferences();
-        setDefaultOrientation();
+//        setDefaultOrientation();
         resetvalues();
     }
 
@@ -825,21 +882,11 @@ public class TestActivity extends AppCompatActivity {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setMessage("Are you sure you want exit?");
                 alertDialogBuilder.setPositiveButton("Ok",
-                        new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                exit();
-                            }
-                        });
+                        (arg0, arg1) -> exit());
 
                 alertDialogBuilder.setNegativeButton("cancel",
-                        new DialogInterface.OnClickListener() {
+                        (arg0, arg1) -> {
 
-                            @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-
-                            }
                         });
 
                 AlertDialog alertDialog = alertDialogBuilder.create();
@@ -924,38 +971,6 @@ public class TestActivity extends AppCompatActivity {
         }
     }
 
-    private void setDefaultOrientation() {
-
-        try {
-
-            settextsixe();
-//            setgaugesize();
-
-        } catch (Exception e) {
-        }
-    }
-
-    private void settextsixe() {
-        int txtsize = 14;
-        int sttxtsize = 12;
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindow().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-//        Status.setTextSize(sttxtsize);
-//        Fuel.setTextSize(txtsize + 2);
-//        coolantTemperature.setTextSize(txtsize);
-//        engineLoad.setTextSize(txtsize);
-//        voltage.setTextSize(txtsize);
-//        Temptext.setTextSize(txtsize);
-//        Loadtext.setTextSize(txtsize);
-//        Volttext.setTextSize(txtsize);
-//        Airtemp_text.setTextSize(txtsize);
-//        airTemperature.setTextSize(txtsize);
-//        Maf_text.setTextSize(txtsize);
-//        Maf.setTextSize(txtsize);
-//        Info.setTextSize(sttxtsize);
-    }
 
     public void invisiblecmd() {
 //        mConversationView.setVisibility(View.INVISIBLE);
@@ -1062,22 +1077,16 @@ public class TestActivity extends AppCompatActivity {
 //        Toast.makeText(this, "Tachometer: " + 7000, Toast.LENGTH_SHORT).show();
         tachometer.speedTo(7000, 1200);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1225);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        speedometer.speedTo(0, 1100);
-                        tachometer.speedTo(0, 1100);
-                    }
-                });
+        new Thread(() -> {
+            try {
+                Thread.sleep(1225);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            runOnUiThread(() -> {
+                speedometer.speedTo(0, 1100);
+                tachometer.speedTo(0, 1100);
+            });
         }).start();
     }
 
