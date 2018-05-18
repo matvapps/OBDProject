@@ -1,4 +1,4 @@
-package com.carzis;
+package com.carzis.dashboard;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.carzis.R;
 import com.carzis.model.DashboardItem;
 import com.carzis.util.Utility;
 

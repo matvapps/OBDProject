@@ -1,13 +1,12 @@
-package com.carzis;
+package com.carzis.dashboard;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,27 +21,29 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.carzis.connect.BluetoothService;
+import com.carzis.connect.DeviceListActivity;
+import com.carzis.connect.ObdWifiManager;
+import com.carzis.prefs.Prefs;
+import com.carzis.R;
+import com.carzis.TroubleCodes;
 import com.carzis.model.DashboardItem;
 import com.carzis.util.custom.GridSpacingItemDecoration;
 import com.carzis.util.custom.ItemSpacingDecoration;
 import com.crashlytics.android.Crashlytics;
-import com.github.florent37.viewanimator.AnimationListener;
 import com.github.florent37.viewanimator.ViewAnimator;
 import com.github.matvapps.dashboarddevices.Speedometer;
 import com.github.matvapps.dashboarddevices.Tachometer;
@@ -55,8 +56,8 @@ import java.util.Locale;
 
 import io.fabric.sdk.android.Fabric;
 
-public class TestActivity extends AppCompatActivity {
-    private static final String TAG = "TestActivity.class";
+public class DashboardActivity extends AppCompatActivity {
+    private static final String TAG = "DashboardActivity.class";
 
     public static final int MESSAGE_STATE_CHANGE = 1;
 
@@ -207,7 +208,7 @@ public class TestActivity extends AppCompatActivity {
                         case ObdWifiManager.STATE_CONNECTING:
 //                            Status.setText(R.string.title_connecting);
                             Log.d(TAG, "INFO: try connect wifi");
-//                            Toast.makeText(TestActivity.this, "INFO:  try connect wifi", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(DashboardActivity.this, "INFO:  try connect wifi", Toast.LENGTH_SHORT).show();
 //                            Info.setText(R.string.tryconnectwifi);
                             break;
                         case ObdWifiManager.STATE_NONE:
@@ -237,10 +238,10 @@ public class TestActivity extends AppCompatActivity {
                     String tmpmsg = clearMsg(msg);
 
                     Log.d(TAG, "INFO: " + tmpmsg);
-//                    Toast.makeText(TestActivity.this, "INFO: " + tmpmsg, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(DashboardActivity.this, "INFO: " + tmpmsg, Toast.LENGTH_SHORT).show();
 //                    Info.setText(tmpmsg);
 
-                    if (tmpmsg.contains(TestActivity.RSP_ID.NODATA.response) || tmpmsg.contains(TestActivity.RSP_ID.ERROR.response)) {
+                    if (tmpmsg.contains(DashboardActivity.RSP_ID.NODATA.response) || tmpmsg.contains(DashboardActivity.RSP_ID.ERROR.response)) {
 
                         try {
                             String command = tmpmsg.substring(0, 4);
@@ -288,8 +289,8 @@ public class TestActivity extends AppCompatActivity {
 
                             Log.d(TAG, "Status: " + getString(R.string.title_connected_to, mConnectedDeviceName));
                             Log.d(TAG, "INFO: " + getString(R.string.title_connected));
-//                            Toast.makeText(TestActivity.this, "Status: " + getString(R.string.title_connected_to, mConnectedDeviceName), Toast.LENGTH_SHORT).show();
-//                            Toast.makeText(TestActivity.this, "INFO: " + getString(R.string.title_connected), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(DashboardActivity.this, "Status: " + getString(R.string.title_connected_to, mConnectedDeviceName), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(DashboardActivity.this, "INFO: " + getString(R.string.title_connected), Toast.LENGTH_SHORT).show();
 
 //                            Status.setText(getString(R.string.title_connected_to, mConnectedDeviceName));
 //                            Info.setText(R.string.title_connected);
@@ -380,6 +381,12 @@ public class TestActivity extends AppCompatActivity {
         }
     };
 
+
+    public static void start(Activity activity) {
+        Intent intent = new Intent(activity, DashboardActivity.class);
+        activity.startActivity(intent);
+    }
+
     private void removePID(String pid) {
         int index = commandslist.indexOf(pid);
 
@@ -454,7 +461,7 @@ public class TestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
+        setContentView(R.layout.activity_dashboard);
 
         Fabric.with(this, new Crashlytics());
 
@@ -511,11 +518,11 @@ public class TestActivity extends AppCompatActivity {
             if (menuView.getVisibility() == View.VISIBLE) {
                 ViewAnimator
                         .animate(menuView)
-                        .translationX(-convertDpToPx(this, 220))
+                        .translationX(-convertDpToPx(this, 180))
                         .duration(300)
 
                         .andAnimate(contentView)
-                        .translationX(-convertDpToPx(this, 220))
+                        .translationX(-convertDpToPx(this, 0))
                         .duration(300)
 
                         .onStop(() -> menuView.setVisibility(View.GONE))
@@ -528,7 +535,7 @@ public class TestActivity extends AppCompatActivity {
                         .duration(300)
 
                         .andAnimate(contentView)
-                        .translationX(convertDpToPx(this, 220))
+                        .translationX(convertDpToPx(this, 180))
                         .duration(300)
 
                         .onStart(() -> menuView.setVisibility(View.VISIBLE))
@@ -792,7 +799,7 @@ public class TestActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_CONNECT_DEVICE:
                 // When DeviceListActivity returns with a device to connect
-                if (resultCode == TestActivity.RESULT_OK) {
+                if (resultCode == DashboardActivity.RESULT_OK) {
                     connectDevice(data);
                 }
                 break;
@@ -801,7 +808,7 @@ public class TestActivity extends AppCompatActivity {
 
                 if (mBtService == null) setupChat();
 
-                if (resultCode == TestActivity.RESULT_OK) {
+                if (resultCode == DashboardActivity.RESULT_OK) {
                     serverIntent = new Intent(this, DeviceListActivity.class);
                     startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
                 } else {

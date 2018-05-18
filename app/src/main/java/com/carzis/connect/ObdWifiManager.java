@@ -1,4 +1,4 @@
-package com.carzis;
+package com.carzis.connect;
 
 /**
  * Created by tbiliyor on 12.01.2017.
@@ -16,6 +16,8 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
+
+import com.carzis.dashboard.DashboardActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -68,9 +70,9 @@ public class ObdWifiManager {
                 mConnecting = false;
 
                 // Send the name of the connected device back to the UI Activity
-                Message msg = mWIFIHandler.obtainMessage(TestActivity.MESSAGE_DEVICE_NAME);
+                Message msg = mWIFIHandler.obtainMessage(DashboardActivity.MESSAGE_DEVICE_NAME);
                 Bundle bundle = new Bundle();
-                bundle.putString(TestActivity.DEVICE_NAME, deviceName);
+                bundle.putString(DashboardActivity.DEVICE_NAME, deviceName);
                 msg.setData(bundle);
                 mWIFIHandler.sendMessage(msg);
 
@@ -109,9 +111,9 @@ public class ObdWifiManager {
 
     private void connectionFailed() {
         // Send a failure message back to the Activity
-        Message msg = mWIFIHandler.obtainMessage(TestActivity.MESSAGE_TOAST);
+        Message msg = mWIFIHandler.obtainMessage(DashboardActivity.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(TestActivity.TOAST, "Unable to connect wifi device");
+        bundle.putString(DashboardActivity.TOAST, "Unable to connect wifi device");
         msg.setData(bundle);
         mWIFIHandler.sendMessage(msg);
         setState(STATE_NONE);
@@ -119,9 +121,9 @@ public class ObdWifiManager {
 
     private void connectionLost() {
         // Send a failure message back to the Activity
-        Message msg = mWIFIHandler.obtainMessage(TestActivity.MESSAGE_TOAST);
+        Message msg = mWIFIHandler.obtainMessage(DashboardActivity.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(TestActivity.TOAST, "Wifi device connection was lost");
+        bundle.putString(DashboardActivity.TOAST, "Wifi device connection was lost");
         msg.setData(bundle);
         mWIFIHandler.sendMessage(msg);
         setState(STATE_NONE);
@@ -157,7 +159,7 @@ public class ObdWifiManager {
 
         mState = state;
         // Give the new state to the Handler so the UI Activity can update
-        mWIFIHandler.obtainMessage(TestActivity.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
+        mWIFIHandler.obtainMessage(DashboardActivity.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
     }
 
     public boolean connect() {
@@ -190,9 +192,9 @@ public class ObdWifiManager {
             return true;
         }
 
-        Message msg = mWIFIHandler.obtainMessage(TestActivity.MESSAGE_TOAST);
+        Message msg = mWIFIHandler.obtainMessage(DashboardActivity.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(TestActivity.TOAST, "Unable to connect wifi device");
+        bundle.putString(DashboardActivity.TOAST, "Unable to connect wifi device");
         msg.setData(bundle);
         mWIFIHandler.sendMessage(msg);
 
@@ -278,7 +280,7 @@ public class ObdWifiManager {
                     byte[] arrayOfBytes = buffer;
                     outStream.write(arrayOfBytes);
                     outStream.flush();
-                    mWIFIHandler.obtainMessage(TestActivity.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
+                    mWIFIHandler.obtainMessage(DashboardActivity.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
                 }
 
             } catch (Exception localIOException1) {
@@ -304,7 +306,7 @@ public class ObdWifiManager {
                             res.append((char) b);
                         }
                         rawData = res.toString().trim();
-                        mWIFIHandler.obtainMessage(TestActivity.MESSAGE_READ, rawData.length(), -1, rawData).sendToTarget();
+                        mWIFIHandler.obtainMessage(DashboardActivity.MESSAGE_READ, rawData.length(), -1, rawData).sendToTarget();
                     }
 
                 } catch (IOException localIOException) {

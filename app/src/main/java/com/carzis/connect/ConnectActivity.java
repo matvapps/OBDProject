@@ -1,9 +1,11 @@
-package com.carzis;
+package com.carzis.connect;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 
+
+import com.carzis.R;
 
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 

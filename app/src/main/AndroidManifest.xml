@@ -20,34 +20,43 @@
             android:name=".notused.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
+            android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".DeviceListActivity"
+            android:name=".connect.DeviceListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/select_device" />
+            android:label="@string/select_device"
+            android:screenOrientation="landscape" />
         <activity
-            android:name=".Prefs"
+            android:name=".prefs.Prefs"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/action_settings" />
+            android:label="@string/action_settings"
+            android:screenOrientation="landscape" />
         <activity
-            android:name=".TestActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:name=".dashboard.DashboardActivity"
+            android:screenOrientation="landscape" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="3e459c5883d795574754798ef84d5657881f1df6" />
 
         <activity
-            android:name=".ConnectActivity"
+            android:name=".connect.ConnectActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".tutorial.TutorialActivity"
             android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+        <activity android:name=".errorlist.ErrorListActivity" />
+        <activity android:name=".mycarlist.MyCarListActivity" />
+        <activity android:name=".checkcar.CheckCarActivity" />
+        <activity android:name=".history.EmptyActivity" />
+        <activity android:name=".profile.ProfileActivity"></activity>
     </application>
 
 </manifest>

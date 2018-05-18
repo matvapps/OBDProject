@@ -48,8 +48,13 @@ dependencies {
     implementation project(':dashboarddevices')
     implementation project(':pulseview')
 
-
+    // library for easy use multiple animation
     implementation 'com.github.florent37:viewanimator:1.0.5'
+
+    // circle page indicator for tutorial page
+    implementation 'me.relex:circleindicator:1.2.2@aar'
+
+
 
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'

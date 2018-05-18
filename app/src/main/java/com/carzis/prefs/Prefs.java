@@ -1,8 +1,10 @@
 
-package com.carzis;
+package com.carzis.prefs;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+
+import com.carzis.R;
 
 public class Prefs extends PreferenceActivity {
 	@Override

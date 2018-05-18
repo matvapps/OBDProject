@@ -1,4 +1,4 @@
-package com.carzis;
+package com.carzis.connect;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -18,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.carzis.R;
 
 import java.io.BufferedReader;
 import java.io.IOException;

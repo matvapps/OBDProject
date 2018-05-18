@@ -37,10 +37,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.carzis.BluetoothService;
-import com.carzis.DeviceListActivity;
-import com.carzis.ObdWifiManager;
-import com.carzis.Prefs;
+import com.carzis.connect.BluetoothService;
+import com.carzis.connect.DeviceListActivity;
+import com.carzis.connect.ObdWifiManager;
+import com.carzis.prefs.Prefs;
 import com.carzis.R;
 import com.carzis.TroubleCodes;
 
