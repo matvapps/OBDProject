@@ -1,7 +1,6 @@
 package com.carzis.dashboard;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -14,15 +13,16 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,34 +30,29 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.carzis.R;
+import com.carzis.TroubleCodes;
 import com.carzis.connect.BluetoothService;
 import com.carzis.connect.DeviceListActivity;
 import com.carzis.connect.ObdWifiManager;
-import com.carzis.prefs.Prefs;
-import com.carzis.R;
-import com.carzis.TroubleCodes;
 import com.carzis.model.DashboardItem;
+import com.carzis.prefs.Prefs;
 import com.carzis.util.custom.GridSpacingItemDecoration;
 import com.carzis.util.custom.ItemSpacingDecoration;
 import com.crashlytics.android.Crashlytics;
-import com.github.florent37.viewanimator.ViewAnimator;
 import com.github.matvapps.dashboarddevices.Speedometer;
 import com.github.matvapps.dashboarddevices.Tachometer;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import io.fabric.sdk.android.Fabric;
 
-public class DashboardActivity extends AppCompatActivity {
-    private static final String TAG = "DashboardActivity.class";
+public class DashboardFragment extends Fragment {
+    private static final String TAG = DashboardFragment.class.getSimpleName();
 
     public static final int MESSAGE_STATE_CHANGE = 1;
 
@@ -125,10 +120,8 @@ public class DashboardActivity extends AppCompatActivity {
     private Speedometer speedometer;
     private Tachometer tachometer;
     private RecyclerView deviceList;
-    private TextView timeText;
-    private ImageButton menuBtn;
+
     private View contentView;
-    private View menuView;
 
     BluetoothDevice currentdevice;
     boolean commandmode = false, initialized = false, m_getPids = false, tryconnect = false, defaultStart = false;
@@ -208,7 +201,7 @@ public class DashboardActivity extends AppCompatActivity {
                         case ObdWifiManager.STATE_CONNECTING:
 //                            Status.setText(R.string.title_connecting);
                             Log.d(TAG, "INFO: try connect wifi");
-//                            Toast.makeText(DashboardActivity.this, "INFO:  try connect wifi", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(DashboardFragment.this, "INFO:  try connect wifi", Toast.LENGTH_SHORT).show();
 //                            Info.setText(R.string.tryconnectwifi);
                             break;
                         case ObdWifiManager.STATE_NONE:
@@ -238,10 +231,10 @@ public class DashboardActivity extends AppCompatActivity {
                     String tmpmsg = clearMsg(msg);
 
                     Log.d(TAG, "INFO: " + tmpmsg);
-//                    Toast.makeText(DashboardActivity.this, "INFO: " + tmpmsg, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(DashboardFragment.this, "INFO: " + tmpmsg, Toast.LENGTH_SHORT).show();
 //                    Info.setText(tmpmsg);
 
-                    if (tmpmsg.contains(DashboardActivity.RSP_ID.NODATA.response) || tmpmsg.contains(DashboardActivity.RSP_ID.ERROR.response)) {
+                    if (tmpmsg.contains(DashboardFragment.RSP_ID.NODATA.response) || tmpmsg.contains(DashboardFragment.RSP_ID.ERROR.response)) {
 
                         try {
                             String command = tmpmsg.substring(0, 4);
@@ -251,7 +244,7 @@ public class DashboardActivity extends AppCompatActivity {
                             }
 
                         } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), e.getMessage(),
+                            Toast.makeText(getActivity(), e.getMessage(),
                                     Toast.LENGTH_LONG).show();
                         }
                     }
@@ -268,7 +261,7 @@ public class DashboardActivity extends AppCompatActivity {
                     break;
 
                 case MESSAGE_TOAST:
-                    Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST),
+                    Toast.makeText(getActivity(), msg.getData().getString(TOAST),
                             Toast.LENGTH_SHORT).show();
                     break;
             }
@@ -277,6 +270,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     @SuppressLint("HandlerLeak")
     private final Handler mBtHandler = new Handler() {
+        @SuppressLint("StringFormatInvalid")
         @Override
         public void handleMessage(Message msg) {
 
@@ -289,8 +283,8 @@ public class DashboardActivity extends AppCompatActivity {
 
                             Log.d(TAG, "Status: " + getString(R.string.title_connected_to, mConnectedDeviceName));
                             Log.d(TAG, "INFO: " + getString(R.string.title_connected));
-//                            Toast.makeText(DashboardActivity.this, "Status: " + getString(R.string.title_connected_to, mConnectedDeviceName), Toast.LENGTH_SHORT).show();
-//                            Toast.makeText(DashboardActivity.this, "INFO: " + getString(R.string.title_connected), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(DashboardFragment.this, "Status: " + getString(R.string.title_connected_to, mConnectedDeviceName), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(DashboardFragment.this, "INFO: " + getString(R.string.title_connected), Toast.LENGTH_SHORT).show();
 
 //                            Status.setText(getString(R.string.title_connected_to, mConnectedDeviceName));
 //                            Info.setText(R.string.title_connected);
@@ -357,7 +351,7 @@ public class DashboardActivity extends AppCompatActivity {
 
                         }catch(Exception e)
                         {
-                            Toast.makeText(getApplicationContext(), e.getMessage(),
+                            Toast.makeTextgetActivity(), e.getMessage(),
                                 Toast.LENGTH_LONG).show();
                         }
                     }*/
@@ -374,7 +368,7 @@ public class DashboardActivity extends AppCompatActivity {
                     mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
                     break;
                 case MESSAGE_TOAST:
-                    Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST),
+                    Toast.makeText(getActivity(), msg.getData().getString(TOAST),
                             Toast.LENGTH_SHORT).show();
                     break;
             }
@@ -382,10 +376,10 @@ public class DashboardActivity extends AppCompatActivity {
     };
 
 
-    public static void start(Activity activity) {
-        Intent intent = new Intent(activity, DashboardActivity.class);
-        activity.startActivity(intent);
-    }
+//    public static void start(Activity activity) {
+//        Intent intent = new Intent(activity, DashboardFragment.class);
+//        activity.startActivity(intent);
+//    }
 
     private void removePID(String pid) {
         int index = commandslist.indexOf(pid);
@@ -428,52 +422,23 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
 
-    private void startTimeThread() {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    while (!isInterrupted()) {
-                        Thread.sleep(1000);
-                        runOnUiThread(() -> {
-                            Calendar calendar = Calendar.getInstance();
-                            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                            String timeString = timeFormat.format(calendar.getTime());
-                            timeText.setText(timeString);
-                        });
-                    }
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        };
-        thread.start();
-    }
-
-    public void forceCrash(View view) {
-        throw new RuntimeException("This is a crash");
-    }
-
-    public float convertDpToPx(Context context, float dp) {
-        return dp * context.getResources().getDisplayMetrics().density;
-    }
-
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        Fabric.with(this, new Crashlytics());
+        View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        Fabric.with(getActivity(), new Crashlytics());
+
+        PowerManager pm = (PowerManager) getActivity().getSystemService(Context.POWER_SERVICE);
         wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
         wl.acquire();
 
-        getWindow().setSoftInputMode(
+        getActivity().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
@@ -486,25 +451,19 @@ public class DashboardActivity extends AppCompatActivity {
         devices.add(new DashboardItem("0", DashboardItem.DashboardDevice.GAS_AMOUNT));
 
 
-        speedometer = findViewById(R.id.pointerSpeedometer);
-        tachometer = findViewById(R.id.pointerTachometer);
-        deviceList = findViewById(R.id.devices_list);
-        timeText = findViewById(R.id.time_text_view);
-        menuBtn = findViewById(R.id.menu_btn);
-        contentView = findViewById(R.id.content);
-        menuView = findViewById(R.id.menu);
-
-
-        startTimeThread();
+        speedometer = rootView.findViewById(R.id.pointerSpeedometer);
+        tachometer = rootView.findViewById(R.id.pointerTachometer);
+        deviceList = rootView.findViewById(R.id.devices_list);
+        contentView = rootView.findViewById(R.id.content);
 
         pixelSpacing = getResources().getDimensionPixelSize(R.dimen.devices_grid_item_spacing);
 
         int orientation = this.getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            deviceList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            deviceList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
             deviceList.addItemDecoration(new ItemSpacingDecoration(pixelSpacing * 2));
         } else {
-            deviceList.setLayoutManager(new GridLayoutManager(this, 2));
+            deviceList.setLayoutManager(new GridLayoutManager(getActivity(), 2));
             deviceList.addItemDecoration(new GridSpacingItemDecoration(2, pixelSpacing, false));
         }
 
@@ -513,40 +472,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         troubleCodes = new TroubleCodes();
 
-        menuBtn.setOnClickListener(view -> {
 
-            if (menuView.getVisibility() == View.VISIBLE) {
-                ViewAnimator
-                        .animate(menuView)
-                        .translationX(-convertDpToPx(this, 180))
-                        .duration(300)
-
-                        .andAnimate(contentView)
-                        .translationX(-convertDpToPx(this, 0))
-                        .duration(300)
-
-                        .onStop(() -> menuView.setVisibility(View.GONE))
-                        .start();
-
-            } else {
-                ViewAnimator
-                        .animate(menuView)
-                        .slideLeft()
-                        .duration(300)
-
-                        .andAnimate(contentView)
-                        .translationX(convertDpToPx(this, 180))
-                        .duration(300)
-
-                        .onStart(() -> menuView.setVisibility(View.VISIBLE))
-                        .start();
-            }
-//            BaseInputConnection mInputConnection = new BaseInputConnection(menuBtn, true);
-//            KeyEvent kd = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MENU);
-//            KeyEvent ku = new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MENU);
-//            mInputConnection.sendKeyEvent(kd);
-//            mInputConnection.sendKeyEvent(ku);
-        });
 
 //        Status = (TextView) findViewById(R.id.Status);
 //        engineLoad = (TextView) findViewById(R.id.Load);
@@ -572,8 +498,6 @@ public class DashboardActivity extends AppCompatActivity {
 //        mTroublecodes = (Button) findViewById(R.id.button_troublecodes);
 //        mConversationView = (ListView) findViewById(R.id.in);
 
-//        invisiblecmd();
-
 
         //ATZ reset all
         //ATDP Describe the current Protocol
@@ -593,7 +517,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
-            Toast.makeText(getApplicationContext(), "Bluetooth is not available", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Bluetooth is not available", Toast.LENGTH_LONG).show();
         } else {
             if (mBtService != null) {
                 if (mBtService.getState() == BluetoothService.STATE_NONE) {
@@ -603,7 +527,7 @@ public class DashboardActivity extends AppCompatActivity {
         }
 
         // Initialize the array adapter for the conversation thread
-        mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.message) {
+        mConversationArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.message) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 // Get the Item from ListView
@@ -662,49 +586,29 @@ public class DashboardActivity extends AppCompatActivity {
 //
 //        mOutEditText.setOnEditorActionListener(mWriteListener);
 
-//        RelativeLayout rlayout = (RelativeLayout) findViewById(R.id.mainscreen);
-//        rlayout.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                try {
-//                    ActionBar actionBar = getSupportActionBar();
-////                    RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) Status.getLayoutParams();
-//                    if (actionbar) {
-//                        //toolbar.setVisibility(View.GONE);
-//                        actionBar.hide();
-//                        actionbar = false;
-//
-////                        lp.setMargins(0, 5, 0, 0);
-//                    } else {
-//                        //toolbar.setVisibility(View.VISIBLE);
-//                        actionBar.show();
-//                        actionbar = true;
-////                        lp.setMargins(0, 0, 0, 0);
-//                    }
-//
-//                    setgaugesize();
-////                    Status.setLayoutParams(lp);
-//
-//                } catch (Exception e) {
-//                }
-//            }
-//        });
-
         getPreferences();
-
         resetgauges();
+
+        return rootView;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_dashboard);
+//
+//
+//    }
 
-        this.menu = menu;
-
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//
+//        this.menu = menu;
+//
+//        getActivity().getMenuInflater().inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -715,7 +619,7 @@ public class DashboardActivity extends AppCompatActivity {
 
                 if (mWifiService != null) {
                     if (mWifiService.isConnected()) {
-                        Toast.makeText(getApplicationContext(), "First Disconnect WIFI Device.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "First Disconnect WIFI Device.", Toast.LENGTH_SHORT).show();
                         return false;
                     }
                 }
@@ -730,7 +634,7 @@ public class DashboardActivity extends AppCompatActivity {
 
                 if (item.getTitle().equals("ConnectBT")) {
                     // Launch the DeviceListActivity to see devices and do scan
-                    serverIntent = new Intent(this, DeviceListActivity.class);
+                    serverIntent = new Intent(getActivity(), DeviceListActivity.class);
                     startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
                 } else {
                     if (mBtService != null) {
@@ -745,7 +649,7 @@ public class DashboardActivity extends AppCompatActivity {
                 if (item.getTitle().equals("ConnectWIFI")) {
 
                     if (mWifiService == null) {
-                        mWifiService = new ObdWifiManager(this, mWifiHandler);
+                        mWifiService = new ObdWifiManager(getActivity(), mWifiHandler);
                     }
 
                     if (mWifiService != null) {
@@ -765,10 +669,8 @@ public class DashboardActivity extends AppCompatActivity {
 
                 if (item.getTitle().equals("Terminal")) {
                     commandmode = true;
-                    visiblecmd();
                     item.setTitle(R.string.gauges);
                 } else {
-                    invisiblecmd();
                     item.setTitle(R.string.terminal);
                     commandmode = false;
                     sendEcuMessage(VOLTAGE);
@@ -778,12 +680,12 @@ public class DashboardActivity extends AppCompatActivity {
             case R.id.menu_settings:
 
                 // Launch the DeviceListActivity to see devices and do scan
-                serverIntent = new Intent(this, Prefs.class);
+                serverIntent = new Intent(getActivity(), Prefs.class);
                 startActivity(serverIntent);
 
                 return true;
             case R.id.menu_exit:
-                exit();
+//                exit();
 
                 return true;
             case R.id.menu_reset:
@@ -799,7 +701,7 @@ public class DashboardActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_CONNECT_DEVICE:
                 // When DeviceListActivity returns with a device to connect
-                if (resultCode == DashboardActivity.RESULT_OK) {
+                if (resultCode == getActivity().RESULT_OK) {
                     connectDevice(data);
                 }
                 break;
@@ -808,43 +710,15 @@ public class DashboardActivity extends AppCompatActivity {
 
                 if (mBtService == null) setupChat();
 
-                if (resultCode == DashboardActivity.RESULT_OK) {
-                    serverIntent = new Intent(this, DeviceListActivity.class);
+                if (resultCode == getActivity().RESULT_OK) {
+                    serverIntent = new Intent(getActivity(), DeviceListActivity.class);
                     startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
                 } else {
-                    Toast.makeText(getApplicationContext(), "BT device not enabled", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "BT device not enabled", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
     }
-
-    ///////////////////////////////////////////////////////////////////////
-
-//    @Override
-//    public void onConfigurationChanged(Configuration newConfig) {
-//        super.onConfigurationChanged(newConfig);
-//        setContentView(R.layout.activity_test);
-//
-//        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//
-//            deviceList.setLayoutManager(new GridLayoutManager(this, 2));
-//            deviceList.addItemDecoration(new GridSpacingItemDecoration(2, pixelSpacing, false));
-//            deviceList.setAdapter(dashboardItemsAdapter);
-//            dashboardItemsAdapter.notifyDataSetChanged();
-//
-//        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-//
-////            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//            deviceList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-//            deviceList.removeItemDecoration(new GridSpacingItemDecoration(1, pixelSpacing, false));
-//            deviceList.setAdapter(dashboardItemsAdapter);
-//            dashboardItemsAdapter.notifyDataSetChanged();
-////            deviceList.addItemDecoration(new GridSpacingItemDecoration(1, pixelSpacing, false));
-//        }
-
-
-//        setDefaultOrientation();
-//    }
 
     @Override
     public synchronized void onResume() {
@@ -852,10 +726,6 @@ public class DashboardActivity extends AppCompatActivity {
         getPreferences();
     }
 
-    @Override
-    public synchronized void onPause() {
-        super.onPause();
-    }
 
     @Override
     public void onDestroy() {
@@ -871,7 +741,6 @@ public class DashboardActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         getPreferences();
-//        setDefaultOrientation();
         resetvalues();
     }
 
@@ -880,48 +749,10 @@ public class DashboardActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        super.onKeyDown(keyCode, event);
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-            if (!commandmode) {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setMessage("Are you sure you want exit?");
-                alertDialogBuilder.setPositiveButton("Ok",
-                        (arg0, arg1) -> exit());
-
-                alertDialogBuilder.setNegativeButton("cancel",
-                        (arg0, arg1) -> {
-
-                        });
-
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-            } else {
-                commandmode = false;
-                invisiblecmd();
-                MenuItem item = menu.findItem(R.id.menu_terminal);
-                item.setTitle(R.string.terminal);
-                sendEcuMessage(VOLTAGE);
-            }
-
-            return false;
-        }
-
-        return super.onKeyDown(keyCode, event);
-    }
-
-    private void exit() {
-        if (mBtService != null) mBtService.stop();
-        wl.release();
-        android.os.Process.killProcess(android.os.Process.myPid());
-    }
-
     private void getPreferences() {
 
         SharedPreferences preferences = PreferenceManager
-                .getDefaultSharedPreferences(getBaseContext());
+                .getDefaultSharedPreferences(getActivity().getBaseContext());
 
         FaceColor = Integer.parseInt(preferences.getString("FaceColor", "0"));
 
@@ -933,7 +764,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         Enginedisplacement = Enginedisplacement / 1000;
 
-        //Toast.makeText(this,String.valueOf(Enginedisplacement),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(),String.valueOf(Enginedisplacement),Toast.LENGTH_SHORT).show();
 
         m_dedectPids = Integer.parseInt(preferences.getString("DedectPids", "0"));
 
@@ -978,110 +809,14 @@ public class DashboardActivity extends AppCompatActivity {
         }
     }
 
-
-    public void invisiblecmd() {
-//        mConversationView.setVisibility(View.INVISIBLE);
-//        mOutEditText.setVisibility(View.INVISIBLE);
-//        mSendButton.setVisibility(View.INVISIBLE);
-//        mPidsButton.setVisibility(View.INVISIBLE);
-//        mTroublecodes.setVisibility(View.INVISIBLE);
-//        mClearTroublecodes.setVisibility(View.INVISIBLE);
-//        mClearlist.setVisibility(View.INVISIBLE);
-//        rpm.setVisibility(View.VISIBLE);
-//        speed.setVisibility(View.VISIBLE);
-//        engineLoad.setVisibility(View.VISIBLE);
-//        Fuel.setVisibility(View.VISIBLE);
-//        voltage.setVisibility(View.VISIBLE);
-//        coolantTemperature.setVisibility(View.VISIBLE);
-//        Loadtext.setVisibility(View.VISIBLE);
-//        Volttext.setVisibility(View.VISIBLE);
-//        Temptext.setVisibility(View.VISIBLE);
-//        Centertext.setVisibility(View.VISIBLE);
-//        Info.setVisibility(View.VISIBLE);
-//        Airtemp_text.setVisibility(View.VISIBLE);
-//        airTemperature.setVisibility(View.VISIBLE);
-//        Maf_text.setVisibility(View.VISIBLE);
-//        Maf.setVisibility(View.VISIBLE);
-    }
-
-    public void visiblecmd() {
-//        rpm.setVisibility(View.INVISIBLE);
-//        speed.setVisibility(View.INVISIBLE);
-//        engineLoad.setVisibility(View.INVISIBLE);
-//        Fuel.setVisibility(View.INVISIBLE);
-//        voltage.setVisibility(View.INVISIBLE);
-//        coolantTemperature.setVisibility(View.INVISIBLE);
-//        Loadtext.setVisibility(View.INVISIBLE);
-//        Volttext.setVisibility(View.INVISIBLE);
-//        Temptext.setVisibility(View.INVISIBLE);
-//        Centertext.setVisibility(View.INVISIBLE);
-//        Info.setVisibility(View.INVISIBLE);
-//        Airtemp_text.setVisibility(View.INVISIBLE);
-//        airTemperature.setVisibility(View.INVISIBLE);
-//        Maf_text.setVisibility(View.INVISIBLE);
-//        Maf.setVisibility(View.INVISIBLE);
-//        mConversationView.setVisibility(View.VISIBLE);
-//        mOutEditText.setVisibility(View.VISIBLE);
-//        mSendButton.setVisibility(View.VISIBLE);
-//        mPidsButton.setVisibility(View.VISIBLE);
-//        mTroublecodes.setVisibility(View.VISIBLE);
-//        mClearTroublecodes.setVisibility(View.VISIBLE);
-//        mClearlist.setVisibility(View.VISIBLE);
-    }
-
-//    private void setgaugesize() {
-//        Display display = getWindow().getWindowManager().getDefaultDisplay();
-//        int width = 0;
-//        int height = 0;
-//
-//        width = display.getWidth();
-//        height = display.getHeight();
-//
-//        if (width > height) {
-//            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(height, height);
-//
-//            lp.addRule(RelativeLayout.BELOW, findViewById(R.id.Load).getId());
-//            lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-//            lp.setMargins(0, 0, 50, 0);
-//            tachometer.setLayoutParams(lp);
-//            tachometer.getLayoutParams().height = height;
-//            tachometer.getLayoutParams().width = (int) (width - 100) / 2;
-//
-//            lp = new RelativeLayout.LayoutParams(height, height);
-//            lp.addRule(RelativeLayout.BELOW, findViewById(R.id.Load).getId());
-//            lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-//            lp.setMargins(50, 0, 0, 0);
-//            speedometer.setLayoutParams(lp);
-//            speedometer.getLayoutParams().height = height;
-//            speedometer.getLayoutParams().width = (int) (width - 100) / 2;
-//
-//        } else if (width < height) {
-//            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, width);
-//
-//            lp.addRule(RelativeLayout.BELOW, findViewById(R.id.Fuel).getId());
-//            lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
-//            lp.setMargins(25, 5, 25, 5);
-//            speedometer.setLayoutParams(lp);
-//            speedometer.getLayoutParams().width = (int) (width - 50);
-//
-//            lp = new RelativeLayout.LayoutParams(width, width);
-//            lp.addRule(RelativeLayout.BELOW, findViewById(R.id.GaugeSpeed).getId());
-//            //lp.addRule(RelativeLayout.ABOVE,findViewById(R.id.info).getId());
-//            lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
-//            lp.setMargins(25, 5, 25, 5);
-//            tachometer.setLayoutParams(lp);
-//            tachometer.getLayoutParams().width = (int) (width - 50);
-//        }
-//    }
-
     public void resetgauges() {
 
         Log.d(TAG, "Speedometer: change speed to " + 240);
-//        Toast.makeText(this, "Speedometer: " + 240, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "Speedometer: " + 240, Toast.LENGTH_SHORT).show();
         speedometer.speedTo(240, 1200);
 
         Log.d(TAG, "Tachometer: change rpm to : " + 7000);
-//        Toast.makeText(this, "Tachometer: " + 7000, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "Tachometer: " + 7000, Toast.LENGTH_SHORT).show();
         tachometer.speedTo(7000, 1200);
 
         new Thread(() -> {
@@ -1090,7 +825,7 @@ public class DashboardActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            runOnUiThread(() -> {
+            getActivity().runOnUiThread(() -> {
                 speedometer.speedTo(0, 1100);
                 tachometer.speedTo(0, 1100);
             });
@@ -1137,14 +872,12 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void setupChat() {
-
         // Initialize the BluetoothChatService to perform bluetooth connections
-        mBtService = new BluetoothService(this, mBtHandler);
+        mBtService = new BluetoothService(getActivity(), mBtHandler);
 
     }
 
     private void sendEcuMessage(String message) {
-
         if (mWifiService != null) {
             if (mWifiService.isConnected()) {
                 try {
@@ -1160,7 +893,7 @@ public class DashboardActivity extends AppCompatActivity {
             // Check that we're actually connected before trying anything
             if (mBtService.getState() != BluetoothService.STATE_CONNECTED) {
                 Log.d(TAG, "INFO: " + getString(R.string.not_connected));
-                //Toast.makeText(this, R.string.not_connected, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), R.string.not_connected, Toast.LENGTH_LONG).show();
                 return;
             }
             try {
@@ -1279,7 +1012,7 @@ public class DashboardActivity extends AppCompatActivity {
                 analysPIDS(tmpmsg);
             } catch (Exception e) {
                 Log.e(TAG, "ERROR: ", e);
-//                Toast.makeText(this, "INFO: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "INFO: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 //                Info.setText("Error : " + e.getMessage());
             }
 
@@ -1388,7 +1121,6 @@ public class DashboardActivity extends AppCompatActivity {
 //            Status.setText(devicename + " " + deviceprotocol);
         }
     }
-
 
     private void setPidsSupported(String buffer) {
         Log.d(TAG, "INFO: Trying to get available pids : " + String.valueOf(trycount));

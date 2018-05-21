@@ -12,7 +12,7 @@ import android.os.Message;
 import android.util.Log;
 
 
-import com.carzis.dashboard.DashboardActivity;
+import com.carzis.dashboard.DashboardFragment;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -80,7 +80,7 @@ public class BluetoothService {
         mState = state;
 
         // Give the new state to the Handler so the UI Activity can update
-        mBTHandler.obtainMessage(DashboardActivity.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
+        mBTHandler.obtainMessage(DashboardFragment.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
     }
 
     /**
@@ -171,9 +171,9 @@ public class BluetoothService {
         mConnectedThread.start();
 
         // Send the name of the connected device back to the UI Activity
-        Message msg = mBTHandler.obtainMessage(DashboardActivity.MESSAGE_DEVICE_NAME);
+        Message msg = mBTHandler.obtainMessage(DashboardFragment.MESSAGE_DEVICE_NAME);
         Bundle bundle = new Bundle();
-        bundle.putString(DashboardActivity.DEVICE_NAME, device.getName());
+        bundle.putString(DashboardFragment.DEVICE_NAME, device.getName());
         msg.setData(bundle);
         mBTHandler.sendMessage(msg);
 
@@ -226,9 +226,9 @@ public class BluetoothService {
      */
     private void connectionFailed() {
         // Send a failure message back to the Activity
-        Message msg = mBTHandler.obtainMessage(DashboardActivity.MESSAGE_TOAST);
+        Message msg = mBTHandler.obtainMessage(DashboardFragment.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(DashboardActivity.TOAST, "Unable to connect bt device");
+        bundle.putString(DashboardFragment.TOAST, "Unable to connect bt device");
         msg.setData(bundle);
         mBTHandler.sendMessage(msg);
         setState(STATE_NONE);
@@ -242,9 +242,9 @@ public class BluetoothService {
      */
     private void connectionLost() {
         // Send a failure message back to the Activity
-        Message msg = mBTHandler.obtainMessage(DashboardActivity.MESSAGE_TOAST);
+        Message msg = mBTHandler.obtainMessage(DashboardFragment.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(DashboardActivity.TOAST, "Bt device connection was lost");
+        bundle.putString(DashboardFragment.TOAST, "Bt device connection was lost");
         msg.setData(bundle);
         mBTHandler.sendMessage(msg);
 
@@ -435,7 +435,7 @@ public class BluetoothService {
                         msg = msg + x;
                         //if (x == 0x3e) {
                         if (msg.contains(">")) {
-                            mBTHandler.obtainMessage(DashboardActivity.MESSAGE_READ, buffer.length, -1, msg).sendToTarget();
+                            mBTHandler.obtainMessage(DashboardFragment.MESSAGE_READ, buffer.length, -1, msg).sendToTarget();
                             msg = "";
                         }
                     }
@@ -456,7 +456,7 @@ public class BluetoothService {
                 mmOutStream.write(arrayOfBytes);
                 mmOutStream.flush();
                 // Share the sent message back to the UI Activity
-                mBTHandler.obtainMessage(DashboardActivity.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
+                mBTHandler.obtainMessage(DashboardFragment.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
 
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);

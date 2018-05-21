@@ -32,9 +32,6 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/action_settings"
             android:screenOrientation="landscape" />
-        <activity
-            android:name=".dashboard.DashboardActivity"
-            android:screenOrientation="landscape" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -52,11 +49,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".errorlist.ErrorListActivity" />
-        <activity android:name=".mycarlist.MyCarListActivity" />
-        <activity android:name=".checkcar.CheckCarActivity" />
-        <activity android:name=".history.EmptyActivity" />
-        <activity android:name=".profile.ProfileActivity"></activity>
+        <activity android:name=".main.MainActivity"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

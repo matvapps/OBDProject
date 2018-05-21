@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/menu"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="#0e2cb3"
+    android:gravity="center"
+    android:visibility="visible">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:gravity="start|center_vertical"
+            android:text="Меню"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/dashboard_menu_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginTop="32dp"
+            android:background="@android:color/transparent"
+            android:gravity="start|center_vertical"
+            android:text="Панель приборов"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+
+        <Button
+            android:id="@+id/error_list_menu_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:background="@android:color/transparent"
+            android:gravity="start|center_vertical"
+            android:text="Список ошибок"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+
+        <Button
+            android:id="@+id/my_cars_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:background="@android:color/transparent"
+            android:gravity="start|center_vertical"
+            android:text="Мои авто"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+
+        <Button
+            android:id="@+id/check_car_menu_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:background="@android:color/transparent"
+            android:gravity="start|center_vertical"
+            android:text="Проверка авто"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/profile_menu_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:background="@android:color/transparent"
+            android:gravity="start|center_vertical"
+            android:text="Профиль"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/history_menu_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:background="@android:color/transparent"
+            android:gravity="start|center_vertical"
+            android:text="История"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+
+        <Button
+            android:id="@+id/settings_menu_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:background="@android:color/transparent"
+            android:gravity="start|center_vertical"
+            android:text="Настройки"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#010C1E"
+    android:orientation="horizontal">
+
+
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" >
+
+        <FrameLayout
+            android:id="@+id/content_body"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <!--<include-->
+        <!--layout="@layout/activity_dashboard"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+
+
+        <include
+            layout="@layout/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
+    </FrameLayout>
+
+
+
+    <include
+        layout="@layout/menu_view"
+        android:layout_width="180dp"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+
+</FrameLayout>

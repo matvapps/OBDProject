@@ -10,6 +10,10 @@ import com.carzis.model.DashboardItem;
  */
 public class Utility {
 
+    public static float convertDpToPx(Context context, float dp) {
+        return dp * context.getResources().getDisplayMetrics().density;
+    }
+
     public static String getDimenBy(Context context, DashboardItem.DashboardDevice deviceType) {
         switch (deviceType) {
             case RPM: {
