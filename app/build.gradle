@@ -54,6 +54,8 @@ dependencies {
     // circle page indicator for tutorial page
     implementation 'me.relex:circleindicator:1.2.2@aar'
 
+    //Bluetooth usage library
+    implementation 'me.aflak.libraries:bluetooth:1.3.3'
 
 
     implementation 'com.android.support:appcompat-v7:27.1.1'

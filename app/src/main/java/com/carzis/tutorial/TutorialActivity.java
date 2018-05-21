@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.carzis.R;
+import com.carzis.connect.ConnectActivity;
 import com.carzis.main.MainActivity;
 
 import me.relex.circleindicator.CircleIndicator;
@@ -31,7 +32,7 @@ public class TutorialActivity extends AppCompatActivity {
 
 
         nextBtn.setOnClickListener(view -> {
-            MainActivity.start(TutorialActivity.this);
+            ConnectActivity.start(TutorialActivity.this);
             finish();
         });
 

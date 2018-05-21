@@ -811,12 +811,7 @@ public class DashboardFragment extends Fragment {
 
     public void resetgauges() {
 
-        Log.d(TAG, "Speedometer: change speed to " + 240);
-//        Toast.makeText(getActivity(), "Speedometer: " + 240, Toast.LENGTH_SHORT).show();
         speedometer.speedTo(240, 1200);
-
-        Log.d(TAG, "Tachometer: change rpm to : " + 7000);
-//        Toast.makeText(getActivity(), "Tachometer: " + 7000, Toast.LENGTH_SHORT).show();
         tachometer.speedTo(7000, 1200);
 
         new Thread(() -> {
@@ -837,7 +832,6 @@ public class DashboardFragment extends Fragment {
 //        engineLoad.setText("0 %");
 //        voltage.setText("0 V");
 //        coolantTemperature.setText("0 C°");
-        Log.d(TAG, "INFO: ");
 //        Info.setText("");
 //        airTemperature.setText("0 C°");
 //        Maf.setText("0 g/s");
@@ -893,7 +887,6 @@ public class DashboardFragment extends Fragment {
             // Check that we're actually connected before trying anything
             if (mBtService.getState() != BluetoothService.STATE_CONNECTED) {
                 Log.d(TAG, "INFO: " + getString(R.string.not_connected));
-                //Toast.makeText(getActivity(), R.string.not_connected, Toast.LENGTH_LONG).show();
                 return;
             }
             try {
@@ -972,7 +965,6 @@ public class DashboardFragment extends Fragment {
             int index = tmpmsg.indexOf("41");
 
             String pidmsg = tmpmsg.substring(index, tmpmsg.length());
-
             if (pidmsg.contains("4100")) {
 
                 setPidsSupported(pidmsg);
@@ -984,9 +976,7 @@ public class DashboardFragment extends Fragment {
     private void analysMsg(Message msg) {
 
         String tmpmsg = clearMsg(msg);
-
         generateVolt(tmpmsg);
-
         getElmInfo(tmpmsg);
 
         if (!initialized) {
@@ -1012,8 +1002,6 @@ public class DashboardFragment extends Fragment {
                 analysPIDS(tmpmsg);
             } catch (Exception e) {
                 Log.e(TAG, "ERROR: ", e);
-//                Toast.makeText(getActivity(), "INFO: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//                Info.setText("Error : " + e.getMessage());
             }
 
             sendDefaultCommands();
@@ -1124,7 +1112,6 @@ public class DashboardFragment extends Fragment {
 
     private void setPidsSupported(String buffer) {
         Log.d(TAG, "INFO: Trying to get available pids : " + String.valueOf(trycount));
-//        Info.setText("Trying to get available pids : " + String.valueOf(trycount));
         trycount++;
 
         StringBuilder flags = new StringBuilder();
@@ -1243,10 +1230,8 @@ public class DashboardFragment extends Fragment {
         }
 
         if (VoltText != null) {
-
             dashboardItemsAdapter.updateItem(
                     new DashboardItem(VoltText, DashboardItem.DashboardDevice.VOLTAGE));
-//            voltage.setText(VoltText);
         }
     }
 
