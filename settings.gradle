@@ -1,1 +1,1 @@
-include ':app', ':dashboarddevices', ':pulseview'
+include ':app', ':dashboarddevices', ':pulseview', ':radar'

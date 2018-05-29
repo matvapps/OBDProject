@@ -1,0 +1,18 @@
+P1220 - Cyl.8 - Fuel Inj. Circ. Short to B +
+P1783 - Трансмиссионное сверхтемпературное состояние
+C0380 - Низкая мощность цепи переключения режима
+P1220 - обнаружена неисправность системы управления дроссельной заслонкой 
+P1B83 - Замер топлива и воздуха и вспомогательные элементы управления выбросами 
+
+
+05-26 19:53:21.092 3387-3387/com.carzis D/MainActivity: analysPIDS: 16
+05-26 19:53:21.911 3387-3387/com.carzis D/MainActivity: analysPIDS: 12
+05-26 19:53:22.180 3387-3387/com.carzis D/MainActivity: analysPIDS: 13
+05-26 19:53:22.421 3387-3387/com.carzis D/MainActivity: analysPIDS: 4
+05-26 19:53:22.660 3387-3387/com.carzis D/MainActivity: analysPIDS: 5
+05-26 19:53:22.900 3387-3387/com.carzis D/MainActivity: analysPIDS: 15
+
+41h = show current data;
+42h = freeze frame;
+
+http://joxi.ru/MAjOJLNS4RdVOr

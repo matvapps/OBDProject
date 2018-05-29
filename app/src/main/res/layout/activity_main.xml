@@ -8,11 +8,20 @@
     android:orientation="horizontal">
 
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/bg"
         android:layout_gravity="center" >
+
+
+        <include
+            layout="@layout/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
 
         <FrameLayout
             android:id="@+id/content_body"
@@ -24,13 +33,7 @@
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="match_parent"/>-->
 
-
-        <include
-            layout="@layout/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="50dp" />
-
-    </FrameLayout>
+    </LinearLayout>
 
 
 

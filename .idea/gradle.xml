@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/dashboarddevices" />
             <option value="$PROJECT_DIR$/pulseview" />
+            <option value="$PROJECT_DIR$/radar" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

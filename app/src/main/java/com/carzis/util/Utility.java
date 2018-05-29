@@ -14,6 +14,11 @@ public class Utility {
         return dp * context.getResources().getDisplayMetrics().density;
     }
 
+    public static byte hexStringToByteArray(char s) {
+        return (byte) ((Character.digit(s, 16) << 4));
+    }
+
+
     public static String getDimenBy(Context context, DashboardItem.DashboardDevice deviceType) {
         switch (deviceType) {
             case RPM: {
@@ -25,17 +30,17 @@ public class Utility {
             case VOLTAGE: {
                 return context.getString(R.string.dimen_title_voltage);
             }
-            case GAS_AMOUNT: {
+            case FUEL_AMOUNT: {
                 return context.getString(R.string.dimen_title_gas);
             }
             case ENGINE_TEMP: {
                 return context.getString(R.string.dimen_title_engine_temp);
             }
-            case INTAKE_TEMP:
+            case INTAKE_AIR_TEMP:
             case COOLANT_TEMP: {
                 return context.getString(R.string.dimen_title_coolant_temp);
             }
-            case OIL_PRESSURE: {
+            case ENGINE_OIL_PRESSURE: {
                 return context.getString(R.string.dimen_title_oil_pressure);
             }
         }
@@ -54,10 +59,10 @@ public class Utility {
             case VOLTAGE: {
                 return R.drawable.ac;
             }
-            case GAS_AMOUNT: {
+            case FUEL_AMOUNT: {
                 return R.drawable.ic_bens;
             }
-            case INTAKE_TEMP:
+            case INTAKE_AIR_TEMP:
             case ENGINE_TEMP: {
                 return R.drawable.temp;
             }
@@ -65,7 +70,7 @@ public class Utility {
                 // TODO: change icon
                 return R.drawable.temp;
             }
-            case OIL_PRESSURE: {
+            case ENGINE_OIL_PRESSURE: {
                 return R.drawable.wo;
             }
         }

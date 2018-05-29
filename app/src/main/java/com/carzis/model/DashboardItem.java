@@ -10,12 +10,13 @@ public class DashboardItem {
     public enum DashboardDevice {
         SPEED,
         RPM,
-        INTAKE_TEMP,
+        INTAKE_AIR_TEMP,
         ENGINE_TEMP,
         COOLANT_TEMP,
-        OIL_PRESSURE,
+        ENGINE_OIL_PRESSURE,
+        ENGINE_OIL_TEMP,
         VOLTAGE,
-        GAS_AMOUNT
+        FUEL_AMOUNT
     }
 
     public DashboardItem(String value, DashboardDevice deviceType) {

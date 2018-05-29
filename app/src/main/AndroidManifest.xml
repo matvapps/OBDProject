@@ -38,19 +38,29 @@
             android:value="3e459c5883d795574754798ef84d5657881f1df6" />
 
         <activity
-            android:name=".connect.ConnectActivity"
+            android:name=".notused.ConnectMainActivity"
             android:screenOrientation="landscape" />
+        <activity
+            android:name=".connect.ConnectActivity"
+            android:screenOrientation="landscape">
+
+        </activity>
         <activity
             android:name=".tutorial.TutorialActivity"
             android:screenOrientation="landscape">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main.MainActivity"
-            android:screenOrientation="landscape"></activity>
+        <activity
+            android:name=".main.MainActivity"
+            android:screenOrientation="landscape" />
+
+        <activity android:name=".register.RegisterActivity"
+            android:screenOrientation="landscape"/>
     </application>
 
 </manifest>
