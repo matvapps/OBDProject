@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Carzis.iml" filepath="$PROJECT_DIR$/Carzis.iml" />
+      <module fileurl="file://D:\Elm327-master\Carzis.iml" filepath="D:\Elm327-master\Carzis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Elm327-master.iml" filepath="$PROJECT_DIR$/Elm327-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/dashboarddevices/dashboarddevices.iml" filepath="$PROJECT_DIR$/dashboarddevices/dashboarddevices.iml" />
       <module fileurl="file://$PROJECT_DIR$/pulseview/pulseview.iml" filepath="$PROJECT_DIR$/pulseview/pulseview.iml" />
