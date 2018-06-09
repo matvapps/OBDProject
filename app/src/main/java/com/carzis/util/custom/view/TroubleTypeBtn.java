@@ -1,4 +1,4 @@
-package com.carzis.util.custom;
+package com.carzis.util.custom.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;

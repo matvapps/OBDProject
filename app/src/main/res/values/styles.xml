@@ -15,6 +15,10 @@
 
     </style>
 
+    <style name="DialogTheme" parent="Theme.AppCompat.Dialog">
+
+    </style>
+
 
 
     <style name="AppTheme.NoActionBar">

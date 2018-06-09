@@ -31,6 +31,7 @@
 
 
     <TextView
+        app:fontFamily="@font/gte_esti_pto_text_bold"
         android:id="@+id/connect_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,6 +45,7 @@
         app:layout_constraintTop_toBottomOf="@+id/bth_icon" />
 
     <TextView
+        app:fontFamily="@font/gte_esti_pto_text_regular"
         android:id="@+id/wait_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

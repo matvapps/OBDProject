@@ -1,14 +1,18 @@
 package com.carzis.main.adapter;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.carzis.R;
-import com.carzis.model.TroubleItem;
+import com.carzis.main.listener.OnTroubleItemClickListener;
+import com.carzis.model.Trouble;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +22,14 @@ import java.util.List;
  */
 public class TroubleCodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<TroubleItem> troubleItems;
-    private List<TroubleItem> defaultItems;
+    private List<Trouble> troubleItems;
+    private List<Trouble> defaultItems;
+
+    public int selectedItemPos = 0;
 
     private String currentType;
 
-    private View.OnClickListener onClickListener;
+    private OnTroubleItemClickListener onItemClickListener;
 
 
     public TroubleCodesAdapter() {
@@ -31,14 +37,14 @@ public class TroubleCodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         defaultItems = new ArrayList<>();
     }
 
-    public void setItems(List<TroubleItem> troubleItems) {
+    public void setItems(List<Trouble> troubleItems) {
         this.defaultItems.clear();
         this.defaultItems.addAll(troubleItems);
         notifyDataSetChanged();
         setTroubleType(currentType);
     }
 
-    public void addItem(TroubleItem troubleItem) {
+    public void addItem(Trouble troubleItem) {
         this.defaultItems.add(troubleItem);
 //        notifyItemInserted(defaultItems.size());
         notifyDataSetChanged();
@@ -57,30 +63,58 @@ public class TroubleCodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         TroubleCodeViewHolder troubleCodeViewHolder = (TroubleCodeViewHolder) holder;
+        Trouble item = getItem(position);
 
-        TroubleItem item = getItem(position);
+//        if (selectedItemPos != -1)
+//            if (selectedItemPos != position) {
+//                troubleCodeViewHolder.text.setTextColor(
+//                        ContextCompat.getColor(troubleCodeViewHolder.itemView.getContext(), R.color.darkerGray));
+//                troubleCodeViewHolder.image.setAlpha(0.4f);
+//            }
 
-        troubleCodeViewHolder.text.setText(item.getCode() + " " + item.getDesc());
+        if (selectedItemPos == position) {
+            troubleCodeViewHolder.text.setTextColor(Color.WHITE);
+            troubleCodeViewHolder.image.setAlpha(1.0f);
+        } else {
+            troubleCodeViewHolder.text.setTextColor(
+                        ContextCompat.getColor(troubleCodeViewHolder.itemView.getContext(), R.color.darkerGray));
+                troubleCodeViewHolder.image.setAlpha(0.4f);
+        }
 
-        if (onClickListener != null)
-            troubleCodeViewHolder.itemView.setOnClickListener(onClickListener);
+        String shortDescription = item.getRu_desc();
+        if (shortDescription.isEmpty())
+            shortDescription = item.getEn_desc();
+
+        if (shortDescription.indexOf("P00") == 0)
+            shortDescription = shortDescription.substring(5);
+
+        troubleCodeViewHolder.text.setText(String.format("%s %s", item.getCode(), shortDescription));
+
+        if (onItemClickListener != null)
+            troubleCodeViewHolder.itemView.setOnClickListener(view -> {
+                selectedItemPos = position;
+                onItemClickListener.onClick(position);
+                troubleCodeViewHolder.text.setTextColor(Color.WHITE);
+                troubleCodeViewHolder.image.setAlpha(1.0f);
+                notifyDataSetChanged();
+            });
 
     }
 
-    public View.OnClickListener getOnClickListener() {
-        return onClickListener;
+    public OnTroubleItemClickListener getOnItemClickListener() {
+        return onItemClickListener;
     }
 
-    public void setOnClickListener(View.OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
+    public void setOnItemClickListener(OnTroubleItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
-    public TroubleItem getItem(int position) {
+    public Trouble getItem(int position) {
         return troubleItems.get(position);
     }
 
     public boolean contains(String troubleCode) {
-        for(TroubleItem item: troubleItems) {
+        for (Trouble item : troubleItems) {
             if (item.getCode().equals(troubleCode))
                 return true;
         }
@@ -93,9 +127,11 @@ public class TroubleCodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void setTroubleType(String troubleType) {
+        if (!troubleType.equals(currentType))
+            selectedItemPos = 0;
         currentType = troubleType;
         troubleItems.clear();
-        for(TroubleItem item: defaultItems)
+        for (Trouble item : defaultItems)
             if (item.getCode().indexOf(troubleType) == 0)
                 if (!contains(item.getCode()))
                     troubleItems.add(item);
@@ -105,11 +141,13 @@ public class TroubleCodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private class TroubleCodeViewHolder extends RecyclerView.ViewHolder {
 
         private TextView text;
+        private ImageView image;
 
         public TroubleCodeViewHolder(View itemView) {
             super(itemView);
 
             text = itemView.findViewById(R.id.text);
+            image = itemView.findViewById(R.id.imageView);
 
         }
     }

@@ -161,7 +161,7 @@ public class ConnectMainActivity extends AppCompatActivity {
         }
 
         connectBt();
-//        iconBth.setOnClickListener(view -> pulsatorLayout.start());
+//        iconBth.setOnItemClickListener(view -> pulsatorLayout.start());
 
     }
 

@@ -3,167 +3,179 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_main">
+    android:layout_height="match_parent">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageButton
-            android:id="@+id/user_image"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/gray_field_background"
-            android:src="@drawable/mask_copy_2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginLeft="24dp" />
-
-        <TextView
-            android:id="@+id/upload_photo_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="Загрузить фото"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            app:layout_constraintStart_toEndOf="@+id/user_image"
-            app:layout_constraintTop_toTopOf="@+id/user_image"
-            android:layout_marginLeft="16dp" />
-
-
-        <LinearLayout
-            android:id="@+id/upload_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/light_gray_stroke_background"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="@+id/upload_photo_txt"
-            app:layout_constraintTop_toBottomOf="@+id/upload_photo_txt">
-
-
-            <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_marginBottom="6dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="4dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="6dp"
-                android:src="@drawable/upload_photo" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:text="Добавить"
-                android:textColor="@android:color/white"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/change_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="@+id/upload_photo"
+        <ImageView
+            android:id="@+id/big_user_photo"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:alpha="0.3"
+            android:scaleType="centerCrop"
+            android:src="@drawable/michael"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginRight="24dp">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/big_user_photo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/user_photo"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/michael"
+                app:riv_corner_radius="6dp" />
 
 
             <TextView
+                android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Изменить пароль"
+                android:layout_marginTop="24dp"
+                android:text="Michael Schumacher"
                 android:textColor="@android:color/white"
-                android:textSize="14sp" />
+                android:textSize="21sp"
+                app:fontFamily="@font/gte_esti_pto_text_bold" />
 
 
             <TextView
+                android:id="@+id/user_bday"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:gravity="left"
-                android:text="Вам придет новый пароль
-по CMC"
-                android:textColor="#43444b"
-                android:textSize="10sp" />
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:textColor="#85858a"
+                android:textSize="16sp"
+                app:fontFamily="@font/gte_esti_pto_text_regular"
+                tools:text="14.07.1982" />
+
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/phone_txt"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="28dp"
+            android:text="Телефон:"
+            android:textColor="#7a8a97"
+            android:textSize="12sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/big_user_photo" />
 
         <TextView
-            android:id="@+id/name_txt"
+            android:id="@+id/user_phone"
+
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:text="+38 099 123 32 25"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
+            app:layout_constraintBottom_toBottomOf="@+id/phone_txt"
+            app:layout_constraintStart_toEndOf="@+id/phone_txt"
+            app:layout_constraintTop_toTopOf="@+id/phone_txt" />
+
+
+        <TextView
+            android:id="@+id/email_txt"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="E-mail:"
+            android:textColor="#7a8a97"
+            android:textSize="12sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
+            app:layout_constraintStart_toStartOf="@+id/phone_txt"
+            app:layout_constraintTop_toBottomOf="@+id/user_phone" />
+
+        <TextView
+            android:id="@+id/user_email"
+
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:text="kirilmefod@gmail.com"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
+            app:layout_constraintBottom_toBottomOf="@+id/email_txt"
+            app:layout_constraintStart_toEndOf="@+id/email_txt"
+            app:layout_constraintTop_toTopOf="@+id/email_txt" />
+
+
+        <Button
+            android:id="@+id/btn_settings_profile"
+            android:layout_width="160dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="38dp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
+            android:background="@drawable/gray_field_background"
+            android:text="Настройки профиля"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/big_user_photo" />
+
+
+        <TextView
+            android:id="@+id/info_txt"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Имя и фамилия"
+            android:text="Персональная информация"
             android:textColor="@android:color/white"
-            android:textSize="11sp"
-            app:layout_constraintStart_toStartOf="@+id/user_image"
-            app:layout_constraintTop_toBottomOf="@+id/user_image" />
+            android:textSize="16sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
+            app:layout_constraintStart_toStartOf="@+id/email_txt"
+            app:layout_constraintTop_toBottomOf="@+id/email_txt" />
 
-
-        <EditText
-            android:id="@+id/name"
-            android:layout_width="200dp"
-            android:layout_height="38dp"
-            android:layout_marginTop="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:textSize="11sp"
-            android:textColorHint="#85858a"
-            android:textColor="#85858a"
-            android:singleLine="true"
-            android:maxLines="1"
-            android:hint="Имя"
-            android:background="@drawable/gray_field_background"
-            app:layout_constraintStart_toStartOf="@+id/name_txt"
-            app:layout_constraintTop_toBottomOf="@+id/name_txt" />
-
-
-        <EditText
-            android:id="@+id/surname"
-            android:layout_width="200dp"
-            android:layout_height="38dp"
-            android:layout_marginStart="16dp"
-            android:background="@drawable/gray_field_background"
-            android:hint="Фамилия"
-            android:maxLines="1"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:singleLine="true"
-            android:textColor="#85858a"
-            android:textColorHint="#85858a"
-            android:textSize="11sp"
-            app:layout_constraintStart_toEndOf="@+id/name"
-            app:layout_constraintTop_toTopOf="@+id/name"
-            android:layout_marginLeft="16dp" />
 
         <TextView
-            android:id="@+id/birthday_txt"
-            android:layout_width="wrap_content"
+            android:id="@+id/user_info"
+
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="День рождения"
-            android:textColor="@android:color/white"
-            android:textSize="11sp"
-            app:layout_constraintStart_toStartOf="@+id/name"
-            app:layout_constraintTop_toBottomOf="@+id/name" />
+            android:layout_marginTop="8dp"
+            android:text="Какая нибудь персональная информация отображается тут"
+            android:textColor="#85858a"
+            android:textSize="12sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
+            app:layout_constraintStart_toStartOf="@+id/info_txt"
+            app:layout_constraintTop_toBottomOf="@+id/info_txt" />
 
 
     </android.support.constraint.ConstraintLayout>
-
 
 </ScrollView>

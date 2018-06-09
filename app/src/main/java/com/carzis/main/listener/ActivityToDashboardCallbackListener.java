@@ -8,4 +8,5 @@ import com.carzis.main.Type;
 public interface ActivityToDashboardCallbackListener {
 
     void onPassRealDataToFragment(Type type, String value);
+    void onAddNewDevice();
 }

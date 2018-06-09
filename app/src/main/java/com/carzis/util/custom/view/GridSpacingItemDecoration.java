@@ -1,4 +1,4 @@
-package com.carzis.util.custom;
+package com.carzis.util.custom.view;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;

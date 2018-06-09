@@ -16,6 +16,7 @@
         android:textColor="@android:color/white"
         android:textSize="17sp"
         android:textStyle="bold"
+        app:fontFamily="@font/gte_esti_pto_text_regular"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,56 +26,57 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
-        android:text="Выьерите категорию чтоб посмотреть список ошибок"
+        android:text="Выберите категорию чтоб посмотреть список ошибок"
         android:textColor="#ffffff"
         android:textSize="9sp"
+        app:fontFamily="@font/gte_esti_pto_text_regular"
         app:layout_constraintStart_toStartOf="@+id/error_list_txt"
         app:layout_constraintTop_toBottomOf="@+id/error_list_txt" />
 
-    <com.carzis.util.custom.TroubleTypeBtn
+    <com.carzis.util.custom.view.TroubleTypeBtn
         android:id="@+id/car_engine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        app:btnImage="@android:drawable/stat_notify_error"
+        app:btnImage="@drawable/ic_trouble_engine"
         app:btnText="Двигатель автомобиля"
         app:layout_constraintStart_toStartOf="@+id/sub_title_text"
         app:layout_constraintTop_toBottomOf="@+id/sub_title_text" />
 
 
-    <com.carzis.util.custom.TroubleTypeBtn
+    <com.carzis.util.custom.view.TroubleTypeBtn
         android:id="@+id/car_body"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        app:btnImage="@android:drawable/stat_notify_error"
+        app:btnImage="@drawable/ic_kuzov"
         app:btnText="Кузовные системы"
         app:layout_constraintBottom_toBottomOf="@+id/car_engine"
         app:layout_constraintStart_toEndOf="@+id/car_engine"
         app:layout_constraintTop_toTopOf="@+id/car_engine" />
 
 
-    <com.carzis.util.custom.TroubleTypeBtn
+    <com.carzis.util.custom.view.TroubleTypeBtn
         android:id="@+id/car_chassis"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        app:btnImage="@android:drawable/stat_notify_error"
+        app:btnImage="@drawable/ic_shasi"
         app:btnText="Шасси"
         app:layout_constraintBottom_toBottomOf="@+id/car_body"
         app:layout_constraintStart_toEndOf="@+id/car_body"
         app:layout_constraintTop_toTopOf="@+id/car_body" />
 
 
-    <com.carzis.util.custom.TroubleTypeBtn
+    <com.carzis.util.custom.view.TroubleTypeBtn
         android:id="@+id/car_electronics"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        app:btnImage="@android:drawable/stat_notify_error"
+        app:btnImage="@drawable/ic_electro"
         app:btnText="Электроника"
         app:layout_constraintBottom_toBottomOf="@+id/car_chassis"
         app:layout_constraintStart_toEndOf="@+id/car_chassis"
@@ -114,11 +116,12 @@
 
             <View
                 android:layout_width="0.5dp"
-                android:alpha="0.6"
                 android:layout_height="match_parent"
+                android:alpha="0.3"
                 android:background="#979797" />
 
             <ScrollView
+                android:id="@+id/trouble_code_full_desc_container"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
@@ -134,6 +137,7 @@
                     android:layout_marginTop="8dp"
                     android:textColor="@android:color/white"
                     android:textSize="11sp"
+                    app:fontFamily="@font/gte_esti_pto_text_regular"
                     tools:text="P0001  — общий диагностический код неисправности (DTC) применяется ко всем автомобилям оборудованным OBD-II, включая,  такими авто как  Ford, Пежо,Опель, VW (Фольксваген), Mazda и т.д.
 
 Ошибка P0001 не очень распространенная и чаще встречается на дизельных двигателях Common Rail (CRD) или автомобилях средствах с непосредственным впрыском бензина (GDI).
@@ -180,13 +184,14 @@
                 android:text="КОД ОШИБКИ"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="10sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:fontFamily="@font/gte_esti_pto_text_regular" />
 
 
             <View
                 android:layout_width="0.5dp"
-                android:alpha="0.6"
                 android:layout_height="match_parent"
+                android:alpha="0.3"
                 android:background="#979797" />
 
             <TextView
@@ -198,7 +203,8 @@
                 android:text="ОПИСАНИЕ"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="10sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:fontFamily="@font/gte_esti_pto_text_regular" />
 
 
         </LinearLayout>

@@ -74,11 +74,11 @@ public class DashboardItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         dashboardItemViewHolder.value.setText(String.valueOf(device.getValue()));
         dashboardItemViewHolder.dimen.setText(
-                Utility.getDimenBy(
+                Utility.getDeviceDimenBy(
                         holder.itemView.getContext(), device.getDeviceType()));
 
         dashboardItemViewHolder.icon.setImageResource(
-                Utility.getIconIdBy(
+                Utility.getDeviceIconIdBy(
                         device.getDeviceType()));
 
     }

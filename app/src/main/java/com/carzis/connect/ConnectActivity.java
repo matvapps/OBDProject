@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.carzis.R;
 import com.carzis.main.MainActivity;
+import com.carzis.repository.local.prefs.KeyValueStorage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -56,6 +57,7 @@ public class ConnectActivity extends AppCompatActivity {
 
     private ImageView iconBth;
     private PulsatorLayout pulsatorLayout;
+    private KeyValueStorage keyValueStorage;
 
     private static final int REQUEST_ENABLE_BT = 3;
     private static final int REQUEST_GET_CONNECT_DEVICE_DATA = 24;
@@ -84,7 +86,6 @@ public class ConnectActivity extends AppCompatActivity {
 //    };
 
 
-
     public static void start(Activity activity) {
         Intent intent = new Intent(activity, ConnectActivity.class);
         activity.startActivity(intent);
@@ -95,19 +96,27 @@ public class ConnectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect);
 
+
+        this.setFinishOnTouchOutside(false);
         iconBth = findViewById(R.id.bth_icon);
         pulsatorLayout = findViewById(R.id.pulsator);
 
-        iconBth.setOnClickListener(view -> {
-            pulsatorLayout.start();
+        keyValueStorage = new KeyValueStorage(ConnectActivity.this);
 
-            connectBt();
+        // every time ask user for his car name
+        if (!keyValueStorage.getCurrentCarName().isEmpty())
+            keyValueStorage.setCurrentCarName("");
 
-//            MainActivity.start(this);
-//            finish();
-        });
+        pulsatorLayout.start();
 
+//        iconBth.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                connectBt();
+//            }
+//        });
 
+        connectBt();
         newBTDevices = new ArrayList<>();
 
         // Register for broadcasts when a device is discovered
@@ -136,8 +145,8 @@ public class ConnectActivity extends AppCompatActivity {
 //            }
 //        }
 //        if (!mBluetoothAdapter.isEnabled()) {
-            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+        Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 //            return;
 //        }
 
@@ -178,6 +187,8 @@ public class ConnectActivity extends AppCompatActivity {
         if (mBluetoothAdapter != null) {
             mBluetoothAdapter.cancelDiscovery();
         }
+
+//        if (bluetoothService != null) bluetoothService.stop();
 
         // Unregister broadcast listeners
         this.unregisterReceiver(mReceiver);
@@ -276,7 +287,6 @@ public class ConnectActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
 
                     MainActivity.start(this, data.getStringExtra("device_name"), data.getStringExtra("device_address"));
-
 //                    connectDevice(data);
                 }
                 break;

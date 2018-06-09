@@ -20,56 +20,12 @@
             android:scaleType="centerCrop"
             android:src="@drawable/bg" />
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_gravity="top"
-            android:layout_marginTop="3dp">
-
-            <ImageButton
-                android:id="@+id/menu_btn"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/btn_rounded_right"
-                android:padding="13.5dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_topbar_right_copy"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="Force Crash!"
-                android:onClick="forceCrash"
-                android:visibility="gone"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true" />
-
-
-            <TextView
-                android:id="@+id/time_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="16:05"
-                android:layout_marginRight="8dp" />
-
-        </android.support.constraint.ConstraintLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="10dp"
             android:orientation="vertical">
 
 
@@ -121,12 +77,14 @@
         </LinearLayout>
 
         <FrameLayout
+            android:id="@+id/error_in_system"
+            android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginLeft="64dp"
             android:layout_marginRight="64dp"
-            android:background="@drawable/group_7"
+            android:background="@drawable/error_in_system"
             android:layout_marginBottom="24dp"/>
 
     </FrameLayout>

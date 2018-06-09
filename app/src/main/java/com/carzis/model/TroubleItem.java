@@ -3,6 +3,7 @@ package com.carzis.model;
 /**
  * Created by Alexandr.
  */
+// NOT USED
 public class TroubleItem {
     private String code;
     private String desc;

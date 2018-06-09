@@ -7,7 +7,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.carzis.R;
-import com.carzis.register.RegisterActivity;
+import com.carzis.connect.ConnectActivity;
+import com.carzis.repository.local.prefs.KeyValueStorage;
 
 import me.relex.circleindicator.CircleIndicator;
 
@@ -18,10 +19,17 @@ public class TutorialActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tutorial);
 
+        KeyValueStorage keyValueStorage = new KeyValueStorage(this);
+        if (!keyValueStorage.isFirstTimeLaunch()) {
+            ConnectActivity.start(this);
+            finish();
+        }
+
+        setContentView(R.layout.activity_tutorial);
         nextBtn = findViewById(R.id.next_btn);
 
+        keyValueStorage.setFirstTimeLaunch(false);
         TutorialPageAdapter tutorialPageAdapter = new TutorialPageAdapter(getSupportFragmentManager());
 
         ViewPager viewpager = findViewById(R.id.viewpager);
@@ -31,7 +39,7 @@ public class TutorialActivity extends AppCompatActivity {
 
 
         nextBtn.setOnClickListener(view -> {
-            RegisterActivity.start(TutorialActivity.this);
+            ConnectActivity.start(TutorialActivity.this);
             finish();
         });
 

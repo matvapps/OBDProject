@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/big_user_photo"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:alpha="0.3"
+            android:scaleType="centerCrop"
+            android:src="@drawable/michael"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/big_user_photo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/user_photo"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/michael"
+                app:riv_corner_radius="6dp" />
+
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Michael Schumacher"
+                android:textColor="@android:color/white"
+                android:textSize="21sp"
+                app:fontFamily="@font/gte_esti_pto_text_bold" />
+
+
+            <TextView
+                android:id="@+id/user_bday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:text="14.07.1982"
+                android:textColor="#85858a"
+                android:textSize="16sp"
+                app:fontFamily="@font/gte_esti_pto_text_regular" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/phone_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="28dp"
+            android:text="Телефон:"
+            android:textColor="#7a8a97"
+            android:textSize="12sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/big_user_photo" />
+
+        <TextView
+            android:id="@+id/user_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:text="+38 099 123 32 25"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
+            app:layout_constraintBottom_toBottomOf="@+id/phone_txt"
+            app:layout_constraintStart_toEndOf="@+id/phone_txt"
+            app:layout_constraintTop_toTopOf="@+id/phone_txt" />
+
+
+        <TextView
+            android:id="@+id/email_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="E-mail:"
+            android:textColor="#7a8a97"
+            android:textSize="12sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
+            app:layout_constraintStart_toStartOf="@+id/phone_txt"
+            app:layout_constraintTop_toBottomOf="@+id/user_phone" />
+
+        <TextView
+            android:id="@+id/user_email"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:text="kirilmefod@gmail.com"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
+            app:layout_constraintBottom_toBottomOf="@+id/email_txt"
+            app:layout_constraintStart_toEndOf="@+id/email_txt"
+            app:layout_constraintTop_toTopOf="@+id/email_txt" />
+
+
+        <Button
+            android:id="@+id/btn_settings_profile"
+            android:layout_width="160dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="45dp"
+            android:background="@drawable/gray_field_background"
+            android:text="Настройки профиля"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
+            app:layout_constraintStart_toStartOf="@+id/user_info"
+            app:layout_constraintTop_toBottomOf="@+id/user_info" />
+
+
+        <TextView
+            android:id="@+id/info_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Персональная информация"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
+            app:layout_constraintStart_toStartOf="@+id/email_txt"
+            app:layout_constraintTop_toBottomOf="@+id/email_txt" />
+
+
+        <TextView
+            android:id="@+id/user_info"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Какая нибудь персональная информация отображается тут"
+            android:textColor="#85858a"
+            android:textSize="12sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
+            app:layout_constraintStart_toStartOf="@+id/info_txt"
+            app:layout_constraintTop_toBottomOf="@+id/info_txt" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</ScrollView>

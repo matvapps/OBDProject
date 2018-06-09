@@ -22,15 +22,21 @@ import android.widget.Toast;
 
 import com.carzis.R;
 import com.carzis.TroubleCodes;
+import com.carzis.additionalscreen.AdditionalActivity;
 import com.carzis.connect.BluetoothService;
 import com.carzis.connect.ConnectActivity;
 import com.carzis.main.fragment.CheckAutoFragment;
 import com.carzis.main.fragment.DashboardFragment;
+import com.carzis.main.fragment.MyCarsFragment;
+import com.carzis.main.fragment.ProfileFragment;
 import com.carzis.main.fragment.TroubleCodesFragment;
 import com.carzis.main.listener.ActivityToDashboardCallbackListener;
 import com.carzis.main.listener.ActivityToTroublesCallbackListener;
 import com.carzis.main.listener.DashboardToActivityCallbackListener;
 import com.carzis.main.listener.TroublesToActivityCallbackListener;
+import com.carzis.model.HistoryItem;
+import com.carzis.repository.local.database.LocalRepository;
+import com.carzis.repository.local.prefs.KeyValueStorage;
 import com.carzis.util.Utility;
 import com.github.florent37.viewanimator.ViewAnimator;
 
@@ -39,6 +45,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import static com.carzis.model.DashboardItem.DashboardDevice;
 
 public class MainActivity extends AppCompatActivity implements DashboardToActivityCallbackListener,
         TroublesToActivityCallbackListener {
@@ -64,18 +72,21 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
     private ImageButton menuBtn;
     private View menuView;
     private View addView;
+    private View addCarView;
 
     private Button dashboardMenuBtn;
     private Button errorListMenuBtn;
     private Button myCarsMenuBtn;
     private Button checkCarMenuBtn;
     private Button profileMenuBtn;
-    private Button historyMenuBtn;
     private Button settingsMenuBtn;
 
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothDevice currentdevice;
     private BluetoothService bluetoothService = null;
+
+    private LocalRepository localRepository;
+    private KeyValueStorage keyValueStorage;
 
     public ActivityToDashboardCallbackListener activityFragmentCallbackListener;
     public ActivityToTroublesCallbackListener activityToTroublesCallbackListener;
@@ -95,26 +106,52 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
             "01", "02", "03", "04", "05", "06", "07", "08",
             "09", "0A", "0B", "0C", "0D", "0E", "0F", "10",
             "11", "12", "13", "14", "15", "16", "17", "18",
-            "19", "1A", "1B", "1C", "1D", "1E", "1F", "2F", "20"};
+            "19", "1A", "1B", "1C", "1D", "1E", "1F", "20",
+            "22", "23", "2C", "2F", "33", "3C", "3D", "3E",
+            "3F", "45", "5C"};
 
     private String VOLTAGE = "ATRV",
             PROTOCOL = "ATDP",
             RESET = "ATZ",
+
+    ENGINE_LOAD = "0104",  // A*100/255
             ENGINE_COOLANT_TEMP = "0105",  //A-40
+            SH_TERM_FUEL_TRIM_1 = "0106", // (A / 1.28) - 100
+            LN_TERM_FUEL_PERCENT_TRIM_1 = "0107", // (A / 1.28) - 100
+            SH_TERM_FUEL_TRIM_2 = "0108", // (A / 1.28) - 100
+            LN_TERM_FUEL_PERCENT_TRIM_2 = "0109", // (A / 1.28) - 100
+            FUEL_PRESSURE = "010A", // 3*A
+            INTAKE_MAN_PRESSURE = "010B", // A,  Intake manifold absolute pressure 0 - 255 kPa
             ENGINE_RPM = "010C",  //((A*256)+B)/4
-            ENGINE_LOAD = "0104",  // A*100/255
             VEHICLE_SPEED = "010D",  //A
+            TIMING_ADVANCE = "010E", // (A / 2) - 64
             INTAKE_AIR_TEMP = "010F",  //A-40
             MAF_AIR_FLOW = "0110", //MAF air flow rate 0 - 655.35	grams/sec ((256*A)+B) / 100  [g/s]
-            FUEL_LEVEL = "012F", // FUEL level 	0-100%	A*100/255
-            ENGINE_OIL_TEMP = "015C",  //A-40
-            FUEL_RAIL_PRESSURE = "0122", // ((A*256)+B)*0.079
-            INTAKE_MAN_PRESSURE = "010B", //Intake manifold absolute pressure 0 - 255 kPa
-            CONT_MODULE_VOLT = "0142",  //((A*256)+B)/1000
-            AMBIENT_AIR_TEMP = "0146",  //A-40
-            CATALYST_TEMP_B1S1 = "013C",  //(((A*256)+B)/10)-40
-            STATUS_DTC = "0101", //Status since DTC Cleared
             THROTTLE_POSITION = "0111", //Throttle position 0 -100 % A*100/255
+            OXY_SENS_VOLT_B_1_SENS_1 = "0114", // (A / 200) - voltage; (100 / 128) * B - 100 - short term fuel trim
+            OXY_SENS_VOLT_B_1_SENS_2 = "0115",
+            OXY_SENS_VOLT_B_1_SENS_3 = "0116",
+            OXY_SENS_VOLT_B_1_SENS_4 = "0117",
+            OXY_SENS_VOLT_B_2_SENS_1 = "0118",
+            OXY_SENS_VOLT_B_2_SENS_2 = "0119",
+            OXY_SENS_VOLT_B_2_SENS_3 = "011A",
+            OXY_SENS_VOLT_B_2_SENS_4 = "011B",
+            FUEL_RAIL_PRESSURE = "0122", // ((A*256)+B)*0.079
+            FUEL_RAIL_PRESSURE_DIESEL = "0123", // 10 * (256 * A + B)
+            COMMANDED_EGR = "012C", // 	A*100/255
+            FUEL_LEVEL = "012F", // FUEL level 	0-100%	A*100/255
+            BAROMETRIC_PRESSURE = "0133", // A
+            CATALYST_TEMP_B1S1 = "013C",  // (((A*256)+B)/10)-40
+            CATALYST_TEMP_B2S1 = "013D", // (((A*256)+B)/10)-40
+            CATALYST_TEMP_B1S2 = "013E", // (((A*256)+B)/10)-40
+            CATALYST_TEMP_B2S2 = "013F", // (((A*256)+B)/10)-40
+            THROTTLE_POS_2 = "0145", // A*100 / 255
+            ENGINE_OIL_TEMP = "015C",  //A-40
+
+
+    CONT_MODULE_VOLT = "0142",  //((A*256)+B)/1000
+            AMBIENT_AIR_TEMP = "0146",  //A-40
+            STATUS_DTC = "0101", //Status since DTC Cleared
             OBD_STANDARDS = "011C", //OBD standards this vehicle
             PIDS_SUPPORTED = "0120"; //PIDs supported
 
@@ -157,8 +194,12 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
         addView = findViewById(R.id.add_btn);
         timeText = findViewById(R.id.time_text_view);
         menuBtn = findViewById(R.id.menu_btn);
+        addCarView = findViewById(R.id.add_car_view);
 
         initMenu();
+
+        addView.setOnClickListener(view -> activityFragmentCallbackListener.onAddNewDevice());
+        addCarView.setOnClickListener(view -> AdditionalActivity.start(MainActivity.this, AdditionalActivity.ADD_CAR_FRAGMENT));
 
         menuBtn.setOnClickListener(view -> {
             if (menuView.getVisibility() == View.VISIBLE)
@@ -191,21 +232,57 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
         deviceadress = getIntent().getStringExtra(ConnectActivity.EXTRA_DEVICE_ADDRESS);
         devicename = getIntent().getStringExtra(ConnectActivity.EXTRA_DEVICE_NAME);
 
+        localRepository = new LocalRepository(this);
+        keyValueStorage = new KeyValueStorage(this);
+
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         troubleCodes = new TroubleCodes();
         initializeCommands
                 = new String[]{"ATZ", "ATL0", "ATE1", "ATH1", "ATAT1", "ATSTFF", "ATI", "ATDP", "ATSP0", "ATSP0"};
 
-        commandslist.add(FUEL_LEVEL);
         commandslist.add(VOLTAGE);
-        commandslist.add(ENGINE_OIL_TEMP);
-        commandslist.add(ENGINE_RPM);
-        commandslist.add(VEHICLE_SPEED);
         commandslist.add(ENGINE_LOAD);
         commandslist.add(ENGINE_COOLANT_TEMP);
+        commandslist.add(SH_TERM_FUEL_TRIM_1);
+        commandslist.add(LN_TERM_FUEL_PERCENT_TRIM_1);
+        commandslist.add(SH_TERM_FUEL_TRIM_2);
+        commandslist.add(LN_TERM_FUEL_PERCENT_TRIM_2);
+        commandslist.add(FUEL_PRESSURE);
+        commandslist.add(INTAKE_MAN_PRESSURE);
+        commandslist.add(ENGINE_RPM);
+        commandslist.add(VEHICLE_SPEED);
+        commandslist.add(TIMING_ADVANCE);
         commandslist.add(INTAKE_AIR_TEMP);
         commandslist.add(MAF_AIR_FLOW);
+        commandslist.add(THROTTLE_POSITION);
+        commandslist.add(OXY_SENS_VOLT_B_1_SENS_1);
+        commandslist.add(OXY_SENS_VOLT_B_1_SENS_2);
+        commandslist.add(OXY_SENS_VOLT_B_1_SENS_3);
+        commandslist.add(OXY_SENS_VOLT_B_1_SENS_4);
+        commandslist.add(OXY_SENS_VOLT_B_2_SENS_1);
+        commandslist.add(OXY_SENS_VOLT_B_2_SENS_2);
+        commandslist.add(OXY_SENS_VOLT_B_2_SENS_3);
+        commandslist.add(OXY_SENS_VOLT_B_2_SENS_4);
+        commandslist.add(FUEL_RAIL_PRESSURE);
+        commandslist.add(FUEL_RAIL_PRESSURE_DIESEL);
+        commandslist.add(COMMANDED_EGR);
+        commandslist.add(FUEL_LEVEL);
+        commandslist.add(BAROMETRIC_PRESSURE);
+        commandslist.add(CATALYST_TEMP_B1S1);
+        commandslist.add(CATALYST_TEMP_B2S1);
+        commandslist.add(CATALYST_TEMP_B1S2);
+        commandslist.add(CATALYST_TEMP_B2S2);
+        commandslist.add(THROTTLE_POS_2);
+        commandslist.add(ENGINE_OIL_TEMP);
+
+
+        commandslist.add(CONT_MODULE_VOLT);
+        commandslist.add(AMBIENT_AIR_TEMP);
+        commandslist.add(STATUS_DTC);
+        commandslist.add(OBD_STANDARDS);
+        commandslist.add(PIDS_SUPPORTED);
+
 
         whichCommand = 0;
 
@@ -309,10 +386,13 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
         return getSupportFragmentManager().findFragmentByTag(fragment.getClass().getSimpleName());
     }
 
+    int troubleCodeInt = 0;
+
 
     private View.OnClickListener onMenuItemClickListener = view -> {
         switch (view.getId()) {
             case R.id.dashboard_menu_btn: {
+                addCarView.setVisibility(View.INVISIBLE);
                 showFragment(new DashboardFragment());
                 addView.setVisibility(View.VISIBLE);
                 content.setBackgroundResource(R.drawable.bg);
@@ -320,6 +400,7 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 break;
             }
             case R.id.error_list_menu_btn: {
+                addCarView.setVisibility(View.INVISIBLE);
                 showFragment(new TroubleCodesFragment());
                 addView.setVisibility(View.INVISIBLE);
                 content.setBackgroundResource(R.drawable.bg_main);
@@ -327,12 +408,15 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 break;
             }
             case R.id.my_cars_btn: {
-                addView.setVisibility(View.VISIBLE);
-
+                addView.setVisibility(View.INVISIBLE);
+                addCarView.setVisibility(View.VISIBLE);
+                showFragment(new MyCarsFragment());
+                content.setBackgroundResource(R.drawable.bg_main);
                 hideMenu();
                 break;
             }
             case R.id.check_car_menu_btn: {
+                addCarView.setVisibility(View.INVISIBLE);
                 showFragment(new CheckAutoFragment());
                 addView.setVisibility(View.INVISIBLE);
                 content.setBackgroundResource(R.drawable.gradient_background);
@@ -340,23 +424,29 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 break;
             }
             case R.id.profile_menu_btn: {
+                addCarView.setVisibility(View.INVISIBLE);
+                showFragment(new ProfileFragment());
                 addView.setVisibility(View.INVISIBLE);
-                hideMenu();
-                break;
-            }
-            case R.id.history_menu_btn: {
-                addView.setVisibility(View.INVISIBLE);
+                content.setBackgroundResource(R.drawable.gradient_background);
                 hideMenu();
                 break;
             }
             case R.id.settings_menu_btn: {
-                addView.setVisibility(View.INVISIBLE);
-                hideMenu();
+//                addCarView.setVisibility(View.INVISIBLE);
+//                troubleCodeInt++;
+//                String troubleCode = "P000" + troubleCodeInt;
+//
+//                activityToTroublesCallbackListener.onPassTroubleCode(troubleCode);
+////                showFragment(new ProfileSettingsFragment());
+//                addView.setVisibility(View.INVISIBLE);
+////                content.setBackgroundResource(R.drawable.bg_main);
+//                hideMenu();
                 break;
             }
 
         }
     };
+
 
     private void initMenu() {
         dashboardMenuBtn = findViewById(R.id.dashboard_menu_btn);
@@ -364,16 +454,17 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
         myCarsMenuBtn = findViewById(R.id.my_cars_btn);
         checkCarMenuBtn = findViewById(R.id.check_car_menu_btn);
         profileMenuBtn = findViewById(R.id.profile_menu_btn);
-        historyMenuBtn = findViewById(R.id.history_menu_btn);
         settingsMenuBtn = findViewById(R.id.settings_menu_btn);
 
+        // TODO
+        checkCarMenuBtn.setEnabled(false);
+        settingsMenuBtn.setEnabled(false);
 
         dashboardMenuBtn.setOnClickListener(onMenuItemClickListener);
         errorListMenuBtn.setOnClickListener(onMenuItemClickListener);
         myCarsMenuBtn.setOnClickListener(onMenuItemClickListener);
         checkCarMenuBtn.setOnClickListener(onMenuItemClickListener);
         profileMenuBtn.setOnClickListener(onMenuItemClickListener);
-        historyMenuBtn.setOnClickListener(onMenuItemClickListener);
         settingsMenuBtn.setOnClickListener(onMenuItemClickListener);
 
     }
@@ -677,13 +768,13 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
 //                            TODO: found fault code
                             Log.d(TAG, "getFaultInfo: " + faultCode);
                             if (activityToTroublesCallbackListener != null)
-                                activityToTroublesCallbackListener.onPassTroubleCode(faultCode, faultDesc);
+                                activityToTroublesCallbackListener.onPassTroubleCode(faultCode);
 //                            mConversationArrayAdapter.add(mConnectedDeviceName + ":  TroubleCode -> " + faultCode + "\n" + faultDesc);
                         } else if (faultCode != null && faultDesc == null) {
                             // TODO: found fault code
                             Log.d(TAG, "getFaultInfo: " + faultCode);
                             if (activityToTroublesCallbackListener != null)
-                                activityToTroublesCallbackListener.onPassTroubleCode(faultCode, "no description found");
+                                activityToTroublesCallbackListener.onPassTroubleCode(faultCode);
 //                            mConversationArrayAdapter.add(mConnectedDeviceName + ":  TroubleCode -> " + faultCode +
 //                                    "\n" + "Definition not found for code: " + faultCode);
                         }
@@ -803,11 +894,25 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (bluetoothService != null) bluetoothService.stop();
+
+
+    }
+
     private void calculateEcuValues(int PID, int A, int B) {
 
         double val = 0;
         int intval = 0;
         int tempC = 0;
+
+        String carName = keyValueStorage.getCurrentCarName();
+        Calendar now = Calendar.getInstance();
+        String time = String.valueOf(now.get(Calendar.MILLISECOND));
+
 
         switch (PID) {
 
@@ -818,8 +923,6 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 int calcLoad = (int) val;
 
 //                engineLoad.setText(Integer.toString(calcLoad) + " %");
-//                TODO:
-//                mConversationArrayAdapter.add("Engine Load: " + Integer.toString(calcLoad) + " %");
 
                 String consumption = null;
 
@@ -838,33 +941,106 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
 
                 activityFragmentCallbackListener
                         .onPassRealDataToFragment(Type.ENGINE_LOAD, String.valueOf(calcLoad));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.ENGINE_LOAD.value,
+                                    String.valueOf(calcLoad), time));
 
                 break;
 
-            case 5://PID(05): Coolant Temperature
+            case 5://PID(05):Engine Coolant Temperature
 
                 // A-40
                 tempC = A - 40;
                 coolantTemp = tempC;
 //                coolantTemperature.setText(Integer.toString(coolantTemp) + " C°");
 //                mConversationArrayAdapter.add("Enginetemp: " + Integer.toString(tempC) + " C°");
-                //TODO:
                 Log.d(TAG, "CoolantTemp: " + tempC);
 
                 activityFragmentCallbackListener
-                        .onPassRealDataToFragment(Type.COOLANT_TEMP, String.valueOf(tempC));
+                        .onPassRealDataToFragment(Type.ENGINE_COOLANT_TEMP, String.valueOf(tempC));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.ENGINE_COOLANT_TEMP.value,
+                                    String.valueOf(tempC), time));
 
                 break;
+            case 6: // SH_TERM_FUEL_TRIM_1
+                // (A / 1.28) - 100
+                val = (A / 1.28) - 100;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.SH_TERM_FUEL_TRIM_1, String.valueOf(val));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.SH_TERM_FUEL_TRIM_1.value,
+                                    String.valueOf(val), time));
+
+                break;
+
+            case 7: // LN_TERM_FUEL_PERCENT_TRIM_1
+                // (A / 1.28) - 100
+                val = (A / 1.28) - 100;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.LN_TERM_FUEL_PERCENT_TRIM_1, String.valueOf(val));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.LN_TERM_FUEL_PERCENT_TRIM_1.value,
+                                    String.valueOf(val), time));
+                break;
+
+            case 8: // SH_TERM_FUEL_TRIM_2
+                // (A / 1.28) - 100
+                val = (A / 1.28) - 100;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.SH_TERM_FUEL_TRIM_2, String.valueOf(val));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.SH_TERM_FUEL_TRIM_2.value,
+                                    String.valueOf(val), time));
+                break;
+
+            case 9: // LN_TERM_FUEL_PERCENT_TRIM_2
+                // (A / 1.28) - 100
+                val = (A / 1.28) - 100;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.LN_TERM_FUEL_PERCENT_TRIM_2, String.valueOf(val));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.LN_TERM_FUEL_PERCENT_TRIM_2.value,
+                                    String.valueOf(val), time));
+                break;
+
+            case 10: // FUEL_PRESSURE
+                // 3*A
+                intval = 3 * A;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.FUEL_PRESSURE, String.valueOf(intval));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.FUEL_PRESSURE.value,
+                                    String.valueOf(intval), time));
+                break;
+
 
             case 11://PID(0B)
 
                 // A
-//                TODO:
-//                mConversationArrayAdapter.add("Intake Man Pressure: " + Integer.toString(A) + " kPa");
                 Log.d(TAG, "Intake Man Pressure: " + A);
 
                 activityFragmentCallbackListener
                         .onPassRealDataToFragment(Type.INTAKE_MAN_PRESSURE, String.valueOf(A));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.INTAKE_MAN_PRESSURE.value,
+                                    String.valueOf(A), time));
                 break;
 
             case 12: //PID(0C): RPM
@@ -876,7 +1052,12 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 Log.d(TAG, "RPM: " + intval);
 
                 activityFragmentCallbackListener
-                        .onPassRealDataToFragment(Type.TURNOVERS, String.valueOf(intval));
+                        .onPassRealDataToFragment(Type.RPM, String.valueOf(rpmval));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.RPM.value,
+                                    String.valueOf(rpmval), time));
 
                 break;
 
@@ -887,6 +1068,23 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 Log.d(TAG, "Speed: " + A);
                 activityFragmentCallbackListener
                         .onPassRealDataToFragment(Type.SPEED, String.valueOf(A));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.SPEED.value,
+                                    String.valueOf(A), time));
+                break;
+
+            case 14: // TIMING_ADVANCE
+                // A / 2 - 64
+                intval = (A / 2) - 64;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.TIMING_ADVANCE, String.valueOf(intval));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.TIMING_ADVANCE.value,
+                                    String.valueOf(intval), time));
                 break;
 
             case 15://PID(0F): Intake Temperature
@@ -895,13 +1093,17 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 tempC = A - 40;
                 intakeairtemp = tempC;
 //                airTemperature.setText(Integer.toString(intakeairtemp) + " C°");
-//                TODO:
 //                mConversationArrayAdapter.add("Intakeairtemp: " + Integer.toString(intakeairtemp) + " C°");
                 Log.d(TAG, "Intakeairtemp: " + intakeairtemp);
 //                if (dashboardItemsAdapter != null)
 
                 activityFragmentCallbackListener
                         .onPassRealDataToFragment(Type.INTAKE_AIR_TEMP, String.valueOf(intakeairtemp));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.INTAKE_AIR_TEMP.value,
+                                    String.valueOf(intakeairtemp), time));
 
                 break;
 
@@ -910,10 +1112,15 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 // ((256*A)+B) / 100  [g/s]
                 val = ((256 * A) + B) / 100;
 //                Maf.setText(Integer.toString(intval) + " g/s");
-                Log.d(TAG, "MAF AIR FLOW: " + A);
+                Log.d(TAG, "MAF AIR FLOW: " + val);
 
                 activityFragmentCallbackListener
                         .onPassRealDataToFragment(Type.MAF_AIR_FLOW, String.valueOf(val));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.MAF_AIR_FLOW.value,
+                                    String.valueOf(val), time));
                 break;
 
             case 17://PID(11)
@@ -923,6 +1130,121 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
 //                mConversationArrayAdapter.add(" Throttle position: " + Integer.toString(intval) + " %");
                 activityFragmentCallbackListener
                         .onPassRealDataToFragment(Type.THROTTLE_POS, String.valueOf(val));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.THROTTLE_POSITION.value,
+                                    String.valueOf(val), time));
+                break;
+
+
+            case 20: // OXY_SENS_VOLT_B_1_SENS_1
+                // (A / 200) - voltage; (100 / 128) * B - 100 - short term fuel trim
+                intval = (100 * B / 128) - 100;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.OXY_SENS_VOLT_B_1_SENS_1, String.valueOf(intval));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.OXY_SENS_VOLT_B_1_SENS_1.value,
+                                    String.valueOf(intval), time));
+
+                break;
+
+            case 21: // OXY_SENS_VOLT_B_1_SENS_2
+                // (A / 200) - voltage; (100 / 128) * B - 100 - short term fuel trim
+                intval = (100 * B / 128) - 100;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.OXY_SENS_VOLT_B_1_SENS_2, String.valueOf(intval));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.OXY_SENS_VOLT_B_1_SENS_2.value,
+                                    String.valueOf(intval), time));
+                break;
+
+            case 22: // OXY_SENS_VOLT_B_1_SENS_3
+                // (A / 200) - voltage; (100 / 128) * B - 100 - short term fuel trim
+                intval = (100 * B / 128) - 100;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.OXY_SENS_VOLT_B_1_SENS_3, String.valueOf(intval));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.OXY_SENS_VOLT_B_1_SENS_3.value,
+                                    String.valueOf(intval), time));
+                break;
+
+            case 23: // OXY_SENS_VOLT_B_1_SENS_4
+                // (A / 200) - voltage; (100 / 128) * B - 100 - short term fuel trim
+                intval = (100 * B / 128) - 100;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.OXY_SENS_VOLT_B_1_SENS_4, String.valueOf(intval));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.OXY_SENS_VOLT_B_1_SENS_4.value,
+                                    String.valueOf(intval), time));
+                break;
+
+            case 24: // OXY_SENS_VOLT_B_2_SENS_1
+                // (A / 200) - voltage; (100 / 128) * B - 100 - short term fuel trim
+                intval = (100 * B / 128) - 100;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.OXY_SENS_VOLT_B_2_SENS_1, String.valueOf(intval));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.OXY_SENS_VOLT_B_2_SENS_1.value,
+                                    String.valueOf(intval), time));
+                break;
+
+            case 25: // OXY_SENS_VOLT_B_2_SENS_2
+                // (A / 200) - voltage; (100 / 128) * B - 100 - short term fuel trim
+                intval = (100 * B / 128) - 100;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.OXY_SENS_VOLT_B_2_SENS_2, String.valueOf(intval));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.OXY_SENS_VOLT_B_2_SENS_2.value,
+                                    String.valueOf(intval), time));
+                break;
+
+            case 26: // OXY_SENS_VOLT_B_2_SENS_3
+                // (A / 200) - voltage; (100 / 128) * B - 100 - short term fuel trim
+                intval = (100 * B / 128) - 100;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.OXY_SENS_VOLT_B_2_SENS_3, String.valueOf(intval));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.OXY_SENS_VOLT_B_2_SENS_3.value,
+                                    String.valueOf(intval), time));
+                break;
+
+            case 27: // OXY_SENS_VOLT_B_2_SENS_4
+                // (A / 200) - voltage; (100 / 128) * B - 100 - short term fuel trim
+                intval = (100 * B / 128) - 100;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.OXY_SENS_VOLT_B_2_SENS_4, String.valueOf(intval));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.OXY_SENS_VOLT_B_2_SENS_4.value,
+                                    String.valueOf(intval), time));
+                break;
+
+            case 34: // FUEL_RAIL_PRESSURE
+                // ((A*256)+B)*0.079
+                val = ((A * 256) + B) * 0.079;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.FUEL_RAIL_PRESSURE, String.valueOf(val));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.FUEL_RAIL_PRESSURE.value,
+                                    String.valueOf(val), time));
                 break;
 
             case 35://PID(23)
@@ -932,8 +1254,20 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
 //                mConversationArrayAdapter.add("Fuel Rail Pressure: " + Integer.toString(intval) + " kPa");
                 Log.d(TAG, "Fuel Rail pressure: " + Double.toString(val) + " kPa");
 
+//                activityFragmentCallbackListener
+//                        .onPassRealDataToFragment(Type.FUEL_RAIL_PRESSURE, String.valueOf(val));
+                break;
+
+            case 44: // COMMANDED_EGR
+                // A*100/255
+                intval = A * 100 / 255;
                 activityFragmentCallbackListener
-                        .onPassRealDataToFragment(Type.FUEL_RAIL_PRESSURE, String.valueOf(val));
+                        .onPassRealDataToFragment(Type.COMMANDED_EGR, String.valueOf(intval));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.COMMANDED_EGR.value,
+                                    String.valueOf(intval), time));
                 break;
 
             case 47:// PID(2F)
@@ -942,7 +1276,12 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 Log.d(TAG, "Fuel level: " + fuelLevel);
 
                 activityFragmentCallbackListener
-                        .onPassRealDataToFragment(Type.FUEL_LEVEL, String.valueOf(fuelLevel));
+                        .onPassRealDataToFragment(Type.FUEL_AMOUNT, String.valueOf(fuelLevel));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.FUEL_AMOUNT.value,
+                                    String.valueOf(fuelLevel), time));
                 break;
 
             case 49://PID(31)
@@ -954,7 +1293,83 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
 
                 activityFragmentCallbackListener
                         .onPassRealDataToFragment(Type.DISTANCE_TRAVELED, String.valueOf(val));
+// if !(carName.equals(")
+//  localRepository.addHistoryItem(
+// new HistoryItem(
+// carName, , , time));
 
+
+                break;
+
+            case 51: // BAROMETRIC_PRESSURE
+                // A
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.BAROMETRIC_PRESSURE, String.valueOf(A));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.BAROMETRIC_PRESSURE.value,
+                                    String.valueOf(A), time));
+                break;
+
+            case 60: // CATALYST_TEMP_B1S1
+                // (((A*256)+B)/10)-40
+                intval = (((A * 256) + B) / 10) - 40;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.CATALYST_TEMP_B1S1, String.valueOf(intval));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.CATALYST_TEMP_B1S1.value,
+                                    String.valueOf(intval), time));
+                break;
+
+            case 61: // CATALYST_TEMP_B2S1
+                // (((A*256)+B)/10)-40
+                intval = (((A * 256) + B) / 10) - 40;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.CATALYST_TEMP_B2S1, String.valueOf(intval));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.CATALYST_TEMP_B2S1.value,
+                                    String.valueOf(intval), time));
+                break;
+
+            case 62: // CATALYST_TEMP_B1S2
+                // (((A*256)+B)/10)-40
+                intval = (((A * 256) + B) / 10) - 40;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.CATALYST_TEMP_B1S2, String.valueOf(intval));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.CATALYST_TEMP_B1S2.value,
+                                    String.valueOf(intval), time));
+                break;
+
+            case 63: // CATALYST_TEMP_B2S2
+                // (((A*256)+B)/10)-40
+                intval = (((A * 256) + B) / 10) - 40;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.CATALYST_TEMP_B2S2, String.valueOf(intval));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.CATALYST_TEMP_B2S2.value,
+                                    String.valueOf(intval), time));
+                break;
+
+            case 69: // THROTTLE_POS_2
+                // A*100 / 255
+                intval = A * 100 / 255;
+                activityFragmentCallbackListener
+                        .onPassRealDataToFragment(Type.THROTTLE_POS_2, String.valueOf(intval));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.THROTTLE_POS_2.value,
+                                    String.valueOf(intval), time));
                 break;
 
             case 70://PID(46)
@@ -966,6 +1381,11 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
 
                 activityFragmentCallbackListener
                         .onPassRealDataToFragment(Type.AMBIENT_AIR_TEMP, String.valueOf(ambientairtemp));
+// if !(carName.equals(")
+//  localRepository.addHistoryItem(
+// new HistoryItem(
+// carName, DashboardDevice.AMBIENT_AIR_TEMP.value,
+// String.valueOf(intval), time));
                 break;
 
             case 92://PID(5C)
@@ -978,6 +1398,11 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
 
                 activityFragmentCallbackListener
                         .onPassRealDataToFragment(Type.ENGINE_OIL_TEMP, String.valueOf(engineoiltemp));
+                if (!carName.equals(""))
+                    localRepository.addHistoryItem(
+                            new HistoryItem(
+                                    carName, DashboardDevice.ENGINE_OIL_TEMP.value,
+                                    String.valueOf(engineoiltemp), time));
                 break;
 
             default:
@@ -1001,6 +1426,11 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
 //                            Toast.makeText(DashboardFragment.this, "Status: " + getString(R.string.title_connected_to, mConnectedDeviceName), Toast.LENGTH_SHORT).show();
 //                            Toast.makeText(DashboardFragment.this, "INFO: " + getString(R.string.title_connected), Toast.LENGTH_SHORT).show();
 
+                            if (keyValueStorage.getCurrentCarName().equals("")) {
+                                // TODO
+//                                showFragment(new MyCarsFragment());
+//                                Toast.makeText(MainActivity.this, "Выберите пожалуйста данный автомобиль", Toast.LENGTH_LONG).show();
+                            }
 //                            Status.setText(getString(R.string.title_connected_to, mConnectedDeviceName));
 //                            Info.setText(R.string.title_connected);
                             connected = true;

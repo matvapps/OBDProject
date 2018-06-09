@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
+        android:name=".CarzisApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
@@ -17,37 +18,30 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".notused.MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/app_name"
-            android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".connect.DeviceListActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|screenSize"
             android:label="@string/select_device"
-            android:screenOrientation="landscape" />
+            android:theme="@style/DialogTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".prefs.Prefs"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|screenSize"
             android:label="@string/action_settings"
-            android:screenOrientation="landscape" />
+            android:windowSoftInputMode="stateHidden" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="3e459c5883d795574754798ef84d5657881f1df6" />
+            android:value="0631195dbe431418ca206095068d7f4781d8af1e" />
 
         <activity
             android:name=".notused.ConnectMainActivity"
-            android:screenOrientation="landscape" />
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".connect.ConnectActivity"
-            android:screenOrientation="landscape">
-
-        </activity>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".tutorial.TutorialActivity"
-            android:screenOrientation="landscape">
+            android:windowSoftInputMode="stateHidden">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -57,10 +51,17 @@
         </activity>
         <activity
             android:name=".main.MainActivity"
-            android:screenOrientation="landscape" />
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".register.RegisterActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".additionalscreen.AdditionalActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".history.HistoryActivity" >
 
-        <activity android:name=".register.RegisterActivity"
-            android:screenOrientation="landscape"/>
+
+        </activity>
     </application>
 
 </manifest>

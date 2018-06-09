@@ -1,51 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ddd"
-    >
-    <TextView android:id="@+id/title_paired_devices"
+    android:layout_height="wrap_content"
+    android:background="@drawable/gradient_background"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title_paired_devices"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/title_paired_devices"
-        android:background="#333"
-        android:textColor="#fff"
+        android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingTop="5dp"
-        android:paddingBottom="5dp"
+        android:text="@string/title_paired_devices"
+        android:textColor="#fff"
         android:textSize="16sp"
-    />
-    <ListView android:id="@+id/paired_devices"
+        app:fontFamily="@font/gte_esti_pto_text_bold" />
+
+    <ListView
+        android:id="@+id/paired_devices"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="8sp"
-        android:transcriptMode="alwaysScroll"
+        android:layout_height="150dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_weight="1"
-    />
-    <TextView android:id="@+id/title_new_devices"
-        android:layout_width="match_parent"
+        android:textSize="8sp" />
+
+    <TextView
+        android:id="@+id/title_new_devices"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/title_other_devices"
-        android:visibility="gone"
-        android:background="#333"
-        android:textColor="#fff"
         android:paddingLeft="5dp"
-    />
-    <ListView android:id="@+id/new_devices"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="8sp"
-        android:transcriptMode="alwaysScroll"
-        android:layout_weight="2"
-    />
-    <Button android:id="@+id/button_scan"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
+        android:text="@string/title_other_devices"
         android:textColor="#fff"
-        android:background="#333"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:fontFamily="@font/gte_esti_pto_text_bold" />
+
+    <ListView
+        android:id="@+id/new_devices"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_weight="2"
+        android:textSize="8sp" />
+
+    <Button
+        android:id="@+id/button_scan"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:background="@drawable/button_blue_rect"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:text="@string/button_scan"
-    />
+        android:textColor="#fff"
+        android:textSize="14sp"
+        app:fontFamily="@font/gte_esti_pto_text_bold" />
 </LinearLayout>

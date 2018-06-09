@@ -12,7 +12,19 @@
 
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">@color/appBlue</color>
+
+
+    <!--AppColors-->
+    <color name="mainBackgroundColor">#010C1E</color>
+    <color name="darkerGray">#aaa</color>
+    <color name="appBlue">#052CA3</color>
+    <color name="transparent">#00000000</color>
+    <color name="color">#7965a5ca</color>
+    <!---->
+
+
+
 
     <color name="bright_cyan">#4cffdd</color>
 
