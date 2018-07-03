@@ -1,10 +1,10 @@
 package com.carzis.additionalscreen.listener;
 
-import com.carzis.model.DashboardItem;
+import com.carzis.model.PID;
 
 /**
  * Created by Alexandr.
  */
 public interface OnDeviceClickListener {
-    void onClick(DashboardItem.DashboardDevice deviceType, boolean enabled);
+    void onClick(PID pid, boolean enabled);
 }

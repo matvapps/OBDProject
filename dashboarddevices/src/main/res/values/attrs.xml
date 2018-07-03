@@ -21,7 +21,7 @@
         <attr name="dd_unitTextColor" format="color"/>
         <attr name="dd_withTremble" format="boolean" />
         <attr name="dd_speedTextSize" format="dimension" />
-        <attr name="dd_textSize" format="dimension" />
+        <!--<attr name="dd_textSize" format="dimension" />-->
         <attr name="dd_unit" format="string" />
         <attr name="dd_use_unit" format="boolean"/>
 
@@ -66,8 +66,9 @@
 
     </declare-styleable>
 
-    <declare-styleable name="Speedometer"  parent="Gauge">
+    <declare-styleable name="Device"  parent="Gauge">
         <attr name="dd_indicatorColor" format="color" />
+        <attr name="dd_markTextSize" format="dimension"/>
         <attr name="dd_withIndicatorLight" format="boolean" />
         <attr name="dd_indicatorLightColor" format="color" />
         <attr name="dd_markColor" format="color" />
@@ -88,12 +89,12 @@
             <enum name="NormalSmallIndicator" value="2" />
             <enum name="TriangleIndicator" value="3" />
             <enum name="SpindleIndicator" value="4" />
-            <enum name="NewCustomIndicator" value="5" />
+            <enum name="DashboardIndicator" value="5" />
             <enum name="HalfLineIndicator" value="6" />
             <enum name="QuarterLineIndicator" value="7" />
             <enum name="KiteIndicator" value="8" />
             <enum name="NeedleIndicator" value="9" />
-            <enum name="NewCustomIndicatorWithCircle" value="10"/>
+            <enum name="DashboardIndicatorWithCircle" value="10"/>
         </attr>
 
         <attr name="dd_deviceMode" format="enum" >
@@ -124,7 +125,7 @@
         <attr name="dd_markWidth" format="dimension"/>
     </declare-styleable>
 
-    <declare-styleable name="CustomSpeedometer" parent="Speedometer">
+    <declare-styleable name="DashboardSpeedometer" parent="Speedometer">
         <attr name="dd_centerCircleColor" />
         <attr name="dd_deviceColor" />
         <attr name="dd_pointerColor" format="color"/>

@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/menu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="start"
     android:background="@color/appBlue"
-    android:gravity="center"
     android:visibility="visible">
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:orientation="vertical"
         android:visibility="visible">
 
@@ -26,6 +24,22 @@
             android:textSize="24sp"
             android:textStyle="bold"
             app:fontFamily="@font/gte_esti_pto_text_bold" />
+
+
+        <Button
+            android:id="@+id/connect_to_bt_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginTop="32dp"
+            android:background="@android:color/transparent"
+            android:gravity="start|center_vertical"
+            android:text="Подкл. к устройству"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:fontFamily="@font/gte_esti_pto_text_regular" />
+
 
         <Button
             android:id="@+id/dashboard_menu_btn"
@@ -104,9 +118,9 @@
             android:gravity="start|center_vertical"
             android:text="Настройки"
             android:textAllCaps="false"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@android:color/white"
             android:textSize="15sp"
             android:textStyle="bold"
             app:fontFamily="@font/gte_esti_pto_text_regular" />
     </LinearLayout>
-</FrameLayout>
+</ScrollView>

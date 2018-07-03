@@ -92,30 +92,30 @@ public abstract class Tachometer extends Device {
     private void initAttributeSet(Context context, AttributeSet attrs) {
         if (attrs == null)
             return;
-        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.Speedometer, 0, 0);
+        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.Device, 0, 0);
 
-        int mode = a.getInt(R.styleable.Speedometer_dd_deviceMode, -1);
+        int mode = a.getInt(R.styleable.Device_dd_deviceMode, -1);
         if (mode != -1 && mode != 0)
             setSpeedometerMode(Mode.values()[mode]);
-        int ind = a.getInt(R.styleable.Speedometer_dd_indicator, -1);
+        int ind = a.getInt(R.styleable.Device_dd_indicator, -1);
         if (ind != -1)
             setIndicator(Indicator.Indicators.values()[ind]);
-        markColor = a.getColor(R.styleable.Speedometer_dd_markColor, markColor);
-        lowSpeedColor = a.getColor(R.styleable.Speedometer_dd_lowSpeedColor, lowSpeedColor);
-        mediumSpeedColor = a.getColor(R.styleable.Speedometer_dd_mediumSpeedColor, mediumSpeedColor);
-        highSpeedColor = a.getColor(R.styleable.Speedometer_dd_highSpeedColor, highSpeedColor);
-        backgroundCircleColor = a.getColor(R.styleable.Speedometer_dd_backgroundCircleColor, backgroundCircleColor);
-        speedometerWidth = a.getDimension(R.styleable.Speedometer_dd_deviceWidth, speedometerWidth);
-        startDegree = a.getInt(R.styleable.Speedometer_dd_startDegree, startDegree);
-        endDegree = a.getInt(R.styleable.Speedometer_dd_endDegree, endDegree);
-        setIndicatorWidth(a.getDimension(R.styleable.Speedometer_dd_indicatorWidth, indicator.getIndicatorWidth()));
-        cutPadding = (int) a.getDimension(R.styleable.Speedometer_dd_cutPadding, cutPadding);
-        setTickNumber(a.getInteger(R.styleable.Speedometer_dd_tickNumber, ticks.size()));
-        tickRotation = a.getBoolean(R.styleable.Speedometer_dd_tickRotation, tickRotation);
-        tickPadding = (int) a.getDimension(R.styleable.Speedometer_dd_tickPadding, tickPadding);
-        setIndicatorColor(a.getColor(R.styleable.Speedometer_dd_indicatorColor, indicator.getIndicatorColor()));
-        withIndicatorLight = a.getBoolean(R.styleable.Speedometer_dd_withIndicatorLight, withIndicatorLight);
-        indicatorLightColor = a.getColor(R.styleable.Speedometer_dd_indicatorLightColor, indicatorLightColor);
+        markColor = a.getColor(R.styleable.Device_dd_markColor, markColor);
+        lowSpeedColor = a.getColor(R.styleable.Device_dd_lowSpeedColor, lowSpeedColor);
+        mediumSpeedColor = a.getColor(R.styleable.Device_dd_mediumSpeedColor, mediumSpeedColor);
+        highSpeedColor = a.getColor(R.styleable.Device_dd_highSpeedColor, highSpeedColor);
+        backgroundCircleColor = a.getColor(R.styleable.Device_dd_backgroundCircleColor, backgroundCircleColor);
+        speedometerWidth = a.getDimension(R.styleable.Device_dd_deviceWidth, speedometerWidth);
+        startDegree = a.getInt(R.styleable.Device_dd_startDegree, startDegree);
+        endDegree = a.getInt(R.styleable.Device_dd_endDegree, endDegree);
+        setIndicatorWidth(a.getDimension(R.styleable.Device_dd_indicatorWidth, indicator.getIndicatorWidth()));
+        cutPadding = (int) a.getDimension(R.styleable.Device_dd_cutPadding, cutPadding);
+        setTickNumber(a.getInteger(R.styleable.Device_dd_tickNumber, ticks.size()));
+        tickRotation = a.getBoolean(R.styleable.Device_dd_tickRotation, tickRotation);
+        tickPadding = (int) a.getDimension(R.styleable.Device_dd_tickPadding, tickPadding);
+        setIndicatorColor(a.getColor(R.styleable.Device_dd_indicatorColor, indicator.getIndicatorColor()));
+        withIndicatorLight = a.getBoolean(R.styleable.Device_dd_withIndicatorLight, withIndicatorLight);
+        indicatorLightColor = a.getColor(R.styleable.Device_dd_indicatorLightColor, indicatorLightColor);
         degree = startDegree;
         a.recycle();
         checkStartAndEndDegree();
@@ -430,7 +430,7 @@ public abstract class Tachometer extends Device {
         invalidate();
     }
 
-    public float getSpeedometerWidth() {
+    public float getRingWidth() {
         return speedometerWidth;
     }
 

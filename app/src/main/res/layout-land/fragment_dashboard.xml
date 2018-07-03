@@ -29,7 +29,7 @@
             android:orientation="horizontal">
 
 
-            <com.github.matvapps.dashboarddevices.CustomSpeedometer
+            <com.github.matvapps.dashboarddevices.DashboardSpeedometer
                 android:id="@+id/pointerSpeedometer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -39,9 +39,10 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_weight="2.5"
-                app:dd_indicator="NewCustomIndicator"
+                app:dd_markTextSize="12sp"
+                app:dd_indicator="DashboardIndicator"
                 app:dd_indicatorColor="#36ffffff"
-                app:dd_textSize="15sp"
+                app:dd_deviceColor="@color/colorDeviceRed"
                 app:dd_tickNumber="13" />
 
 
@@ -66,7 +67,7 @@
             </FrameLayout>
 
 
-            <com.github.matvapps.dashboarddevices.CustomTachometer
+            <com.github.matvapps.dashboarddevices.DashboardTachometer
                 android:id="@+id/pointerTachometer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -76,10 +77,11 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_weight="2.5"
-                app:dd_indicator="NewCustomIndicatorWithCircle"
+                app:dd_indicator="DashboardIndicatorWithCircle"
+                app:dd_markTextSize="12dp"
                 app:dd_indicatorColor="#36ffffff"
-                app:dd_textSize="15sp"
                 app:dd_tickNumber="8"
+                app:dd_deviceColor="@color/colorDeviceRed"
                 app:dd_use_unit="false" />
 
 
@@ -95,15 +97,5 @@
             android:background="@drawable/error_in_system" />
 
     </FrameLayout>
-
-
-    <!--<TextView-->
-        <!--android:id="@+id/content"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintLeft_toLeftOf="parent"-->
-        <!--app:layout_constraintRight_toRightOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent" />-->
 
 </FrameLayout>

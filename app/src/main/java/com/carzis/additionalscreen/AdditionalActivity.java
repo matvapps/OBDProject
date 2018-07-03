@@ -15,6 +15,7 @@ import com.carzis.additionalscreen.fragment.AddDeviceFragment;
 import com.carzis.additionalscreen.fragment.ProfileSettingsFragment;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -25,7 +26,7 @@ public class AdditionalActivity extends AppCompatActivity {
     public static final int ADD_CAR_FRAGMENT = 24;
 
     private static final String FRAGMENT_EXTRA = "fragment";
-
+    public static final String SUPPORTED_PIDS_EXTRA = "supported_pids";
 
     private TextView timeText;
     private View background;
@@ -35,6 +36,13 @@ public class AdditionalActivity extends AppCompatActivity {
     public static void start(Activity activity, int fragmentType) {
         Intent intent = new Intent(activity, AdditionalActivity.class);
         intent.putExtra(FRAGMENT_EXTRA, fragmentType);
+        activity.startActivity(intent);
+    }
+
+    public static void start(Activity activity, int fragmentType, ArrayList<String> supportedPids) {
+        Intent intent = new Intent(activity, AdditionalActivity.class);
+        intent.putExtra(FRAGMENT_EXTRA, fragmentType);
+        intent.putExtra(SUPPORTED_PIDS_EXTRA, supportedPids);
         activity.startActivity(intent);
     }
 
@@ -85,6 +93,11 @@ public class AdditionalActivity extends AppCompatActivity {
         backBtn.setOnClickListener(view -> finish());
 
         final int fragmentType = intent.getIntExtra(FRAGMENT_EXTRA, 0);
+        ArrayList<String> supportedPids = new ArrayList<>();
+        if (intent.hasExtra(SUPPORTED_PIDS_EXTRA)) {
+            supportedPids = intent.getStringArrayListExtra(SUPPORTED_PIDS_EXTRA);
+        }
+
         switch (fragmentType) {
 
             case SETTINGS_PROFILE_FRAGMENT: {
@@ -93,7 +106,11 @@ public class AdditionalActivity extends AppCompatActivity {
                 break;
             }
             case ADD_DEVICE_FRAGMENT: {
-                showFragment(new AddDeviceFragment());
+                AddDeviceFragment addDeviceFragment = new AddDeviceFragment();
+                Bundle bundle = new Bundle();
+                bundle.putStringArrayList(SUPPORTED_PIDS_EXTRA, supportedPids);
+                addDeviceFragment.setArguments(bundle);
+                showFragment(addDeviceFragment);
                 background.setBackgroundResource(R.drawable.bg_main);
                 break;
             }

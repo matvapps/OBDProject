@@ -7,10 +7,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.util.Log;
 
 
-public class NewCustomIndicator extends Indicator<NewCustomIndicator> {
+public class DashboardIndicator extends Indicator<DashboardIndicator> {
 
     private Path indicatorPath = new Path();
     private Path circlePartPath = new Path();
@@ -34,7 +33,7 @@ public class NewCustomIndicator extends Indicator<NewCustomIndicator> {
         this.useCenterCircle = useCenterCircle;
     }
 
-    public NewCustomIndicator(Context context, float mode, boolean useCenterCircle) {
+    public DashboardIndicator(Context context, float mode, boolean useCenterCircle) {
         super(context);
         this.mode = mode;
         this.useCenterCircle = useCenterCircle;

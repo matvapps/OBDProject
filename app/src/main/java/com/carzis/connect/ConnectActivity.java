@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.carzis.R;
-import com.carzis.main.MainActivity;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 
 import java.io.BufferedReader;
@@ -27,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -51,7 +51,7 @@ public class ConnectActivity extends AppCompatActivity {
 
 
     private Calendar _discoveryStartTime;
-    private SimpleDateFormat _logDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+    private SimpleDateFormat _logDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS", Locale.getDefault());
 
     private List<BluetoothDevice> newBTDevices;
 
@@ -206,7 +206,6 @@ public class ConnectActivity extends AppCompatActivity {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 // If it's already paired, skip it, because it's been listed already
                 if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
-//                    TODO: add new device
                     newBTDevices.add(device);
                     Log.d(TAG, "onReceive: new device: " + device.getName() + ", " + device.getAddress());
 //                    mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
@@ -254,7 +253,6 @@ public class ConnectActivity extends AppCompatActivity {
                                         BluetoothSocket socket = device.createRfcommSocketToServiceRecord(BluetoothSerialUuid);
                                         socket.connect();
                                         socket.close();
-                                        // TODO: add new device
                                         newBTDevices.add(device);
                                         Log.d(TAG, "onReceive: new device: " + device.getName() + ", " + device.getAddress());
 //                                        mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
@@ -286,8 +284,19 @@ public class ConnectActivity extends AppCompatActivity {
                 // When DeviceListActivity returns with a device to connect
                 if (resultCode == RESULT_OK) {
 
-                    MainActivity.start(this, data.getStringExtra("device_name"), data.getStringExtra("device_address"));
-//                    connectDevice(data);
+                    String address = data.getStringExtra(EXTRA_DEVICE_ADDRESS);
+                    String name = data.getStringExtra(EXTRA_DEVICE_NAME);
+
+                    // Create the result Intent and include the MAC address
+                    Intent intent = new Intent();
+                    intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
+                    intent.putExtra(EXTRA_DEVICE_NAME, name);
+
+                    // Set result and finish this Activity
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
+                } else {
+                    finish();
                 }
                 break;
 
@@ -297,7 +306,7 @@ public class ConnectActivity extends AppCompatActivity {
                     serverIntent = new Intent(this, DeviceListActivity.class);
                     startActivityForResult(serverIntent, REQUEST_GET_CONNECT_DEVICE_DATA);
                 } else {
-                    Toast.makeText(this, "BT device not enabled", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Bluetooth не включен", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }

@@ -79,7 +79,7 @@ public abstract class Indicator<I extends Indicator> {
 
     private void updateData(Device device) {
         this.viewSize = device.getSize();
-        this.speedometerWidth = device.getSpeedometerWidth();
+        this.speedometerWidth = device.getRingWidth();
         this.padding = device.getPadding();
         this.inEditMode = device.isInEditMode();
     }
@@ -167,8 +167,8 @@ public abstract class Indicator<I extends Indicator> {
     /** indicator's shape */
     public enum Indicators {
         NoIndicator, NormalIndicator, NormalSmallIndicator, TriangleIndicator
-        , SpindleIndicator, NewCustomIndicator, HalfLineIndicator, QuarterLineIndicator
-        , KiteIndicator, NeedleIndicator, NewCustomIndicatorWithCircle
+        , SpindleIndicator, DashboardIndicator, HalfLineIndicator, QuarterLineIndicator
+        , KiteIndicator, NeedleIndicator, DashboardIndicatorWithCircle
     }
 
     /**
@@ -181,14 +181,14 @@ public abstract class Indicator<I extends Indicator> {
         switch (indicator) {
             case NoIndicator :
                 return new NoIndicator(context);
-            case NewCustomIndicator:
-                return new NewCustomIndicator(context, NewCustomIndicator.LINE, false);
-            case NewCustomIndicatorWithCircle:
-                return new NewCustomIndicator(context, NewCustomIndicator.LINE, true);
+            case DashboardIndicator:
+                return new DashboardIndicator(context, DashboardIndicator.LINE, false);
+            case DashboardIndicatorWithCircle:
+                return new DashboardIndicator(context, DashboardIndicator.LINE, true);
             case HalfLineIndicator :
-                return new NewCustomIndicator(context, NewCustomIndicator.HALF_LINE, false);
+                return new DashboardIndicator(context, DashboardIndicator.HALF_LINE, false);
             case QuarterLineIndicator :
-                return new NewCustomIndicator(context, NewCustomIndicator.QUARTER_LINE, false);
+                return new DashboardIndicator(context, DashboardIndicator.QUARTER_LINE, false);
             default :
                 return new NoIndicator(context);
         }

@@ -41,6 +41,7 @@ public class CustomSpinner extends android.support.v7.widget.AppCompatSpinner {
 
     }
 
+
     @Override
     public boolean performClick() {
         // register that the Spinner was opened so we have a status

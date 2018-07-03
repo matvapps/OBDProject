@@ -163,6 +163,7 @@ public class DeviceListActivity extends Activity {
         //requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(com.carzis.R.layout.device_list);
 
+        this.setFinishOnTouchOutside(false);
         newDevicesTitle = (TextView) findViewById(R.id.title_new_devices);
 
         // Set result CANCELED in case the user backs out

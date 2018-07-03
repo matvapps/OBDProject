@@ -51,6 +51,21 @@ public class TroubleCodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         setTroubleType(currentType);
     }
 
+    public void updateItem(Trouble troubleItem) {
+        if (!contains(troubleItem.getCode()))
+            return;
+
+        this.defaultItems.set(getPositionOf(troubleItem), troubleItem);
+    }
+
+    public int getPositionOf(Trouble troubleItem) {
+        for (int i = 0; i < getItemCount(); i++) {
+            if (defaultItems.get(i).getCode().equals(troubleItem.getCode()))
+                return i;
+        }
+        return -1;
+    }
+
 
     @NonNull
     @Override

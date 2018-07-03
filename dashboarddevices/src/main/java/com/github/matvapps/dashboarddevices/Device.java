@@ -21,7 +21,7 @@ public abstract class Device extends Gauge {
     }
 
     public abstract int getSize();
-    public abstract float getSpeedometerWidth();
+    public abstract float getRingWidth();
 //    public abstract int getPadding();
 //    public abstract boolean isInEditMode();
 }

@@ -49,6 +49,7 @@ dependencies {
     })
 
     implementation project(':dashboarddevices')
+    implementation project(':mathparser')
     implementation project(':pulseview')
     implementation project(':radar')
 
@@ -77,6 +78,9 @@ dependencies {
     // Plots
     implementation 'com.jjoe64:graphview:4.2.2'
     implementation 'com.github.lecho:hellocharts-android:v1.5.8'
+
+    // String to math formula
+//    implementation 'org.mariuszgromada.math.mxparser:4.1.1'
 
 
 

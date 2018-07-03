@@ -40,14 +40,14 @@ public class DashboardItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public void removeItem(DashboardItem device) {
         for (int i = 0; i < items.size(); i++) {
-            if (items.get(i).getDeviceType() == device.getDeviceType())
+            if (items.get(i).getPid() == device.getPid())
                 removeItem(i);
         }
     }
 
     public void updateItem(DashboardItem device) {
         for (int i = 0; i < items.size(); i++) {
-            if (items.get(i).getDeviceType() == device.getDeviceType()) {
+            if (items.get(i).getPid() == device.getPid()) {
                 items.get(i).setValue(device.getValue());
                 notifyDataSetChanged();
             }
@@ -73,13 +73,14 @@ public class DashboardItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         DashboardItem device = items.get(position);
 
         dashboardItemViewHolder.value.setText(String.valueOf(device.getValue()));
+
         dashboardItemViewHolder.dimen.setText(
                 Utility.getDeviceDimenBy(
-                        holder.itemView.getContext(), device.getDeviceType()));
+                        holder.itemView.getContext(), device.getPid()));
 
         dashboardItemViewHolder.icon.setImageResource(
                 Utility.getDeviceIconIdBy(
-                        device.getDeviceType()));
+                        device.getPid()));
 
     }
 

@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
 import com.carzis.R;
-import com.carzis.model.DashboardItem.DashboardDevice;
+import com.carzis.model.PID;
 
 /**
  * Created by Alexandr.
@@ -24,11 +24,19 @@ public class KeyValueStorage {
     private final String USER_DASHBOARD_DEVICES = "user_dashboard_devices";
     private final String FIRST_TIME_LAUNCH = "first_time_launch";
     private final String CURRENT_CAR = "current_car";
+    private final String PROTOCOL = "protocol";
+    private final String INIT_STRING = "init_string";
+    private final String LANGUAGE = "language";
+    private final String CONNECT_TYPE = "connect_type";
+
+
+    private Context context;
 
     @SuppressLint("CommitPrefEdits")
     public KeyValueStorage(@NonNull Context context) {
         preferences = context.getSharedPreferences(context.getString(R.string.app_name), 0);
         editor = preferences.edit();
+        this.context = context;
     }
 
     public void setUserFullName(String fullName) {
@@ -76,25 +84,52 @@ public class KeyValueStorage {
         return preferences.getString(USER_IMAGE, "");
     }
 
+    public void setInitString(String initString) {
+        editor.putString(INIT_STRING, initString);
+        editor.commit();
+    }
 
-    public void addDeviceToDashboard(DashboardDevice device) {
+    public String getInitString() {
+        return preferences.getString(INIT_STRING, "ATZ;ATL0;ATE1;ATH1;ATAT1;ATSTFF;ATI;ATDP;ATSP0");
+    }
+
+    public int getProtocol() {
+        return preferences.getInt(PROTOCOL, 0);
+    }
+
+    public void setProtocol(int protocol) {
+        editor.putInt(PROTOCOL, 0);
+        editor.commit();
+    }
+
+    public String getLanguage() {
+        return preferences.getString(LANGUAGE, "Русский");
+    }
+
+    public void setLanguage(String language) {
+        editor.putString(LANGUAGE, language);
+        editor.commit();
+    }
+
+    public String getConnectType() {
+        return preferences.getString(CONNECT_TYPE, "Bluetooth");
+    }
+
+    public void setConnectType(String connectType) {
+        editor.putString(CONNECT_TYPE, connectType);
+    }
+
+    public void addDeviceToDashboard(PID pid) {
         String devices = preferences.getString(USER_DASHBOARD_DEVICES, "");
-
-        devices += " " + device.value;
-
+        devices += " " + pid.getCommand();
 
         editor.putString(USER_DASHBOARD_DEVICES, devices);
         editor.commit();
     }
 
-    public void removeDeviceFromDashboard(DashboardDevice device) {
-
+    public void removeDeviceFromDashboard(PID pid) {
         String devices = preferences.getString(USER_DASHBOARD_DEVICES, "");
-//        String comma = ",";
-//        if (!devices.isEmpty() && !devices.contains(","))
-//            comma = "";
-
-        devices = devices.replace(String.valueOf(device.value), "");
+        devices = devices.replace(pid.getCommand(), "");
 
         editor.putString(USER_DASHBOARD_DEVICES, devices);
         editor.commit();

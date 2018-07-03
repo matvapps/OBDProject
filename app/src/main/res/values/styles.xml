@@ -19,6 +19,13 @@
 
     </style>
 
+    <style name="AppPreferenceTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/gradient_background</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:textColor">@color/bright_cyan</item>
+        <item name="fontFamily">@font/gte_esti_pto_text_bold</item>
+        <!--<item name="colorAccent">@android:color/holo_red_dark</item>-->
+    </style>
 
 
     <style name="AppTheme.NoActionBar">

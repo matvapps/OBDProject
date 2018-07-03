@@ -20,8 +20,6 @@ public class Car {
     @NonNull
     private String name;
 
-
-
     public Car(String brand, String model, String year, String engine_num, String bodywork_num, String name) {
         this.brand = brand;
         this.model = model;

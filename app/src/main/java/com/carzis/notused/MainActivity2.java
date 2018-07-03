@@ -43,7 +43,7 @@
 //import com.carzis.connect.DeviceListActivity;
 //import com.carzis.connect.ObdWifiManager;
 //import com.carzis.main.MainActivity;
-//import com.carzis.prefs.Prefs;
+//import com.carzis.prefs.SettingsActivity;
 //
 //import java.util.ArrayList;
 //import java.util.List;
@@ -649,7 +649,7 @@
 //            case R.id.menu_settings:
 //
 //                // Launch the DeviceListActivity to see devices and do scan
-//                serverIntent = new Intent(this, Prefs.class);
+//                serverIntent = new Intent(this, SettingsActivity.class);
 //                startActivity(serverIntent);
 //
 //                return true;

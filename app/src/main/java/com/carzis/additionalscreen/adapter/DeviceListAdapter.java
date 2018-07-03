@@ -87,12 +87,12 @@ public class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         deviceViewHolder.itemView.setOnClickListener(view -> {
             if (currSelectedItems < maxSelectedItems) {
                 if (!deviceViewHolder.chbx.isChecked()) {
-                    onItemClickListener.onClick(device.getDeviceType(), true);
+                    onItemClickListener.onClick(device.getPid(), true);
                     deviceViewHolder.itemView.setBackgroundResource(R.drawable.item_background_active);
                     deviceViewHolder.chbx.setChecked(true);
                     currSelectedItems++;
                 } else {
-                    onItemClickListener.onClick(device.getDeviceType(), false);
+                    onItemClickListener.onClick(device.getPid(), false);
                     deviceViewHolder.itemView.setBackgroundResource(R.drawable.item_background_noactive);
                     deviceViewHolder.chbx.setChecked(false);
                     currSelectedItems--;
@@ -100,17 +100,17 @@ public class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
         });
 
-        if (isSelectedDashboardDevice(device.getDeviceType().value)) {
+        if (isSelectedDashboardDevice(device.getPid().getCommand())) {
             deviceViewHolder.itemView.setBackgroundResource(R.drawable.item_background_active);
             deviceViewHolder.chbx.setChecked(true);
         }
 
         deviceViewHolder.deviceName.setText(
-                Utility.getDeviceNameBy(device.getDeviceType()));
+                Utility.getDeviceNameBy(device.getPid()));
 
         deviceViewHolder.deviceIcon.setImageResource(
                 Utility.getDeviceIconIdBy(
-                        device.getDeviceType()));
+                        device.getPid()));
     }
 
     @Override
@@ -119,12 +119,11 @@ public class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
 
-    private boolean isSelectedDashboardDevice(int type) {
+    private boolean isSelectedDashboardDevice(String command) {
         if (userDashboardDevices.isEmpty())
             return false;
 
-        return userDashboardDevices.contains(String.valueOf(type));
-
+        return userDashboardDevices.contains(command);
     }
 
 

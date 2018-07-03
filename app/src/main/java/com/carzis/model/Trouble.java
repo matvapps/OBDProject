@@ -1,6 +1,7 @@
 package com.carzis.model;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -18,6 +19,20 @@ public class Trouble {
     private String ru_desc;
     private String full_desc;
 
+    @Ignore
+    public Trouble(@NonNull String code) {
+        this.code = code;
+        this.en_desc = "";
+        this.ru_desc = "";
+        this.full_desc = "";
+    }
+
+    public Trouble(@NonNull String code, String en_desc, String ru_desc, String full_desc) {
+        this.code = code;
+        this.en_desc = en_desc;
+        this.ru_desc = ru_desc;
+        this.full_desc = full_desc;
+    }
 
     public String getCode() {
         return code;

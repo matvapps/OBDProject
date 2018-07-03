@@ -228,7 +228,7 @@ public abstract class Gauge extends View {
         currentSpeed = minSpeed;
         withTremble = a.getBoolean(R.styleable.Gauge_dd_withTremble, withTremble);
         textPaint.setColor(a.getColor(R.styleable.Gauge_dd_textColor, textPaint.getColor()));
-        textPaint.setTextSize(a.getDimension(R.styleable.Gauge_dd_textSize, textPaint.getTextSize()));
+//        textPaint.setTextSize(a.getDimension(R.styleable.Gauge_dd_textSize, textPaint.getTextSize()));
         speedTextPaint.setColor(a.getColor(R.styleable.Gauge_dd_speedTextColor, speedTextPaint.getColor()));
         speedTextPaint.setTextSize(a.getDimension(R.styleable.Gauge_dd_speedTextSize, speedTextPaint.getTextSize()));
         unitTextPaint.setColor(a.getColor(R.styleable.Gauge_dd_unitTextColor, unitTextPaint.getColor()));
@@ -254,10 +254,10 @@ public abstract class Gauge extends View {
             setTextTypeface(Typeface.createFromAsset(getContext().getAssets(), typefacePath));
         int position = a.getInt(R.styleable.Gauge_dd_speedTextPosition, -1);
         if (position != -1)
-            setSpeedTextPosition(Position.values()[position]);
+            setValueTextPosition(Position.values()[position]);
         byte speedFormat = (byte) a.getInt(R.styleable.Gauge_dd_speedTextFormat, -1);
         if (speedFormat != -1)
-            setSpeedTextFormat(speedFormat);
+            setValueTextFormat(speedFormat);
         byte tickFormat = (byte) a.getInt(R.styleable.Gauge_dd_tickTextFormat, -1);
         if (tickFormat != -1)
             setTickTextFormat(tickFormat);
@@ -844,7 +844,7 @@ public abstract class Gauge extends View {
      *
      * @param speedTextFormat new format.
      */
-    public void setSpeedTextFormat(byte speedTextFormat) {
+    public void setValueTextFormat(byte speedTextFormat) {
         this.speedTextFormat = speedTextFormat;
         if (!attachedToWindow)
             return;
@@ -973,7 +973,7 @@ public abstract class Gauge extends View {
      *
      * @return max speed.
      * @see #getMinSpeed()
-     * @see #setMaxSpeed(float)
+     * @see #setMaxValue(float)
      */
     public float getMaxSpeed() {
         return maxSpeed;
@@ -987,7 +987,7 @@ public abstract class Gauge extends View {
      * @param maxSpeed new MAX Speed.
      * @throws IllegalArgumentException if {@code minSpeed >= maxSpeed}
      */
-    public void setMaxSpeed(float maxSpeed) {
+    public void setMaxValue(float maxSpeed) {
         setMinMaxSpeed(minSpeed, maxSpeed);
     }
 
@@ -1062,7 +1062,7 @@ public abstract class Gauge extends View {
      * change all text color without <b>speed, unit text</b>.
      *
      * @param textColor new color.
-     * @see #setSpeedTextColor(int)
+     * @see #setValueTextColor(int)
      * @see #setUnitTextColor(int)
      */
     public void setTextColor(int textColor) {
@@ -1087,7 +1087,7 @@ public abstract class Gauge extends View {
      * @see #setUnitTextColor(int)
      * @see #setTextColor(int)
      */
-    public void setSpeedTextColor(int speedTextColor) {
+    public void setValueTextColor(int speedTextColor) {
         speedTextPaint.setColor(speedTextColor);
         if (!attachedToWindow)
             return;
@@ -1105,7 +1105,7 @@ public abstract class Gauge extends View {
      * change just unit text color.
      *
      * @param unitTextColor new color.
-     * @see #setSpeedTextColor(int)
+     * @see #setValueTextColor(int)
      * @see #setTextColor(int)
      */
     public void setUnitTextColor(int unitTextColor) {
@@ -1127,7 +1127,7 @@ public abstract class Gauge extends View {
      *
      * @param textSize new size in pixel.
      * @see #dpTOpx(float)
-     * @see #setSpeedTextSize(float)
+     * @see #setValueTextSize(float)
      * @see #setUnitTextSize(float)
      */
     public void setTextSize(float textSize) {
@@ -1152,7 +1152,7 @@ public abstract class Gauge extends View {
      * @see #setTextSize(float)
      * @see #setUnitTextSize(float)
      */
-    public void setSpeedTextSize(float speedTextSize) {
+    public void setValueTextSize(float speedTextSize) {
         speedTextPaint.setTextSize(speedTextSize);
         if (!attachedToWindow)
             return;
@@ -1171,7 +1171,7 @@ public abstract class Gauge extends View {
      *
      * @param unitTextSize new size in pixel.
      * @see #dpTOpx(float)
-     * @see #setSpeedTextSize(float)
+     * @see #setValueTextSize(float)
      * @see #setTextSize(float)
      */
     public void setUnitTextSize(float unitTextSize) {
@@ -1580,7 +1580,7 @@ public abstract class Gauge extends View {
      *
      * @param position new Position (enum value).
      */
-    public void setSpeedTextPosition(Position position) {
+    public void setValueTextPosition(Position position) {
         this.speedTextPosition = position;
         if (!attachedToWindow)
             return;

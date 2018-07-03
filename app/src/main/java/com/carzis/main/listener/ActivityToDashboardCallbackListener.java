@@ -1,12 +1,14 @@
 package com.carzis.main.listener;
 
-import com.carzis.main.Type;
+import com.carzis.model.PID;
+
+import java.util.List;
 
 /**
  * Created by Alexandr.
  */
 public interface ActivityToDashboardCallbackListener {
 
-    void onPassRealDataToFragment(Type type, String value);
-    void onAddNewDevice();
+    void onPassRealDataToFragment(PID pid, String value);
+    void onAddNewDevice(List<String> supportedPIDS);
 }

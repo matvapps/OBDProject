@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -185,14 +184,10 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
 
     @Override
     public void onPassTroubleCode(String troubleCode) {
-        Log.d(TAG, "onPassTroubleCode: " + troubleCode);
+        if (!troubleCodesAdapter.contains(troubleCode))
+            troubleCodesAdapter.addItem(new Trouble(troubleCode));
 
         localRepository.getTrouble(troubleCode);
-
-//        if (!troubleCodesAdapter.contains(troubleCode)) {
-//            troubleCodesAdapter.addItem(new TroubleItem(troubleCode, shortDesc));
-//        }
-
     }
 
     @Override
@@ -246,13 +241,14 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
     @Override
     public void onGetTroubleCode(Trouble trouble) {
         if (trouble != null) {
-            if (!troubleCodesAdapter.contains(trouble.getCode())) {
+            if (!troubleCodesAdapter.contains(trouble.getCode()))
                 troubleCodesAdapter.addItem(trouble);
+            else
+                troubleCodesAdapter.updateItem(trouble);
 
-                // If this is first displayed trouble then automatically show full description
-                if (troubleCodesAdapter.getItemCount() == 1)
-                    updateFullDescription(troubleCodesAdapter.getItem(0));
-            }
+            // If this is first displayed trouble then automatically show full description
+            if (troubleCodesAdapter.getItemCount() == 1)
+                updateFullDescription(troubleCodesAdapter.getItem(0));
         }
     }
 

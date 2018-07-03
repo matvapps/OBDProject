@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('MathParser.org-mXparser-jdk18-4.1.1.jar'))

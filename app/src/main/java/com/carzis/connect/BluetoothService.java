@@ -12,6 +12,7 @@ import android.os.Message;
 import android.util.Log;
 
 import com.carzis.main.MainActivity;
+import com.carzis.obd.OBDReader;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -79,7 +80,7 @@ public class BluetoothService {
         mState = state;
 
         // Give the new state to the Handler so the UI Activity can update
-        mBTHandler.obtainMessage(MainActivity.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
+        mBTHandler.obtainMessage(OBDReader.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
     }
 
     /**
@@ -170,7 +171,7 @@ public class BluetoothService {
         mConnectedThread.start();
 
         // Send the name of the connected device back to the UI Activity
-        Message msg = mBTHandler.obtainMessage(MainActivity.MESSAGE_DEVICE_NAME);
+        Message msg = mBTHandler.obtainMessage(OBDReader.MESSAGE_DEVICE_NAME);
         Bundle bundle = new Bundle();
         bundle.putString(MainActivity.DEVICE_NAME, device.getName());
         msg.setData(bundle);
@@ -225,7 +226,7 @@ public class BluetoothService {
      */
     private void connectionFailed() {
         // Send a failure message back to the Activity
-        Message msg = mBTHandler.obtainMessage(MainActivity.MESSAGE_TOAST);
+        Message msg = mBTHandler.obtainMessage(OBDReader.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
         bundle.putString(MainActivity.TOAST, "Не получилось подключится к устройству");
         msg.setData(bundle);
@@ -241,7 +242,7 @@ public class BluetoothService {
      */
     private void connectionLost() {
         // Send a failure message back to the Activity
-        Message msg = mBTHandler.obtainMessage(MainActivity.MESSAGE_TOAST);
+        Message msg = mBTHandler.obtainMessage(OBDReader.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
         bundle.putString(MainActivity.TOAST, "Соеденение потеряно");
         msg.setData(bundle);
@@ -434,7 +435,7 @@ public class BluetoothService {
                         msg = msg + x;
                         //if (x == 0x3e) {
                         if (msg.contains(">")) {
-                            mBTHandler.obtainMessage(MainActivity.MESSAGE_READ, buffer.length, -1, msg).sendToTarget();
+                            mBTHandler.obtainMessage(OBDReader.MESSAGE_READ, buffer.length, -1, msg).sendToTarget();
                             msg = "";
                         }
                     }
@@ -455,7 +456,7 @@ public class BluetoothService {
                 mmOutStream.write(arrayOfBytes);
                 mmOutStream.flush();
                 // Share the sent message back to the UI Activity
-                mBTHandler.obtainMessage(MainActivity.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
+                mBTHandler.obtainMessage(OBDReader.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
 
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);
