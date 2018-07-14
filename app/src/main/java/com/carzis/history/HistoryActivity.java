@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.carzis.R;
 import com.carzis.model.HistoryItem;
-import com.carzis.model.LoadingError;
+import com.carzis.model.AppError;
 import com.carzis.repository.local.database.LocalRepository;
 
 import java.util.ArrayList;
@@ -134,7 +134,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryView {
     }
 
     @Override
-    public void showError(LoadingError loadingError) {
+    public void showError(AppError appError) {
 
     }
 }

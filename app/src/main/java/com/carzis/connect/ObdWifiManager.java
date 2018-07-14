@@ -97,7 +97,7 @@
 //            if (this.ioException != null) {
 //                new AlertDialog.Builder(context)
 //                        .setTitle("An error occurrsed")
-//                        .setMessage(this.ioException.toString())
+//                        .setLogin(this.ioException.toString())
 //                        .setIcon(android.R.drawable.ic_dialog_alert)
 //                        .show();
 //            }
@@ -109,7 +109,7 @@
 //    }
 //
 //    private void connectionFailed() {
-//        // Send a failure message back to the Activity
+//        // Send a failure login back to the Activity
 //        Message msg = mWIFIHandler.obtainMessage(MainActivity.MESSAGE_TOAST);
 //        Bundle bundle = new Bundle();
 //        bundle.putString(MainActivity.TOAST, "Unable to connect wifi device");
@@ -119,7 +119,7 @@
 //    }
 //
 //    private void connectionLost() {
-//        // Send a failure message back to the Activity
+//        // Send a failure login back to the Activity
 //        Message msg = mWIFIHandler.obtainMessage(MainActivity.MESSAGE_TOAST);
 //        Bundle bundle = new Bundle();
 //        bundle.putString(MainActivity.TOAST, "Wifi device connection was lost");

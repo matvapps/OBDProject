@@ -1,4 +1,4 @@
-package com.carzis.register;
+package com.carzis.entry;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.carzis.R;
+import com.carzis.entry.register.RegisterCallbackListener;
 
 /**
  * Created by Alexandr.
@@ -46,7 +47,7 @@ public class PhoneFragment extends Fragment {
 
         nextBtn.setOnClickListener(v -> {
             if(callbackListener != null)
-                callbackListener.onNextBtnClick(RegisterActivity.FRAGMENT_PHONE);
+                callbackListener.onInputPhoneFinish(LogRegActivity.FRAGMENT_PHONE);
         });
     }
 

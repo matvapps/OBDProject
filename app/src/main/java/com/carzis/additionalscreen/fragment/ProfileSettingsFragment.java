@@ -18,13 +18,14 @@ import com.carzis.R;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 import com.carzis.util.Utility;
 import com.carzis.util.custom.view.CustomSpinnerAdapter;
-import com.github.reinaldoarrosi.maskededittext.MaskedEditText;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
+
+import br.com.sapereaude.maskedEditText.MaskedEditText;
 
 /**
  * Created by Alexandr.

@@ -289,9 +289,9 @@ public class ConnectMainActivity extends AppCompatActivity {
 //        if (mWifiService != null) {
 //            if (mWifiService.isConnected()) {
 //                try {
-//                    if (message.length() > 0) {
-//                        message = message + "\r";
-//                        byte[] send = message.getBytes();
+//                    if (login.length() > 0) {
+//                        login = login + "\r";
+//                        byte[] send = login.getBytes();
 //                        mWifiService.write(send);
 //                    }
 //                } catch (Exception e) {
@@ -307,7 +307,7 @@ public class ConnectMainActivity extends AppCompatActivity {
             if (message.length() > 0) {
 
                 message = message + "\r";
-                // Get the message bytes and tell the BluetoothChatService to write
+                // Get the login bytes and tell the BluetoothChatService to write
                 byte[] send = message.getBytes();
                 mBtService.write(send);
             }
@@ -503,12 +503,12 @@ public class ConnectMainActivity extends AppCompatActivity {
                         Log.e(TAG, "Fault Code: " + substr + " : " + faultCode + " desc: " + faultDesc);
 
                         if (faultCode != null && faultDesc != null) {
-//                            TODO: found fault code
+//                            TODO: found fault email
 //                            mConversationArrayAdapter.add(mConnectedDeviceName + ":  TroubleCode -> " + faultCode + "\n" + faultDesc);
                         } else if (faultCode != null && faultDesc == null) {
-                            // TODO: found fault code
+                            // TODO: found fault email
 //                            mConversationArrayAdapter.add(mConnectedDeviceName + ":  TroubleCode -> " + faultCode +
-//                                    "\n" + "Definition not found for code: " + faultCode);
+//                                    "\n" + "Definition not found for email: " + faultCode);
                         }
                     }
                 } else {
@@ -878,7 +878,7 @@ public class ConnectMainActivity extends AppCompatActivity {
 
                         }catch(Exception e)
                         {
-                            Toast.makeTextgetActivity(), e.getMessage(),
+                            Toast.makeTextgetActivity(), e.getLogin(),
                                 Toast.LENGTH_LONG).show();
                         }
                     }*/

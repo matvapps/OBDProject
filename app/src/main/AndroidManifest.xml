@@ -5,8 +5,12 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
         android:name=".CarzisApplication"
@@ -44,7 +48,6 @@
         <activity
             android:name=".tutorial.TutorialActivity"
             android:windowSoftInputMode="stateHidden">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -56,15 +59,20 @@
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".register.RegisterActivity"
+            android:name=".entry.LogRegActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".additionalscreen.AdditionalActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".history.HistoryActivity" >
+        <activity android:name=".history.HistoryActivity"></activity>
 
+        <receiver android:name=".entry.register.IncomingSms">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
 
-        </activity>
+        <activity android:name=".pidlist.PidListActvity"></activity>
     </application>
 
 </manifest>

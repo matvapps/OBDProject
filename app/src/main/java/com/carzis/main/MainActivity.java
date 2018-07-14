@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
     private Button checkCarMenuBtn;
     private Button profileMenuBtn;
     private Button settingsMenuBtn;
+    private Button historyMenuBtn;
 
     private LocalRepository localRepository;
     private KeyValueStorage keyValueStorage;

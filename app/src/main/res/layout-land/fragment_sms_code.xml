@@ -75,19 +75,20 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:background="@drawable/gray_field_background"
-            android:paddingBottom="15dp"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:paddingTop="15dp">
+            android:background="@drawable/gray_field_background">
 
-            <TextView
+            <EditText
+                android:background="@null"
                 android:id="@+id/sms_code_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="____"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:inputType="number"
+                android:maxLength="1"
+                android:hint="_"
+                android:textAlignment="center"
                 android:textColor="#85858a"
-                android:textSize="16sp"
+                android:textSize="24sp"
+                android:layout_gravity="center"
                 android:textStyle="bold" />
 
         </FrameLayout>
@@ -98,19 +99,20 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:background="@drawable/gray_field_background"
-            android:paddingBottom="15dp"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:paddingTop="15dp">
+            android:background="@drawable/gray_field_background">
 
-            <TextView
+            <EditText
+                android:background="@null"
                 android:id="@+id/sms_code_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="____"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:inputType="number"
+                android:maxLength="1"
+                android:hint="_"
+                android:textAlignment="center"
                 android:textColor="#85858a"
-                android:textSize="16sp"
+                android:textSize="24sp"
+                android:layout_gravity="center"
                 android:textStyle="bold" />
 
         </FrameLayout>
@@ -119,19 +121,44 @@
             android:id="@+id/sms_code_container_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/gray_field_background"
-            android:paddingBottom="15dp"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:paddingTop="15dp">
+            android:background="@drawable/gray_field_background">
 
-            <TextView
+            <EditText
+                android:background="@null"
                 android:id="@+id/sms_code_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="____"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:inputType="number"
+                android:maxLength="1"
+                android:hint="_"
+                android:textAlignment="center"
                 android:textColor="#85858a"
-                android:textSize="16sp"
+                android:textSize="24sp"
+                android:layout_gravity="center"
+                android:textStyle="bold" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/sms_code_container_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/gray_field_background">
+
+            <EditText
+                android:background="@null"
+                android:id="@+id/sms_code_4"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:inputType="number"
+                android:maxLength="1"
+                android:hint="_"
+                android:textAlignment="center"
+                android:textColor="#85858a"
+                android:textSize="24sp"
+                android:layout_gravity="center"
                 android:textStyle="bold" />
 
         </FrameLayout>

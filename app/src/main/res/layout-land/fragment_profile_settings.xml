@@ -234,15 +234,15 @@
             app:layout_constraintTop_toBottomOf="@+id/birthday_container" />
 
 
-        <com.github.reinaldoarrosi.maskededittext.MaskedEditText
+        <br.com.sapereaude.maskedEditText.MaskedEditText
             android:id="@+id/phone_country_code"
-
             android:layout_width="wrap_content"
             android:layout_height="38dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/gray_field_background"
-            android:hint="+38"
-            android:inputType="phone"
+            app:allowed_chars="1234567890"
+            app:mask="+##"
+            android:hint="38"
             android:maxLength="4"
             android:paddingLeft="20dp"
             android:paddingRight="16dp"
@@ -252,21 +252,21 @@
             android:textSize="11sp"
             app:fontFamily="@font/gte_esti_pto_text_regular"
             app:layout_constraintStart_toStartOf="@+id/phone_txt"
-            app:layout_constraintTop_toBottomOf="@+id/phone_txt"
-            app:mask="+99" />
+            app:layout_constraintTop_toBottomOf="@+id/phone_txt" />
 
 
-        <com.github.reinaldoarrosi.maskededittext.MaskedEditText
+        <br.com.sapereaude.maskedEditText.MaskedEditText
             android:id="@+id/phone_num"
-
             android:layout_width="250dp"
             android:layout_height="38dp"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:background="@drawable/gray_field_background"
-            android:hint="099 123 32 25"
+            app:allowed_chars="1234567890"
             android:inputType="phone"
-            android:maxLength="10"
+            app:mask="(###) ###-##-##"
+            android:hint="0933102515"
+            app:keep_hint="true"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:singleLine="true"
@@ -276,8 +276,7 @@
             app:fontFamily="@font/gte_esti_pto_text_regular"
             app:layout_constraintBottom_toBottomOf="@+id/phone_country_code"
             app:layout_constraintStart_toEndOf="@+id/phone_country_code"
-            app:layout_constraintTop_toTopOf="@+id/phone_country_code"
-            app:mask="(999) 999-99-99" />
+            app:layout_constraintTop_toTopOf="@+id/phone_country_code"/>
 
 
         <TextView

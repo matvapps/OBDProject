@@ -18,7 +18,7 @@ import com.carzis.additionalscreen.fragment.AddDeviceFragment;
 import com.carzis.main.adapter.MyCarsAdapter;
 import com.carzis.main.view.MyCarsView;
 import com.carzis.model.Car;
-import com.carzis.model.LoadingError;
+import com.carzis.model.AppError;
 import com.carzis.repository.local.database.LocalRepository;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 import com.carzis.util.Utility;
@@ -107,7 +107,7 @@ public class MyCarsFragment extends Fragment implements MyCarsView{
     }
 
     @Override
-    public void showError(LoadingError loadingError) {
+    public void showError(AppError appError) {
 
     }
 }

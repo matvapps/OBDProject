@@ -19,8 +19,8 @@ import io.reactivex.functions.Action;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
-import static com.carzis.model.LoadingError.GET_CAR_FROM_LOCAL_REPO_ERROR;
-import static com.carzis.model.LoadingError.GET_TROUBLE_FROM_LOCAL_REPO_ERROR;
+import static com.carzis.model.AppError.GET_CAR_FROM_LOCAL_REPO_ERROR;
+import static com.carzis.model.AppError.GET_TROUBLE_FROM_LOCAL_REPO_ERROR;
 
 /**
  * Created by Alexandr.

@@ -80,7 +80,7 @@
         android:textSize="13sp"
         app:layout_constraintStart_toStartOf="@+id/check_text"
         app:layout_constraintTop_toBottomOf="@+id/check_text"
-        android:text="Введите VIN code в формате 4f2yu08102km26251" />
+        android:text="Введите VIN email в формате 4f2yu08102km26251" />
 
 
     <LinearLayout

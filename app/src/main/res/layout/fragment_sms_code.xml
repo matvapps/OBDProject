@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#010C1E">
+
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/bg_main"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/sms_text"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="84dp"
+            android:includeFontPadding="false"
+            android:text="Код с СМС"
+            android:textColor="@android:color/white"
+            android:textSize="34sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/sms_code_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="44dp"
+            android:includeFontPadding="false"
+            android:text="Введите код из СМС"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sms_text" />
+
+
+        <LinearLayout
+            android:id="@+id/phone_container"
+            android:layout_width="wrap_content"
+            android:layout_height="51dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sms_code_text">
+
+            <FrameLayout
+                android:id="@+id/sms_code_container_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/gray_field_background">
+
+                <EditText
+                    android:id="@+id/sms_code_1"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:hint="_"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:textAlignment="center"
+                    android:textColor="#85858a"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/sms_code_container_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/gray_field_background">
+
+                <EditText
+                    android:id="@+id/sms_code_2"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:hint="_"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:textAlignment="center"
+                    android:textColor="#85858a"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/sms_code_container_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/gray_field_background">
+
+                <EditText
+                    android:id="@+id/sms_code_3"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:hint="_"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:textAlignment="center"
+                    android:textColor="#85858a"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/sms_code_container_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/gray_field_background">
+
+                <EditText
+                    android:id="@+id/sms_code_4"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:hint="_"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:textAlignment="center"
+                    android:textColor="#85858a"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/next_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/button_blue_rect"
+            android:includeFontPadding="false"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:text="Далее"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/phone_container" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</android.support.constraint.ConstraintLayout>

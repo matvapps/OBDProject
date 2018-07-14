@@ -18,10 +18,12 @@ import com.carzis.main.MainActivity;
 import com.carzis.main.adapter.TroubleCodesAdapter;
 import com.carzis.main.listener.ActivityToTroublesCallbackListener;
 import com.carzis.main.listener.TroublesToActivityCallbackListener;
+import com.carzis.main.presenter.TroubleCodePresenter;
 import com.carzis.main.view.TroubleCodesView;
-import com.carzis.model.LoadingError;
+import com.carzis.model.AppError;
 import com.carzis.model.Trouble;
 import com.carzis.repository.local.database.LocalRepository;
+import com.carzis.repository.local.prefs.KeyValueStorage;
 import com.carzis.util.custom.view.TroubleTypeBtn;
 
 import java.util.List;
@@ -37,6 +39,8 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
 
 
     private LocalRepository localRepository;
+    private TroubleCodePresenter troubleCodePresenter;
+    private KeyValueStorage keyValueStorage;
     private TroublesToActivityCallbackListener troublesToActivityCallbackListener;
 
     private TroubleTypeBtn carEngineBtn;
@@ -63,6 +67,7 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_trouble_codes, container, false);
 
+        keyValueStorage = new KeyValueStorage(getContext());
         troublesToActivityCallbackListener.getTroubleCodes();
 
         troubleCodesList = rootView.findViewById(R.id.trouble_codes_list);
@@ -95,6 +100,8 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
         troubleCodesList.setAdapter(troubleCodesAdapter);
 
         localRepository = new LocalRepository(Objects.requireNonNull(getContext()));
+        troubleCodePresenter = new TroubleCodePresenter();
+        troubleCodePresenter.attachView(this);
         localRepository.attachView(this);
 
         carEngineBtn.setOnClickListener(this);
@@ -116,49 +123,6 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
                     }
                 });
 
-//        troubleCodesAdapter.addItem(new TroubleItem("P0123", "Description", "Full description 1"));
-//        troubleCodesAdapter.addItem(new TroubleItem("P0124", "Description", "Full description 2"));
-//        troubleCodesAdapter.addItem(new TroubleItem("P0125", "Description", "Full description 3"));
-//        troubleCodesAdapter.addItem(new TroubleItem("P0126", "Description", "Full description 4"));
-//        troubleCodesAdapter.addItem(new TroubleItem("P0127", "Description", "Full description 5"));
-//        troubleCodesAdapter.addItem(new TroubleItem("P0128", "Description", "Full description 6"));
-//        troubleCodesAdapter.addItem(new TroubleItem("P0129", "Description", "Full description 7"));
-//        troubleCodesAdapter.addItem(new TroubleItem("P0112", "Description", "Full description 8"));
-//        troubleCodesAdapter.addItem(new TroubleItem("P0111", "Description", "Full description 9"));
-//        troubleCodesAdapter.addItem(new TroubleItem("P0123", "Description", "Full description 0"));
-//
-//        troubleCodesAdapter.addItem(new TroubleItem("B0123", "Description", "Full description 1"));
-//        troubleCodesAdapter.addItem(new TroubleItem("B0124", "Description", "Full description 2"));
-//        troubleCodesAdapter.addItem(new TroubleItem("B0125", "Description", "Full description 3"));
-//        troubleCodesAdapter.addItem(new TroubleItem("B0126", "Description", "Full description 4"));
-//        troubleCodesAdapter.addItem(new TroubleItem("B0127", "Description", "Full description 5"));
-//        troubleCodesAdapter.addItem(new TroubleItem("B0128", "Description", "Full description 6"));
-//        troubleCodesAdapter.addItem(new TroubleItem("B0129", "Description", "Full description 7"));
-//        troubleCodesAdapter.addItem(new TroubleItem("B0112", "Description", "Full description 8"));
-//        troubleCodesAdapter.addItem(new TroubleItem("B0111", "Description", "Full description 9"));
-//        troubleCodesAdapter.addItem(new TroubleItem("B0123", "Description", "Full description 0"));
-//
-//        troubleCodesAdapter.addItem(new TroubleItem("C0123", "Description", "Full description 1"));
-//        troubleCodesAdapter.addItem(new TroubleItem("C0124", "Description", "Full description 2"));
-//        troubleCodesAdapter.addItem(new TroubleItem("C0125", "Description", "Full description 3"));
-//        troubleCodesAdapter.addItem(new TroubleItem("C0126", "Description", "Full description 4"));
-//        troubleCodesAdapter.addItem(new TroubleItem("C0127", "Description", "Full description 5"));
-//        troubleCodesAdapter.addItem(new TroubleItem("C0128", "Description", "Full description 6"));
-//        troubleCodesAdapter.addItem(new TroubleItem("C0129", "Description", "Full description 7"));
-//        troubleCodesAdapter.addItem(new TroubleItem("C0112", "Description", "Full description 8"));
-//        troubleCodesAdapter.addItem(new TroubleItem("C0111", "Description", "Full description 9"));
-//        troubleCodesAdapter.addItem(new TroubleItem("C0123", "Description", "Full description 0"));
-//
-//        troubleCodesAdapter.addItem(new TroubleItem("U0123", "Description", "Full description 1"));
-//        troubleCodesAdapter.addItem(new TroubleItem("U0124", "Description", "Full description 2"));
-//        troubleCodesAdapter.addItem(new TroubleItem("U0125", "Description", "Full description 3"));
-//        troubleCodesAdapter.addItem(new TroubleItem("U0126", "Description", "Full description 4"));
-//        troubleCodesAdapter.addItem(new TroubleItem("U0127", "Description", "Full description 5"));
-//        troubleCodesAdapter.addItem(new TroubleItem("U0128", "Description", "Full description 6"));
-//        troubleCodesAdapter.addItem(new TroubleItem("U0129", "Description", "Full description 7"));
-//        troubleCodesAdapter.addItem(new TroubleItem("U0112", "Description", "Full description 7"));
-//        troubleCodesAdapter.addItem(new TroubleItem("U0111", "Description", "Full description 8"));
-//        troubleCodesAdapter.addItem(new TroubleItem("U0123", "Description", "Full description 9"));
         carEngineBtn.callOnClick();
         return rootView;
     }
@@ -187,7 +151,9 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
         if (!troubleCodesAdapter.contains(troubleCode))
             troubleCodesAdapter.addItem(new Trouble(troubleCode));
 
-        localRepository.getTrouble(troubleCode);
+        // TODO: check for brand
+        troubleCodePresenter.getTroubleCodeDescription(keyValueStorage.getUserToken(), troubleCode, keyValueStorage.getLanguage(), "");
+//        localRepository.getTrouble(troubleCode);
     }
 
     @Override
@@ -263,12 +229,25 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
     }
 
     @Override
+    public void onRemoteRepoError(String code) {
+        localRepository.getTrouble(code);
+    }
+
+    @Override
     public void showLoading(boolean load) {
 
     }
 
     @Override
-    public void showError(LoadingError loadingError) {
+    public void showError(AppError appError) {
+        switch (appError) {
+            case GET_TROUBLE_FROM_LOCAL_REPO_ERROR:
+
+                break;
+            case GET_TROUBLE_FROM_REMOTE_REPO_ERROR:
+
+                break;
+        }
 //        Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
     }
 //    --------------------------------------------------------

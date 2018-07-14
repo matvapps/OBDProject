@@ -28,6 +28,8 @@ public class KeyValueStorage {
     private final String INIT_STRING = "init_string";
     private final String LANGUAGE = "language";
     private final String CONNECT_TYPE = "connect_type";
+    private final String USER_TOKEN = "user_token";
+    private final String USER_PASSWORD = "user_password";
 
 
     private Context context;
@@ -37,6 +39,24 @@ public class KeyValueStorage {
         preferences = context.getSharedPreferences(context.getString(R.string.app_name), 0);
         editor = preferences.edit();
         this.context = context;
+    }
+
+    public void setUserPassword(String userPassword) {
+        editor.putString(USER_PASSWORD, userPassword);
+        editor.commit();
+    }
+
+    public String getUserPassword() {
+        return preferences.getString(USER_PASSWORD, "");
+    }
+
+    public void setUserToken(String userToken) {
+        editor.putString(USER_TOKEN, userToken);
+        editor.commit();
+    }
+
+    public String getUserToken() {
+        return preferences.getString(USER_TOKEN, "");
     }
 
     public void setUserFullName(String fullName) {

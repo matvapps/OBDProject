@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.carzis.R;
-import com.carzis.main.MainActivity;
+import com.carzis.entry.LogRegActivity;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 
 import me.relex.circleindicator.CircleIndicator;
@@ -21,10 +21,10 @@ public class TutorialActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         KeyValueStorage keyValueStorage = new KeyValueStorage(this);
-        if (!keyValueStorage.isFirstTimeLaunch()) {
-            MainActivity.start(this);
-            finish();
-        }
+//        if (!keyValueStorage.isFirstTimeLaunch()) {
+//            MainActivity.start(this);
+//            finish();
+//        }
 
         setContentView(R.layout.activity_tutorial);
         nextBtn = findViewById(R.id.next_btn);
@@ -39,7 +39,8 @@ public class TutorialActivity extends AppCompatActivity {
 
 
         nextBtn.setOnClickListener(view -> {
-            MainActivity.start(TutorialActivity.this);
+            LogRegActivity.start(TutorialActivity.this);
+//            MainActivity.start(TutorialActivity.this);
             finish();
         });
 

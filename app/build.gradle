@@ -64,16 +64,25 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"
     // ROOM RXJava
     implementation "android.arch.persistence.room:rxjava2:1.1.0"
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
 
     // ROOM ASSET for use pre-created db
     implementation 'com.github.humazed:RoomAsset:1.0.3'
+    // RXJava
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+
+    // Retrofit
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    //OkHttp3
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
 
     // Rounded image view
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
     //MaskedEditText
-    implementation 'com.github.reinaldoarrosi:maskededittext:1.1.0'
+    implementation 'ru.egslava:MaskedEditText:1.0.5'
 
     // Plots
     implementation 'com.jjoe64:graphview:4.2.2'
@@ -81,7 +90,6 @@ dependencies {
 
     // String to math formula
 //    implementation 'org.mariuszgromada.math.mxparser:4.1.1'
-
 
 
     implementation 'com.android.support:appcompat-v7:27.1.1'

@@ -81,14 +81,19 @@
             android:paddingRight="25dp"
             android:paddingTop="15dp">
 
-            <TextView
+            <br.com.sapereaude.maskedEditText.MaskedEditText
                 android:id="@+id/phone_country_code"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="+38"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:hint="38"
+                android:maxLength="4"
                 android:textColor="#85858a"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:inputType="phone"
+                app:allowed_chars="1234567890"
+                app:mask="+##" />
 
         </FrameLayout>
 
@@ -102,14 +107,19 @@
             android:paddingRight="25dp"
             android:paddingTop="15dp">
 
-            <TextView
+            <br.com.sapereaude.maskedEditText.MaskedEditText
                 android:id="@+id/phone_number"
                 android:layout_width="240dp"
-                android:layout_height="wrap_content"
-                android:text="099 123 32 25"
+                android:background="@null"
+                android:layout_height="match_parent"
+                android:hint="0933102515"
+                android:inputType="phone"
                 android:textColor="#85858a"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:allowed_chars="1234567890"
+                app:keep_hint="true"
+                app:mask="(###) ###-##-##" />
 
         </FrameLayout>
 

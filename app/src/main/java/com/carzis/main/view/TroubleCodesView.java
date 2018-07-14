@@ -11,4 +11,5 @@ import java.util.List;
 public interface TroubleCodesView extends BaseView {
     void onGetTroubleCode(Trouble trouble);
     void onGetTroubleCodes(List<Trouble> troubles);
+    void onRemoteRepoError(String code);
 }
