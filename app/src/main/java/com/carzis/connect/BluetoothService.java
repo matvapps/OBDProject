@@ -225,7 +225,7 @@ public class BluetoothService {
      * Indicate that the connection attempt failed and notify the UI Activity.
      */
     private void connectionFailed() {
-        // Send a failure login back to the Activity
+        // Send a failure phone back to the Activity
         Message msg = mBTHandler.obtainMessage(OBDReader.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
         bundle.putString(MainActivity.TOAST, "Не получилось подключится к устройству");
@@ -241,7 +241,7 @@ public class BluetoothService {
      * Indicate that the connection was lost and notify the UI Activity.
      */
     private void connectionLost() {
-        // Send a failure login back to the Activity
+        // Send a failure phone back to the Activity
         Message msg = mBTHandler.obtainMessage(OBDReader.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
         bundle.putString(MainActivity.TOAST, "Соеденение потеряно");
@@ -455,7 +455,7 @@ public class BluetoothService {
                 byte[] arrayOfBytes = buffer;
                 mmOutStream.write(arrayOfBytes);
                 mmOutStream.flush();
-                // Share the sent login back to the UI Activity
+                // Share the sent phone back to the UI Activity
                 mBTHandler.obtainMessage(OBDReader.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
 
             } catch (IOException e) {

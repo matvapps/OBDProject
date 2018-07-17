@@ -3,8 +3,6 @@ package com.carzis.model.response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.sql.Timestamp;
-
 public class ProfileResponse extends BaseResponse {
     @SerializedName("user_photo")
     @Expose
@@ -15,26 +13,26 @@ public class ProfileResponse extends BaseResponse {
     @SerializedName("email")
     @Expose
     private String email;
-    @SerializedName("firstName")
+    @SerializedName("first_name")
     @Expose
     private String firstName;
-    @SerializedName("secondName")
+    @SerializedName("second_name")
     @Expose
     private String secondName;
     @SerializedName("birthday")
     @Expose
-    private Timestamp birthday;
+    private String birthday;
     @SerializedName("phone")
     @Expose
     private String phone;
     @SerializedName("is_payed")
     @Expose
-    private boolean isPayed;
+    private Integer isPayed;
 
     public ProfileResponse() {
     }
 
-    public ProfileResponse(String photoUrl, String password, String email, String firstName, String secondName, Timestamp birthday, String phone, boolean isPayed) {
+    public ProfileResponse(String photoUrl, String password, String email, String firstName, String secondName, String birthday, String phone, Integer isPayed) {
         this.photoUrl = photoUrl;
         this.password = password;
         this.email = email;
@@ -85,11 +83,11 @@ public class ProfileResponse extends BaseResponse {
         this.secondName = secondName;
     }
 
-    public Timestamp getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Timestamp birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
@@ -101,11 +99,11 @@ public class ProfileResponse extends BaseResponse {
         this.phone = phone;
     }
 
-    public boolean isPayed() {
+    public Integer isPayed() {
         return isPayed;
     }
 
-    public void setPayed(boolean payed) {
+    public void setPayed(Integer payed) {
         isPayed = payed;
     }
 }

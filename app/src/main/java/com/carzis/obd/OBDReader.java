@@ -235,9 +235,9 @@ public class OBDReader {
 //        if (mWifiService != null) {
 //            if (mWifiService.isConnected()) {
 //                try {
-//                    if (login.length() > 0) {
-//                        login = login + "\r";
-//                        byte[] send = login.getBytes();
+//                    if (phone.length() > 0) {
+//                        phone = phone + "\r";
+//                        byte[] send = phone.getBytes();
 //                        mWifiService.write(send);
 //                    }
 //                } catch (Exception e) {
@@ -253,7 +253,7 @@ public class OBDReader {
             if (message.length() > 0) {
 
                 message = message + "\r";
-                // Get the login bytes and tell the BluetoothChatService to write
+                // Get the phone bytes and tell the BluetoothChatService to write
                 byte[] send = message.getBytes();
                 bluetoothService.write(send);
             }
@@ -671,7 +671,7 @@ public class OBDReader {
                 case MESSAGE_WRITE:
                     byte[] writeBuf = (byte[]) msg.obj;
                     String writeMessage = new String(writeBuf);
-                    Log.d(TAG, "Handle login/ your-> " + writeMessage);
+                    Log.d(TAG, "Handle phone/ your-> " + writeMessage);
                     break;
                 case MESSAGE_READ:
                     String tmpmsg = clearMsg(msg);
@@ -688,11 +688,11 @@ public class OBDReader {
 //
 //                        }catch(Exception e)
 //                        {
-//                            Toast.makeTextgetActivity(), e.getLogin(),
+//                            Toast.makeTextgetActivity(), e.getPhone(),
 //                                Toast.LENGTH_LONG).show();
 //                        }
 //                    }
-                    Log.d(TAG, "Handle login/ Adapter say-> " + tmpmsg);
+                    Log.d(TAG, "Handle phone/ Adapter say-> " + tmpmsg);
                     analysMsg(msg);
                     break;
                 case MESSAGE_DEVICE_NAME:

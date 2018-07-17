@@ -8,7 +8,7 @@ import android.provider.Settings;
 public class AndroidUtility {
 
     public static String getDeviceName() {
-        return Build.MANUFACTURER + " " + Build.MODEL;
+        return Build.MODEL;
     }
 
     public static String getDeviceId(Context context) {

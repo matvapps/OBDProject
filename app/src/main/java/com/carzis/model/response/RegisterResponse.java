@@ -4,42 +4,41 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class RegisterResponse extends BaseResponse{
-    @SerializedName("email")
+    @SerializedName("device_id")
     @Expose
-    protected String email;
+    protected String device_id;
 
-    @SerializedName("login")
+    @SerializedName("phone")
     @Expose
-    protected String login;
-
+    protected String phone;
 
     public RegisterResponse() {
     }
 
-    public RegisterResponse(String email, String login) {
-        this.email = email;
-        this.login = login;
+    public RegisterResponse(String device_id, String phone) {
+        this.device_id = device_id;
+        this.phone = phone;
     }
 
-    public String getEmail() {
-        return email;
+    public String getDevice_id() {
+        return device_id;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setDevice_id(String device_id) {
+        this.device_id = device_id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
 
     @Override
     public String toString() {
-        return "email = " + email + ", login = " + login;
+        return "device_id = " + device_id + ", phone = " + phone;
     }
 }

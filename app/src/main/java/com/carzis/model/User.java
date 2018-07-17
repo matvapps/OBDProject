@@ -1,7 +1,5 @@
 package com.carzis.model;
 
-import android.support.v4.media.session.PlaybackStateCompat;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -14,7 +12,7 @@ public class User {
     @SerializedName("password")
     @Expose
     private String password;
-    @SerializedName("email")
+    @SerializedName("device_id")
     @Expose
     private String email;
     @SerializedName("firstName")
@@ -31,12 +29,12 @@ public class User {
     private String phone;
     @SerializedName("is_payed")
     @Expose
-    private boolean isPayed;
+    private Integer isPayed;
 
     public User() {
     }
 
-    public User(String photoUrl, String password, String email, String firstName, String secondName, Timestamp birthday, String phone, boolean isPayed) {
+    public User(String photoUrl, String password, String email, String firstName, String secondName, Timestamp birthday, String phone, Integer isPayed) {
         this.photoUrl = photoUrl;
         this.password = password;
         this.email = email;
@@ -103,11 +101,11 @@ public class User {
         this.phone = phone;
     }
 
-    public boolean isPayed() {
+    public Integer isPayed() {
         return isPayed;
     }
 
-    public void setPayed(boolean payed) {
+    public void setPayed(Integer payed) {
         isPayed = payed;
     }
 }

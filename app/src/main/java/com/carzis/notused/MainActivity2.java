@@ -226,7 +226,7 @@
 //                            }
 //
 //                        } catch (Exception e) {
-//                            Toast.makeText(getApplicationContext(), e.getLogin(),
+//                            Toast.makeText(getApplicationContext(), e.getPhone(),
 //                                    Toast.LENGTH_LONG).show();
 //                        }
 //                    }
@@ -326,7 +326,7 @@
 //
 //                        }catch(Exception e)
 //                        {
-//                            Toast.makeText(getApplicationContext(), e.getLogin(),
+//                            Toast.makeText(getApplicationContext(), e.getPhone(),
 //                                Toast.LENGTH_LONG).show();
 //                        }
 //                    }*/
@@ -363,10 +363,10 @@
 //    private TextView.OnEditorActionListener mWriteListener =
 //            new TextView.OnEditorActionListener() {
 //                public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
-//                    // If the action is a key-up event on the return key, send the login
+//                    // If the action is a key-up event on the return key, send the phone
 //                    if (actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_UP) {
-//                        String login = view.getText().toString();
-//                        sendEcuMessage(login);
+//                        String phone = view.getText().toString();
+//                        sendEcuMessage(phone);
 //                    }
 //                    return true;
 //                }
@@ -473,7 +473,7 @@
 //        }
 //
 //        // Initialize the array adapter for the conversation thread
-//        mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.login) {
+//        mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.phone) {
 //            @Override
 //            public View getView(int position, View convertView, ViewGroup parent) {
 //                // Get the Item from ListView
@@ -504,9 +504,9 @@
 //
 //        mSendButton.setOnClickListener(new View.OnClickListener() {
 //            public void onClick(View v) {
-//                // Send a login using content of the edit text widget
-//                String login = mOutEditText.getText().toString();
-//                sendEcuMessage(login);
+//                // Send a phone using content of the edit text widget
+//                String phone = mOutEditText.getText().toString();
+//                sendEcuMessage(phone);
 //            }
 //        });
 //
@@ -739,7 +739,7 @@
 //
 //            if (!commandmode) {
 //                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-//                alertDialogBuilder.setLogin("Are you sure you want exit?");
+//                alertDialogBuilder.setPhone("Are you sure you want exit?");
 //                alertDialogBuilder.setPositiveButton("Ok",
 //                        new DialogInterface.OnClickListener() {
 //
@@ -1037,14 +1037,14 @@
 //
 //    }
 //
-//    private void sendEcuMessage(String login) {
+//    private void sendEcuMessage(String phone) {
 //
 //        if (mWifiService != null) {
 //            if (mWifiService.isConnected()) {
 //                try {
-//                    if (login.length() > 0) {
-//                        login = login + "\r";
-//                        byte[] send = login.getBytes();
+//                    if (phone.length() > 0) {
+//                        phone = phone + "\r";
+//                        byte[] send = phone.getBytes();
 //                        mWifiService.write(send);
 //                    }
 //                } catch (Exception e) {
@@ -1057,11 +1057,11 @@
 //                return;
 //            }
 //            try {
-//                if (login.length() > 0) {
+//                if (phone.length() > 0) {
 //
-//                    login = login + "\r";
-//                    // Get the login bytes and tell the BluetoothChatService to write
-//                    byte[] send = login.getBytes();
+//                    phone = phone + "\r";
+//                    // Get the phone bytes and tell the BluetoothChatService to write
+//                    byte[] send = phone.getBytes();
 //                    mBtService.write(send);
 //                }
 //            } catch (Exception e) {
@@ -1171,7 +1171,7 @@
 //            try {
 //                analysPIDS(tmpmsg);
 //            } catch (Exception e) {
-//                Info.setText("Error : " + e.getLogin());
+//                Info.setText("Error : " + e.getPhone());
 //            }
 //
 //            sendDefaultCommands();
@@ -1212,7 +1212,7 @@
 //                            mConversationArrayAdapter.add(mConnectedDeviceName + ":  TroubleCode -> " + faultCode + "\n" + faultDesc);
 //                        } else if (faultCode != null && faultDesc == null) {
 //                            mConversationArrayAdapter.add(mConnectedDeviceName + ":  TroubleCode -> " + faultCode +
-//                                    "\n" + "Definition not found for email: " + faultCode);
+//                                    "\n" + "Definition not found for device_id: " + faultCode);
 //                        }
 //                    }
 //                } else {
@@ -1254,7 +1254,7 @@
 //                troubleCodesArray.add(dtc);
 //            }
 //        } catch (Exception e) {
-//            Log.e(TAG, "Error: " + e.getLogin());
+//            Log.e(TAG, "Error: " + e.getPhone());
 //        }
 //    }
 //

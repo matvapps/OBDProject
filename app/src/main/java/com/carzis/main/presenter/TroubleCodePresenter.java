@@ -1,7 +1,5 @@
 package com.carzis.main.presenter;
 
-import android.view.View;
-
 import com.carzis.base.Presenter;
 import com.carzis.main.view.TroubleCodesView;
 import com.carzis.model.AppError;
@@ -14,7 +12,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TroubleCodePresenter implements Presenter<TroubleCodesView>{
+public class TroubleCodePresenter implements Presenter<TroubleCodesView> {
 
     private TroubleCodesView view;
     private CarzisApi api;
@@ -25,10 +23,15 @@ public class TroubleCodePresenter implements Presenter<TroubleCodesView>{
             @Override
             public void onResponse(Call<TroubleResponse> call, Response<TroubleResponse> response) {
                 view.showLoading(false);
-                view.onGetTroubleCode(new Trouble(troubleCode,
-                        "",
-                        response.body().getDescription(),
-                        response.body().getFull_description()));
+                if (response.code() == 200) {
+                    view.onGetTroubleCode(new Trouble(troubleCode,
+                            "",
+                            response.body().getDescription(),
+                            response.body().getFull_description()));
+                } else {
+                    view.onRemoteRepoError(troubleCode);
+                    view.showError(AppError.GET_TROUBLE_FROM_REMOTE_REPO_ERROR);
+                }
             }
 
             @Override

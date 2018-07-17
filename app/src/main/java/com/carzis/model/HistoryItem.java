@@ -10,20 +10,20 @@ import android.support.annotation.NonNull;
  */
 @Entity(tableName = "history")
 public class HistoryItem {
-    @PrimaryKey
     @NonNull
     @ColumnInfo(name = "car_name")
     private String carName;
     @NonNull
     @ColumnInfo(name = "pid_id")
-    private Integer pidId;
+    private String pidId;
     @NonNull
     private String value;
+    @PrimaryKey
     @NonNull
     private String time;
 
 
-    public HistoryItem(@NonNull String carName, @NonNull Integer pidId, @NonNull String value, @NonNull String time) {
+    public HistoryItem(@NonNull String carName, @NonNull String pidId, @NonNull String value, @NonNull String time) {
         this.carName = carName;
         this.pidId = pidId;
         this.value = value;
@@ -40,11 +40,11 @@ public class HistoryItem {
     }
 
     @NonNull
-    public Integer getPidId() {
+    public String getPidId() {
         return pidId;
     }
 
-    public void setPidId(@NonNull Integer pidId) {
+    public void setPidId(@NonNull String pidId) {
         this.pidId = pidId;
     }
 

@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".CarzisApplication"
@@ -48,15 +50,17 @@
         <activity
             android:name=".tutorial.TutorialActivity"
             android:windowSoftInputMode="stateHidden">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+
         </activity>
         <activity
             android:name=".main.MainActivity"
-            android:screenOrientation="landscape"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".entry.LogRegActivity"
@@ -64,7 +68,9 @@
         <activity
             android:name=".additionalscreen.AdditionalActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".history.HistoryActivity"></activity>
+        <activity android:name=".history.HistoryActivity">
+
+        </activity>
 
         <receiver android:name=".entry.register.IncomingSms">
             <intent-filter>

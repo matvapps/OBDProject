@@ -6,6 +6,7 @@
       <module fileurl="file://D:/Elm327-master/Carzis.iml" filepath="D:/Elm327-master/Carzis.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/dashboarddevices/dashboarddevices.iml" filepath="$PROJECT_DIR$/dashboarddevices/dashboarddevices.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hellocharts-library/hellocharts-library.iml" filepath="$PROJECT_DIR$/hellocharts-library/hellocharts-library.iml" />
       <module fileurl="file://$PROJECT_DIR$/mathparser/mathparser.iml" filepath="$PROJECT_DIR$/mathparser/mathparser.iml" />
       <module fileurl="file://$PROJECT_DIR$/pulseview/pulseview.iml" filepath="$PROJECT_DIR$/pulseview/pulseview.iml" />
       <module fileurl="file://$PROJECT_DIR$/radar/radar.iml" filepath="$PROJECT_DIR$/radar/radar.iml" />

@@ -289,9 +289,9 @@ public class ConnectMainActivity extends AppCompatActivity {
 //        if (mWifiService != null) {
 //            if (mWifiService.isConnected()) {
 //                try {
-//                    if (login.length() > 0) {
-//                        login = login + "\r";
-//                        byte[] send = login.getBytes();
+//                    if (phone.length() > 0) {
+//                        phone = phone + "\r";
+//                        byte[] send = phone.getBytes();
 //                        mWifiService.write(send);
 //                    }
 //                } catch (Exception e) {
@@ -307,7 +307,7 @@ public class ConnectMainActivity extends AppCompatActivity {
             if (message.length() > 0) {
 
                 message = message + "\r";
-                // Get the login bytes and tell the BluetoothChatService to write
+                // Get the phone bytes and tell the BluetoothChatService to write
                 byte[] send = message.getBytes();
                 mBtService.write(send);
             }
@@ -503,12 +503,12 @@ public class ConnectMainActivity extends AppCompatActivity {
                         Log.e(TAG, "Fault Code: " + substr + " : " + faultCode + " desc: " + faultDesc);
 
                         if (faultCode != null && faultDesc != null) {
-//                            TODO: found fault email
+//                            TODO: found fault device_id
 //                            mConversationArrayAdapter.add(mConnectedDeviceName + ":  TroubleCode -> " + faultCode + "\n" + faultDesc);
                         } else if (faultCode != null && faultDesc == null) {
-                            // TODO: found fault email
+                            // TODO: found fault device_id
 //                            mConversationArrayAdapter.add(mConnectedDeviceName + ":  TroubleCode -> " + faultCode +
-//                                    "\n" + "Definition not found for email: " + faultCode);
+//                                    "\n" + "Definition not found for device_id: " + faultCode);
                         }
                     }
                 } else {
@@ -690,7 +690,7 @@ public class ConnectMainActivity extends AppCompatActivity {
                 rpmval = intval;
                 Log.d(TAG, "Tachometer: " + intval);
 //                TODO
-//                tachometer.speedTo(intval);
+//                tachometer.moveTo(intval);
 
                 break;
 
@@ -700,7 +700,7 @@ public class ConnectMainActivity extends AppCompatActivity {
                 // A
                 Log.d(TAG, "Speedometer : " + A);
 //                TODO:
-//                speedometer.speedTo(A);
+//                speedometer.moveTo(A);
 
                 break;
 
@@ -878,7 +878,7 @@ public class ConnectMainActivity extends AppCompatActivity {
 
                         }catch(Exception e)
                         {
-                            Toast.makeTextgetActivity(), e.getLogin(),
+                            Toast.makeTextgetActivity(), e.getPhone(),
                                 Toast.LENGTH_LONG).show();
                         }
                     }*/

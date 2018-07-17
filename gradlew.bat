@@ -79,8 +79,8 @@ set CLASSPATH=%APP_HOME%\gradle\wrapper\gradle-wrapper.jar
 if "%ERRORLEVEL%"=="0" goto mainEnd
 
 :fail
-rem Set variable GRADLE_EXIT_CONSOLE if you need the _script_ return email instead of
-rem the _cmd.exe /c_ return email!
+rem Set variable GRADLE_EXIT_CONSOLE if you need the _script_ return device_id instead of
+rem the _cmd.exe /c_ return device_id!
 if  not "" == "%GRADLE_EXIT_CONSOLE%" exit 1
 exit /b 1
 

@@ -41,6 +41,7 @@ public class DashboardFragment extends Fragment implements ActivityToDashboardCa
     private Speedometer speedometer;
     private Tachometer tachometer;
     private RecyclerView deviceList;
+//    private ImageView backround;
 
     @Nullable
     @Override
@@ -51,19 +52,41 @@ public class DashboardFragment extends Fragment implements ActivityToDashboardCa
         speedometer = rootView.findViewById(R.id.pointerSpeedometer);
         tachometer = rootView.findViewById(R.id.pointerTachometer);
         deviceList = rootView.findViewById(R.id.devices_list);
+//        backround = rootView.findViewById(R.id.background);
 
         dashboardItemsAdapter = new DashboardItemsAdapter();
         keyValueStorage = new KeyValueStorage(Objects.requireNonNull(getContext()));
         supportedDevices = new ArrayList<>();
 
         setupDevices(keyValueStorage.getUserDashboardDevices());
-
         deviceList.setAdapter(dashboardItemsAdapter);
 
+        // reset gauges on dashboard start
         resetgauges();
 
         return rootView;
     }
+
+    // lets start animate gauges
+    public void resetgauges() {
+        speedometer.moveTo(240, 1300); // move to max speed, duration 1300
+        tachometer.moveTo(7000, 1300); // move to max turnovers, duration 1300
+        new Thread(() -> {
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    // uncomment this to enable revert action
+                    speedometer.moveTo(0, 1000);
+                    tachometer.moveTo(0, 1000);
+                });
+            }
+        }).start();
+    }
+
 
     private void setupDevices(String devices) {
         String devicesStr = devices.replaceAll("\\s+", "");
@@ -102,45 +125,6 @@ public class DashboardFragment extends Fragment implements ActivityToDashboardCa
         ((MainActivity) context).activityToDashboardCallbackListener = this;
 
     }
-
-    public void resetgauges() {
-
-        speedometer.speedTo(240, 1300);
-        tachometer.speedTo(7001, 1300);
-
-        new Thread(() -> {
-            try {
-                Thread.sleep(1500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (getActivity() != null) {
-                Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
-                    speedometer.speedTo(0, 1000);
-                    tachometer.speedTo(0, 1000);
-                });
-            }
-        }).start();
-    }
-
-
-    private void setSpeed(float speed) {
-        speedometer.speedTo(speed);
-    }
-
-    private void setSpeed(float speed, long duration) {
-        speedometer.speedTo(speed, duration);
-    }
-
-    private void setTurnovers(float turnovers) {
-        tachometer.speedTo(turnovers);
-    }
-
-    private void setTurnovers(float turnovers, long duration) {
-        tachometer.speedTo(turnovers, duration);
-    }
-
-
 
     @Override
     public void onResume() {
@@ -195,11 +179,11 @@ public class DashboardFragment extends Fragment implements ActivityToDashboardCa
 //                break;
             case ENGINE_RPM:
                 float turnovers = Float.parseFloat(value);
-                tachometer.speedTo(turnovers);
+                tachometer.moveTo(turnovers);
                 break;
             case VEHICLE_SPEED:
                 float speed = Float.parseFloat(value);
-                speedometer.speedTo(speed);
+                speedometer.moveTo(speed);
                 break;
             default:
                 dashboardItemsAdapter.updateItem(new DashboardItem(value, pid));
@@ -473,13 +457,13 @@ public class DashboardFragment extends Fragment implements ActivityToDashboardCa
 //        switch (type) {
 //
 //            case SPEED:
-//                speedometer.speedTo(Integer.parseInt(value));
+//                speedometer.moveTo(Integer.parseInt(value));
 //                dashboardItemsAdapter.updateItem(new DashboardItem(value, SPEED));
 //
 ////                localRepository.addHistoryItem(new HistoryItem(carName, SPEED.value, value, time));
 //                break;
 //            case RPM:
-//                tachometer.speedTo(Integer.parseInt(value));
+//                tachometer.moveTo(Integer.parseInt(value));
 //                dashboardItemsAdapter.updateItem(new DashboardItem(value, RPM));
 //
 ////                localRepository.addHistoryItem(new HistoryItem(carName, RPM.value, value, time));
@@ -667,5 +651,18 @@ public class DashboardFragment extends Fragment implements ActivityToDashboardCa
         this.supportedDevices = supportedDevices;
         setupDevices(keyValueStorage.getUserDashboardDevices());
 //        Log.d(TAG, "setSupportedDevices: supportedPIDS " + this.supportedDevices);
+    }
+
+    private void setSpeed(float speed) {
+        speedometer.moveTo(speed);
+    }
+    private void setSpeed(float speed, long duration) {
+        speedometer.moveTo(speed, duration);
+    }
+    private void setTurnovers(float turnovers) {
+        tachometer.moveTo(turnovers);
+    }
+    private void setTurnovers(float turnovers, long duration) {
+        tachometer.moveTo(turnovers, duration);
     }
 }

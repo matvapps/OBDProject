@@ -1,1 +1,1 @@
-include ':app', ':dashboarddevices', ':pulseview', ':radar', ':mathparser'
+include ':app', ':dashboarddevices', ':pulseview', ':radar', ':mathparser', ':hellocharts-library'

@@ -14,37 +14,38 @@ import me.relex.circleindicator.CircleIndicator;
 
 public class TutorialActivity extends AppCompatActivity {
 
+    private final String CURRENT_PAGE = "current_page";
+
     private Button nextBtn;
+    private int currentPage = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
         KeyValueStorage keyValueStorage = new KeyValueStorage(this);
-//        if (!keyValueStorage.isFirstTimeLaunch()) {
-//            MainActivity.start(this);
-//            finish();
-//        }
+        if (!keyValueStorage.isFirstTimeLaunch()) {
+            LogRegActivity.start(this);
+            finish();
+        }
+        keyValueStorage.setFirstTimeLaunch(false);
 
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial);
         nextBtn = findViewById(R.id.next_btn);
 
-        keyValueStorage.setFirstTimeLaunch(false);
         TutorialPageAdapter tutorialPageAdapter = new TutorialPageAdapter(getSupportFragmentManager());
 
         ViewPager viewpager = findViewById(R.id.viewpager);
         CircleIndicator indicator = findViewById(R.id.indicator);
         viewpager.setAdapter(tutorialPageAdapter);
-        indicator.setViewPager(viewpager);
+        viewpager.setOffscreenPageLimit(viewpager.getChildCount());
 
+        indicator.setViewPager(viewpager);
 
         nextBtn.setOnClickListener(view -> {
             LogRegActivity.start(TutorialActivity.this);
-//            MainActivity.start(TutorialActivity.this);
             finish();
         });
-
-
         viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -53,6 +54,7 @@ public class TutorialActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
+                currentPage = position;
                 if (position + 1 == TutorialPageAdapter.PAGE_COUNT) {
                     nextBtn.setVisibility(View.VISIBLE);
                 } else
@@ -64,5 +66,23 @@ public class TutorialActivity extends AppCompatActivity {
 
             }
         });
+
+        if (savedInstanceState != null) {
+            viewpager.setCurrentItem(savedInstanceState.getInt(CURRENT_PAGE));
+            tutorialPageAdapter.notifyDataSetChanged();
+        }
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_PAGE, currentPage);
+    }
+
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 }

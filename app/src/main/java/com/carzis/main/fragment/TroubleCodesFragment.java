@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,16 +83,13 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
             titleTextView = rootView.findViewById(R.id.title_text);
             backToTroublesBtn = rootView.findViewById(R.id.back_to_troubles);
 
-            backToTroublesBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    troubleFullDescText.setVisibility(View.INVISIBLE);
-                    fullTroubleCodesDescContainer.setVisibility(View.INVISIBLE);
-                    backToTroublesBtn.setVisibility(View.GONE);
-                    titleTextView.setText("КОД ОШИБКИ");
-                    troubleCodesList.setVisibility(View.VISIBLE);
+            backToTroublesBtn.setOnClickListener(view -> {
+                troubleFullDescText.setVisibility(View.INVISIBLE);
+                fullTroubleCodesDescContainer.setVisibility(View.INVISIBLE);
+                backToTroublesBtn.setVisibility(View.GONE);
+                titleTextView.setText("КОД ОШИБКИ");
+                troubleCodesList.setVisibility(View.VISIBLE);
 
-                }
             });
 
         }
@@ -148,8 +146,8 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
 
     @Override
     public void onPassTroubleCode(String troubleCode) {
-        if (!troubleCodesAdapter.contains(troubleCode))
-            troubleCodesAdapter.addItem(new Trouble(troubleCode));
+//        if (!troubleCodesAdapter.contains(troubleCode))
+//            troubleCodesAdapter.addItem(new Trouble(troubleCode));
 
         // TODO: check for brand
         troubleCodePresenter.getTroubleCodeDescription(keyValueStorage.getUserToken(), troubleCode, keyValueStorage.getLanguage(), "");
@@ -206,6 +204,7 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
     //    loading troubles interface
     @Override
     public void onGetTroubleCode(Trouble trouble) {
+        Log.d(TAG, "onGetTroubleCode: " + trouble.getRu_desc());
         if (trouble != null) {
             if (!troubleCodesAdapter.contains(trouble.getCode()))
                 troubleCodesAdapter.addItem(trouble);

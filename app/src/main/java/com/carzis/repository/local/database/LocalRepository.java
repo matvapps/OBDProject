@@ -37,9 +37,11 @@ public class LocalRepository {
     public void attachView(TroubleCodesView troubleCodesView) {
         this.troubleCodesView = troubleCodesView;
     }
+
     public void attachView(MyCarsView myCarsView) {
         this.myCarsView = myCarsView;
     }
+
     public void attachView(HistoryView historyView) {
         this.historyView = historyView;
     }
@@ -146,9 +148,12 @@ public class LocalRepository {
 
 
     public void addHistoryItem(HistoryItem historyItem) {
-        Completable.fromAction(() ->
-                appDatabase.historyItemDao().insert(historyItem))
-                .observeOn(AndroidSchedulers.mainThread())
+        Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                appDatabase.historyItemDao().insert(historyItem);
+            }
+        }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io()).subscribe(new CompletableObserver() {
             @Override
             public void onSubscribe(Disposable d) {

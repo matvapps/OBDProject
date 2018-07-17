@@ -63,8 +63,8 @@ public abstract class Gauge extends View {
      */
     private float minSpeed = 0f;
     /**
-     * the last speed which you set by {@link #speedTo(float)}
-     * or {@link #speedTo(float, long)} or {@link #speedPercentTo(int)},
+     * the last speed which you set by {@link #moveTo(float)}
+     * or {@link #moveTo(float, long)} or {@link #speedPercentTo(int)},
      * or if you stop speedometer By {@link #stop()} method.
      */
     private float speed = minSpeed;
@@ -410,7 +410,7 @@ public abstract class Gauge extends View {
         if (unitUnderSpeedText) {
             if (!useUnit) {
                 unitSpeedInterval = -dpTOpx(15);
-                speedText = String.valueOf(Integer.parseInt(speedText) / 1000);
+                speedText = String.valueOf(Integer.parseInt(speedText));
             } else {
                 speedUnitTextCanvas.drawText(unit, speedUnitTextBitmap.getWidth() * .5f
                         , speedUnitTextBitmap.getHeight() * .5f + unitTextPaint.getTextSize() + unitSpeedInterval * .5f, unitTextPaint);
@@ -494,7 +494,7 @@ public abstract class Gauge extends View {
 
     /**
      * stop speedometer and run tremble if {@link #withTremble} is true.
-     * use this method just when you wont to stop {@code speedTo and realSpeedTo}.
+     * use this method just when you wont to stop {@code moveTo and realSpeedTo}.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void stop() {
@@ -553,8 +553,8 @@ public abstract class Gauge extends View {
      * move speed to percent value.
      *
      * @param percent percent value to move, must be between [0,100].
-     * @see #speedTo(float)
-     * @see #speedTo(float, long)
+     * @see #moveTo(float)
+     * @see #moveTo(float, long)
      * @see #speedPercentTo(int, long)
      * @see #realSpeedTo(float)
      */
@@ -568,13 +568,13 @@ public abstract class Gauge extends View {
      * @param percent      percent value to move, must be between [0,100].
      * @param moveDuration The length of the animation, in milliseconds.
      *                     This value cannot be negative.
-     * @see #speedTo(float)
-     * @see #speedTo(float, long)
+     * @see #moveTo(float)
+     * @see #moveTo(float, long)
      * @see #speedPercentTo(int)
      * @see #realSpeedTo(float)
      */
     public void speedPercentTo(int percent, long moveDuration) {
-        speedTo(getSpeedValue(percent), moveDuration);
+        moveTo(getSpeedValue(percent), moveDuration);
     }
 
     /**
@@ -584,16 +584,16 @@ public abstract class Gauge extends View {
      * if {@code speed > maxSpeed} speed value will move to {@link #maxSpeed},<br>
      * if {@code speed < minSpeed} speed value will move to {@link #minSpeed}.<br>
      * <p>
-     * it is the same {@link #speedTo(float, long)}
+     * it is the same {@link #moveTo(float, long)}
      * with default {@code moveDuration = 2000}.
      *
      * @param speed current speed to move.
-     * @see #speedTo(float, long)
+     * @see #moveTo(float, long)
      * @see #speedPercentTo(int)
      * @see #realSpeedTo(float)
      */
-    public void speedTo(float speed) {
-        speedTo(speed, 2000);
+    public void moveTo(float speed) {
+        moveTo(speed, 2000);
     }
 
     /**
@@ -606,12 +606,12 @@ public abstract class Gauge extends View {
      * @param speed        current speed to move.
      * @param moveDuration The length of animation, in milliseconds.
      *                     This value cannot be negative.
-     * @see #speedTo(float)
+     * @see #moveTo(float)
      * @see #speedPercentTo(int)
      * @see #realSpeedTo(float)
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public void speedTo(float speed, long moveDuration) {
+    public void moveTo(float speed, long moveDuration) {
         speed = (speed > maxSpeed) ? maxSpeed : (speed < minSpeed) ? minSpeed : speed;
         if (speed == this.speed)
             return;
@@ -678,8 +678,8 @@ public abstract class Gauge extends View {
      * when <b>slow down</b> : speed value will decrease <i>rapidly</i> by {@link #decelerate}.
      *
      * @param speed current speed to move.
-     * @see #speedTo(float)
-     * @see #speedTo(float, long)
+     * @see #moveTo(float)
+     * @see #moveTo(float, long)
      * @see #speedPercentTo(int)
      * @see #speedUp()
      * @see #slowDown()
@@ -925,8 +925,8 @@ public abstract class Gauge extends View {
     }
 
     /**
-     * @return the last speed which you set by {@link #speedTo(float)}
-     * or {@link #speedTo(float, long)} or {@link #speedPercentTo(int)},
+     * @return the last speed which you set by {@link #moveTo(float)}
+     * or {@link #moveTo(float, long)} or {@link #speedPercentTo(int)},
      * or if you stop speedometer By {@link #stop()} method.
      * @see #getCurrentSpeed()
      */

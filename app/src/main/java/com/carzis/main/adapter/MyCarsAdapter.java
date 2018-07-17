@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.carzis.R;
+import com.carzis.additionalscreen.listener.OnCarClickListener;
 import com.carzis.model.Car;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 
@@ -30,7 +31,7 @@ public class MyCarsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private List<Car> curItems;
 
     private String selectedItemName = "";
-//    private OnDeviceClickListener onItemClickListener;
+    private OnCarClickListener onItemClickListener;
 
     public void setItems(List<Car> items) {
         this.items.clear();
@@ -74,15 +75,16 @@ public class MyCarsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             carViewHolder.itemView.setSelected(false);
 
         carViewHolder.itemView.setOnClickListener(view -> {
-            if (!carViewHolder.itemView.isSelected()) {
-                selectedItemName = items.get(position).getName();
-                carViewHolder.itemView.setSelected(true);
-                keyValueStorage.setCurrentCarName(selectedItemName);
-                notifyDataSetChanged();
-            } else {
-
-                carViewHolder.itemView.setSelected(false);
-            }
+            if (onItemClickListener != null)
+                onItemClickListener.onClick(items.get(position).getName());
+//            if (!carViewHolder.itemView.isSelected()) {
+//                selectedItemName = items.get(position).getName();
+//                carViewHolder.itemView.setSelected(true);
+//                keyValueStorage.setCurrentCarName(selectedItemName);
+//                notifyDataSetChanged();
+//            } else {
+//                carViewHolder.itemView.setSelected(false);
+//            }
         });
 
         carViewHolder.carName.setText(curItems.get(position).getName());
@@ -115,6 +117,13 @@ public class MyCarsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return curItems.size();
     }
 
+    public OnCarClickListener getOnItemClickListener() {
+        return onItemClickListener;
+    }
+
+    public void setOnItemClickListener(OnCarClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     private class CarViewHolder extends RecyclerView.ViewHolder {
 

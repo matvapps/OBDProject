@@ -94,7 +94,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@null"
-                    android:hint="38"
+                    android:hint="__"
                     android:inputType="phone"
                     android:maxLength="4"
                     android:textColor="#85858a"
@@ -120,14 +120,14 @@
                     android:layout_width="200dp"
                     android:layout_height="match_parent"
                     android:background="@null"
-                    android:hint="0933102515"
+                    android:hint="__________"
                     android:inputType="phone"
                     android:textColor="#85858a"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:allowed_chars="1234567890"
                     app:keep_hint="true"
-                    app:mask="(###) ###-##-##" />
+                    app:mask=" (###) ###-##-##" />
 
             </FrameLayout>
 

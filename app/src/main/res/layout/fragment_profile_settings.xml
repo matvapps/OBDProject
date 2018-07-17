@@ -32,6 +32,7 @@
             android:text="Загрузить фото"
             android:textColor="@android:color/white"
             android:textSize="12sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
             app:layout_constraintStart_toEndOf="@+id/user_image"
             app:layout_constraintTop_toTopOf="@+id/user_image" />
 
@@ -66,7 +67,8 @@
                 android:layout_marginRight="10dp"
                 android:text="Добавить"
                 android:textColor="@android:color/white"
-                android:textSize="9sp" />
+                android:textSize="9sp"
+                app:fontFamily="@font/gte_esti_pto_text_regular" />
 
         </LinearLayout>
 
@@ -88,7 +90,8 @@
                 android:text="Изменить пароль"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
-                android:visibility="invisible" />
+                android:visibility="gone"
+                app:fontFamily="@font/gte_esti_pto_text_regular" />
 
 
             <TextView
@@ -100,7 +103,8 @@
 по CMC"
                 android:textColor="#43444b"
                 android:textSize="8sp"
-                android:visibility="invisible" />
+                android:visibility="gone"
+                app:fontFamily="@font/gte_esti_pto_text_regular" />
 
         </LinearLayout>
 
@@ -113,6 +117,7 @@
             android:text="Имя и фамилия"
             android:textColor="@android:color/white"
             android:textSize="11sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
             app:layout_constraintStart_toStartOf="@+id/user_image"
             app:layout_constraintTop_toBottomOf="@+id/user_image" />
 
@@ -165,6 +170,7 @@
             android:text="День рождения"
             android:textColor="@android:color/white"
             android:textSize="11sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
             app:layout_constraintStart_toStartOf="@+id/name"
             app:layout_constraintTop_toBottomOf="@+id/name" />
 
@@ -219,52 +225,58 @@
             android:layout_marginTop="24dp"
             android:text="Телефон"
             android:textColor="@android:color/white"
+            android:visibility="invisible"
             android:textSize="11sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
             app:layout_constraintStart_toStartOf="@+id/birthday_container"
             app:layout_constraintTop_toBottomOf="@+id/birthday_container" />
 
 
-        <com.github.reinaldoarrosi.maskededittext.MaskedEditText
+        <br.com.sapereaude.maskedEditText.MaskedEditText
             android:id="@+id/phone_country_code"
             android:layout_width="wrap_content"
             android:layout_height="38dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/gray_field_background"
-            android:hint="+38"
+            android:hint="__"
+            android:inputType="phone"
             android:paddingLeft="20dp"
             android:paddingRight="16dp"
             android:singleLine="true"
-            android:inputType="phone"
-            android:maxLength="4"
             android:textColor="#85858a"
             android:textColorHint="#85858a"
-            app:mask="+99"
             android:textSize="11sp"
+            android:visibility="gone"
+            app:allowed_chars="1234567890"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
             app:layout_constraintStart_toStartOf="@+id/phone_txt"
-            app:layout_constraintTop_toBottomOf="@+id/phone_txt" />
+            app:layout_constraintTop_toBottomOf="@+id/phone_txt"
+            app:mask="+##" />
 
 
-        <com.github.reinaldoarrosi.maskededittext.MaskedEditText
+        <br.com.sapereaude.maskedEditText.MaskedEditText
             android:id="@+id/phone_num"
             android:layout_width="0dp"
             android:layout_height="38dp"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:background="@drawable/gray_field_background"
-            android:hint="099 123 32 25"
+            android:hint="__________"
             android:inputType="phone"
-            android:maxLength="10"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:singleLine="true"
             android:textColor="#85858a"
             android:textColorHint="#85858a"
             android:textSize="11sp"
+            android:visibility="gone"
+            app:allowed_chars="1234567890"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
             app:layout_constraintBottom_toBottomOf="@+id/phone_country_code"
             app:layout_constraintEnd_toEndOf="@+id/birthday_container"
             app:layout_constraintStart_toEndOf="@+id/phone_country_code"
             app:layout_constraintTop_toTopOf="@+id/phone_country_code"
-            app:mask="(999) 999-99-99" />
+            app:mask="(###) ###-##-##" />
 
 
         <TextView
@@ -275,6 +287,7 @@
             android:text="Email"
             android:textColor="@android:color/white"
             android:textSize="11sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
             app:layout_constraintStart_toStartOf="@+id/phone_country_code"
             app:layout_constraintTop_toBottomOf="@+id/phone_country_code" />
 
@@ -285,7 +298,6 @@
             android:layout_height="38dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/gray_field_background"
-            android:hint="email@gmail.com"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:singleLine="true"
@@ -325,6 +337,7 @@
             android:text="Даю согласие на обработку персональных данных\nСоглашаюсь на Политику конфиденциальности"
             android:textColor="#85858a"
             android:textSize="11sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
             app:layout_constraintBottom_toBottomOf="@+id/policy_chbx_container"
             app:layout_constraintStart_toEndOf="@+id/policy_chbx_container"
             app:layout_constraintTop_toTopOf="@+id/policy_chbx_container" />

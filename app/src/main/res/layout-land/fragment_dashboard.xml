@@ -42,7 +42,7 @@
                 app:dd_markTextSize="12sp"
                 app:dd_indicator="DashboardIndicator"
                 app:dd_indicatorColor="#36ffffff"
-                app:dd_deviceColor="@color/colorDeviceRed"
+                app:dd_deviceColor="@color/colorDeviceBlue"
                 app:dd_tickNumber="13" />
 
 
@@ -81,7 +81,7 @@
                 app:dd_markTextSize="12dp"
                 app:dd_indicatorColor="#36ffffff"
                 app:dd_tickNumber="8"
-                app:dd_deviceColor="@color/colorDeviceRed"
+                app:dd_deviceColor="@color/colorDeviceBlue"
                 app:dd_use_unit="false" />
 
 

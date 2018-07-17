@@ -2,6 +2,7 @@ package com.carzis.main;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -12,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,14 +53,18 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
     public static final int REQUEST_CONNECT_TO_DEVICE = 8;
+    private static final String FRAGMENT = "fragment";
 
+    private String currentFragment = "";
 
-    private View content;
+    private View movingContainer;
+    private ImageView content;
     private TextView timeText;
     private ImageButton menuBtn;
     private View menuView;
     private View addView;
     private View addCarView;
+    private View contentBody;
 
     private Button connectToBtMenuBtn;
     private Button dashboardMenuBtn;
@@ -92,15 +98,17 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
     private void initView() {
 
         content = findViewById(R.id.content);
+        contentBody = findViewById(R.id.content_body);
         menuView = findViewById(R.id.menu);
         addView = findViewById(R.id.add_btn);
         timeText = findViewById(R.id.time_text_view);
         menuBtn = findViewById(R.id.menu_btn);
         addCarView = findViewById(R.id.add_car_view);
+        movingContainer = findViewById(R.id.moving_container);
 
         initMenu();
 
-        addView.setOnClickListener(view ->activityToDashboardCallbackListener.onAddNewDevice(obdReader.getSupportedPids()));
+        addView.setOnClickListener(view -> activityToDashboardCallbackListener.onAddNewDevice(obdReader.getSupportedPids()));
         addCarView.setOnClickListener(view -> AdditionalActivity.start(MainActivity.this, AdditionalActivity.ADD_CAR_FRAGMENT));
 
         menuBtn.setOnClickListener(view -> {
@@ -109,13 +117,12 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
             else
                 showMenu();
         });
-        content.setOnClickListener(view -> {
+        contentBody.setOnClickListener(view -> {
             if (menuView.getVisibility() == View.VISIBLE)
                 hideMenu();
         });
 
 
-        showFragment(new DashboardFragment());
         startTimeThread();
     }
 
@@ -125,12 +132,42 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
         setContentView(R.layout.activity_main);
         initView();
 
+        if (savedInstanceState != null) {
+            currentFragment = savedInstanceState.getString(FRAGMENT);
+            switch (currentFragment) {
+                case "DashboardFragment": {
+                    dashboardMenuBtn.callOnClick();
+                    break;
+                }
+                case "CheckAutoFragment": {
+                    checkCarMenuBtn.callOnClick();
+                    break;
+                }
+                case "MyCarsFragment": {
+                    myCarsMenuBtn.callOnClick();
+                    break;
+                }
+                case "ProfileFragment": {
+                    profileMenuBtn.callOnClick();
+                    break;
+                }
+                case "TroubleCodesFragment": {
+                    errorListMenuBtn.callOnClick();
+                    break;
+                }
+
+            }
+        } else {
+            dashboardMenuBtn.callOnClick();
+        }
+
 //        deviceadress = getIntent().getStringExtra(ConnectActivity.EXTRA_DEVICE_ADDRESS);
 //        devicename = getIntent().getStringExtra(ConnectActivity.EXTRA_DEVICE_NAME);
 
         localRepository = new LocalRepository(this);
         keyValueStorage = new KeyValueStorage(this);
         obdReader = new OBDReader(this);
+
 
 //        obdReader.connectDevice(deviceadress, devicename);
         obdReader.setOnReceiveFaultCodeListener(this);
@@ -234,19 +271,22 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
         super.onKeyDown(keyCode, event);
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setMessage("Вы точно хотите выйти?");
-            alertDialogBuilder.setPositiveButton("Да",
-                    (arg0, arg1) -> exit());
+            if (menuView.getVisibility() == View.VISIBLE) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setMessage("Вы точно хотите выйти?");
+                alertDialogBuilder.setPositiveButton("Да",
+                        (arg0, arg1) -> exit());
 
-            alertDialogBuilder.setNegativeButton("Нет",
-                    (arg0, arg1) -> {
+                alertDialogBuilder.setNegativeButton("Нет",
+                        (arg0, arg1) -> {
 
-                    });
+                        });
 
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
-
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            } else {
+                showMenu();
+            }
             return false;
         }
         return super.onKeyDown(keyCode, event);
@@ -261,6 +301,15 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
 
     private void showFragment(Fragment fragment) {
         String TAG = fragment.getClass().getSimpleName();
+        currentFragment = TAG;
+
+        if (getResources().getConfiguration().orientation
+                == Configuration.ORIENTATION_LANDSCAPE) {
+        }
+        else {
+            content.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        }
+
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.content_body, fragment, TAG);
         fragmentTransaction.addToBackStack(null);
@@ -287,7 +336,14 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 showFragment(dashboardFragment);
 
                 addView.setVisibility(View.VISIBLE);
-                content.setBackgroundResource(R.drawable.bg);
+
+                if (getResources().getConfiguration().orientation
+                        == Configuration.ORIENTATION_LANDSCAPE) {
+                    content.setImageResource(R.drawable.bg_land);
+                }
+                else {
+                    content.setImageResource(R.drawable.bg_vert);
+                }
                 hideMenu();
                 break;
             }
@@ -295,7 +351,7 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 addCarView.setVisibility(View.INVISIBLE);
                 showFragment(new TroubleCodesFragment());
                 addView.setVisibility(View.INVISIBLE);
-                content.setBackgroundResource(R.drawable.bg_main);
+                content.setImageResource(R.drawable.bg_main);
                 hideMenu();
                 break;
             }
@@ -303,7 +359,7 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 addView.setVisibility(View.INVISIBLE);
                 addCarView.setVisibility(View.VISIBLE);
                 showFragment(new MyCarsFragment());
-                content.setBackgroundResource(R.drawable.bg_main);
+                content.setImageResource(R.drawable.bg_main);
                 hideMenu();
                 break;
             }
@@ -311,7 +367,7 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 addCarView.setVisibility(View.INVISIBLE);
                 showFragment(new CheckAutoFragment());
                 addView.setVisibility(View.INVISIBLE);
-                content.setBackgroundResource(R.drawable.gradient_background);
+                content.setImageResource(R.drawable.gradient_background);
                 hideMenu();
                 break;
             }
@@ -319,7 +375,7 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 addCarView.setVisibility(View.INVISIBLE);
                 showFragment(new ProfileFragment());
                 addView.setVisibility(View.INVISIBLE);
-                content.setBackgroundResource(R.drawable.gradient_background);
+                content.setImageResource(R.drawable.gradient_background);
                 hideMenu();
                 break;
             }
@@ -333,7 +389,7 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
 //                activityToTroublesCallbackListener.onPassTroubleCode(troubleCode);
 ////                showFragment(new ProfileSettingsFragment());
 //                addView.setVisibility(View.INVISIBLE);
-////                content.setBackgroundResource(R.drawable.bg_main);
+////                content.setImageResource();(R.drawable.bg_main);
 //                hideMenu();
                 break;
             }
@@ -350,8 +406,6 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
         profileMenuBtn = findViewById(R.id.profile_menu_btn);
         settingsMenuBtn = findViewById(R.id.settings_menu_btn);
 
-        // TODO
-        checkCarMenuBtn.setEnabled(false);
 
         connectToBtMenuBtn.setOnClickListener(onMenuItemClickListener);
         dashboardMenuBtn.setOnClickListener(onMenuItemClickListener);
@@ -369,7 +423,7 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 .slideLeft()
                 .duration(300)
 
-                .andAnimate(content)
+                .andAnimate(movingContainer)
                 .translationX(Utility.convertDpToPx(this, 180))
                 .duration(300)
 
@@ -383,7 +437,7 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 .translationX(-Utility.convertDpToPx(this, 180))
                 .duration(300)
 
-                .andAnimate(content)
+                .andAnimate(movingContainer)
                 .translationX(-Utility.convertDpToPx(this, 0))
                 .duration(300)
 
@@ -462,4 +516,23 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(FRAGMENT, currentFragment);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        currentFragment = savedInstanceState.getString(FRAGMENT);
+    }
+
+//    @Override
+//    public void onBackPressed() {
+////        if (menuView.getVisibility() == View.VISIBLE)
+////            super.onBackPressed();
+////        else
+////            showMenu();
+//    }
 }

@@ -15,10 +15,12 @@ import android.widget.EditText;
 
 import com.carzis.R;
 import com.carzis.additionalscreen.fragment.AddDeviceFragment;
+import com.carzis.additionalscreen.listener.OnCarClickListener;
 import com.carzis.main.adapter.MyCarsAdapter;
 import com.carzis.main.view.MyCarsView;
 import com.carzis.model.Car;
 import com.carzis.model.AppError;
+import com.carzis.pidlist.PidListActvity;
 import com.carzis.repository.local.database.LocalRepository;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 import com.carzis.util.Utility;
@@ -61,6 +63,12 @@ public class MyCarsFragment extends Fragment implements MyCarsView{
         localRepository.getAllCars();
 
         myCarsAdapter = new MyCarsAdapter(getContext());
+        myCarsAdapter.setOnItemClickListener(new OnCarClickListener() {
+            @Override
+            public void onClick(String carName) {
+                PidListActvity.start(getActivity(), carName);
+            }
+        });
 
         int spanCount = 4;
         if (isLayoutPortrait(getContext()))

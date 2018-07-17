@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:id="@+id/check_car_vin_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/btn_check_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="ПРОВЕРКА ПО VIN КОДУ"
+                android:textColor="@android:color/white"
+                android:textSize="8sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/check_car_num_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/btn_check_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/check_car_vin_btn"
+            app:layout_constraintStart_toEndOf="@+id/check_car_vin_btn"
+            app:layout_constraintTop_toTopOf="@+id/check_car_vin_btn">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="ПРОВЕРКА ПО НОМЕРУ"
+                android:textColor="@android:color/white"
+                android:textSize="8sp" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/check_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Проверка авто по VIN коду"
+            android:textAllCaps="true"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/check_car_vin_btn"
+            app:layout_constraintTop_toBottomOf="@+id/check_car_vin_btn" />
+
+
+        <TextView
+            android:id="@+id/sub_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Введите VIN device_id в формате 4f2yu08102km26251"
+            android:textColor="#939596"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="@+id/check_text"
+            app:layout_constraintTop_toBottomOf="@+id/check_text" />
+
+
+        <LinearLayout
+            android:id="@+id/field_container"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/light_gray_field_background"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/sub_title_text"
+            app:layout_constraintTop_toBottomOf="@+id/sub_title_text">
+
+
+            <EditText
+                android:id="@+id/vin_edtxt"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:background="@null"
+                android:hint="Введите ваш код…"
+                android:maxLength="17"
+                android:textColor="#939596"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:id="@+id/btn_search"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:layout_weight="0.85"
+                android:background="@drawable/button_blue_rect"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_search" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="Поиск"
+                    android:textColor="#ffffff"
+                    android:textSize="11sp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/car_content_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:textColor="@android:color/white"
+            android:textSize="11sp"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/field_container"
+            app:layout_constraintStart_toStartOf="@+id/field_container"
+            app:layout_constraintTop_toBottomOf="@+id/field_container" />
+
+
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

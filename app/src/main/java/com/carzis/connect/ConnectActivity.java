@@ -248,7 +248,7 @@ public class ConnectActivity extends AppCompatActivity {
 
                                     // In order to get the name, we must attempt to connect to the device.
                                     // This will attempt to pair with the device, and will ask the user
-                                    // for a PIN email if one is required.
+                                    // for a PIN device_id if one is required.
                                     try {
                                         BluetoothSocket socket = device.createRfcommSocketToServiceRecord(BluetoothSerialUuid);
                                         socket.connect();

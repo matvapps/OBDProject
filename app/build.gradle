@@ -52,6 +52,7 @@ dependencies {
     implementation project(':mathparser')
     implementation project(':pulseview')
     implementation project(':radar')
+    implementation project(':hellocharts-library')
 
     // library for easy use multiple animation
     implementation 'com.github.florent37:viewanimator:1.0.5'
@@ -84,9 +85,16 @@ dependencies {
     //MaskedEditText
     implementation 'ru.egslava:MaskedEditText:1.0.5'
 
+    //SMS Receiver
+    implementation 'com.github.stfalcon:smsverifycatcher:0.3.2'
+
+    //Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+
     // Plots
-    implementation 'com.jjoe64:graphview:4.2.2'
-    implementation 'com.github.lecho:hellocharts-android:v1.5.8'
+//    implementation 'com.jjoe64:graphview:4.2.2'
+//    implementation 'com.github.lecho:hellocharts-android:v1.5.8'
 
     // String to math formula
 //    implementation 'org.mariuszgromada.math.mxparser:4.1.1'

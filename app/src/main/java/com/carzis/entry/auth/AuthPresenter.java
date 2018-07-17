@@ -1,5 +1,7 @@
 package com.carzis.entry.auth;
 
+import android.util.Log;
+
 import com.carzis.base.Presenter;
 import com.carzis.model.AppError;
 import com.carzis.model.response.ConfirmRegisterResponse;
@@ -21,17 +23,21 @@ public class AuthPresenter implements Presenter<AuthView>{
         api = ApiUtils.getCarzisApi();
     }
 
-    public void auth(String phone, String password, String deviceId, String deviceName) {
+    public void auth(String phone, Integer password, String deviceId, String deviceName) {
         view.showLoading(true);
         api.auth(phone, password, deviceId, deviceName).enqueue(new Callback<ConfirmRegisterResponse>() {
             @Override
             public void onResponse(Call<ConfirmRegisterResponse> call, Response<ConfirmRegisterResponse> response) {
                 view.showLoading(false);
+                Log.d("AuthPresenter", "onResponse: " + response.code());
+                if (response.code() == 200)
+                    view.onAuth(response.body().getUser(), response.body().getToken());
             }
 
             @Override
             public void onFailure(Call<ConfirmRegisterResponse> call, Throwable t) {
                 view.showLoading(false);
+                Log.d("LogRegActivity", "onFailure: " + t.getMessage());
                 view.showError(AppError.AUTH_USER_ERROR);
             }
         });
