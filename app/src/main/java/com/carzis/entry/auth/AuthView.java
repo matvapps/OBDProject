@@ -4,5 +4,5 @@ import com.carzis.base.BaseView;
 import com.carzis.model.User;
 
 public interface AuthView extends BaseView {
-    void onAuth(User user, String token);
+    void onAuth(String token);
 }

@@ -197,12 +197,12 @@ public class LogRegActivity extends AppCompatActivity implements RegisterCallbac
     }
 
     @Override
-    public void onConfirmRegister(User user, String token) {
+    public void onConfirmRegister(String token) {
         startMain(token);
     }
 
     @Override
-    public void onAuth(User user, String token) {
+    public void onAuth(String token) {
         startMain(token);
     }
 

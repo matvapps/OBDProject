@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Введите VIN device_id в формате 4f2yu08102km26251"
+            android:text="Введите VIN код в формате 4f2yu08102km26251"
             android:textColor="#939596"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="@+id/check_text"

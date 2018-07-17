@@ -8,6 +8,8 @@ import com.carzis.model.response.ConfirmRegisterResponse;
 import com.carzis.repository.remote.ApiUtils;
 import com.carzis.repository.remote.CarzisApi;
 
+import java.util.Arrays;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,13 +33,17 @@ public class AuthPresenter implements Presenter<AuthView>{
                 view.showLoading(false);
                 Log.d("AuthPresenter", "onResponse: " + response.code());
                 if (response.code() == 200)
-                    view.onAuth(response.body().getUser(), response.body().getToken());
+                    view.onAuth(response.body().getToken());
             }
 
             @Override
             public void onFailure(Call<ConfirmRegisterResponse> call, Throwable t) {
                 view.showLoading(false);
+                Log.d("LogRegActivity", "onFailure: " + Arrays.toString(t.getStackTrace()));
+                Log.d("LogRegActivity", "onFailure: " + t.toString());
+                Log.d("LogRegActivity", "onFailure: " + t.getLocalizedMessage());
                 Log.d("LogRegActivity", "onFailure: " + t.getMessage());
+
                 view.showError(AppError.AUTH_USER_ERROR);
             }
         });

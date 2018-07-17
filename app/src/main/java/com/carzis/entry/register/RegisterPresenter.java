@@ -64,7 +64,7 @@ public class RegisterPresenter implements Presenter<RegisterView> {
             public void onResponse(Call<ConfirmRegisterResponse> call, Response<ConfirmRegisterResponse> response) {
                 view.showLoading(false);
                 if (response.code() == 200)
-                    view.onConfirmRegister(response.body().getUser(), response.body().getToken());
+                    view.onConfirmRegister(response.body().getToken());
             }
 
             @Override

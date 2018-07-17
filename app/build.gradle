@@ -49,7 +49,7 @@ dependencies {
     })
 
     implementation project(':dashboarddevices')
-    implementation project(':mathparser')
+//    implementation project(':mathparser')
     implementation project(':pulseview')
     implementation project(':radar')
     implementation project(':hellocharts-library')
@@ -97,7 +97,7 @@ dependencies {
 //    implementation 'com.github.lecho:hellocharts-android:v1.5.8'
 
     // String to math formula
-//    implementation 'org.mariuszgromada.math.mxparser:4.1.1'
+    implementation group: 'org.mariuszgromada.math', name: 'MathParser.org-mXparser', version: '4.1.1'
 
 
     implementation 'com.android.support:appcompat-v7:27.1.1'

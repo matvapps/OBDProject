@@ -1,5 +1,6 @@
 package com.carzis.model.response;
 
+import com.carzis.model.Device;
 import com.carzis.model.User;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -7,9 +8,9 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class ConfirmRegisterResponse extends BaseResponse {
-    @SerializedName("user")
-    @Expose
-    private User user;
+//    @SerializedName("user")
+//    @Expose
+//    private User user;
     @SerializedName("token")
     @Expose
     private String token;
@@ -20,13 +21,13 @@ public class ConfirmRegisterResponse extends BaseResponse {
     public ConfirmRegisterResponse() {
     }
 
-    public ConfirmRegisterResponse(User user, String token) {
-        this.user = user;
+    public ConfirmRegisterResponse(/*User user,*/ String token) {
+//        this.user = user;
         this.token = token;
     }
 
-    public ConfirmRegisterResponse(User user, String token, List<Device> activeDevices) {
-        this.user = user;
+    public ConfirmRegisterResponse(/*User user,*/ String token, List<Device> activeDevices) {
+//        this.user = user;
         this.token = token;
         this.activeDevices = activeDevices;
     }
@@ -39,13 +40,13 @@ public class ConfirmRegisterResponse extends BaseResponse {
         this.activeDevices = activeDevices;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
 
     public String getToken() {
         return token;

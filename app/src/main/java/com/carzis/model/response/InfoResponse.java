@@ -1,5 +1,8 @@
 package com.carzis.model.response;
 
+import com.carzis.model.Accident;
+import com.carzis.model.Restriction;
+import com.carzis.model.Search;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -8,7 +11,7 @@ import java.util.List;
 /**
  * Created by Alexandr.
  */
-public class VinInfoResponse extends BaseResponse {
+public class InfoResponse extends BaseResponse {
 
     @SerializedName("gibdd_done")
     @Expose
@@ -32,19 +35,19 @@ public class VinInfoResponse extends BaseResponse {
 
     @SerializedName("history")
     @Expose
-    private String history;
+    private HistoryResponse history;
 
     @SerializedName("accidents")
     @Expose
-    private List<String> accidents;
+    private List<Accident> accidents;
 
     @SerializedName("searches")
     @Expose
-    private List<String> searches;
+    private List<Search> searches;
 
     @SerializedName("restrictions")
     @Expose
-    private List<String> restrictions;
+    private List<Restriction> restrictions;
 
     @SerializedName("gibdd_accidents_total_time")
     @Expose
@@ -62,10 +65,10 @@ public class VinInfoResponse extends BaseResponse {
     @Expose
     private float gibddRestrictionsTotalTime;
 
-    public VinInfoResponse() {
+    public InfoResponse() {
     }
 
-    public VinInfoResponse(int gibddDone, int gibddHistoryDone, int gibddAccidentsDone, int gibddSearchesDone, int gibddRestrictionsDone, String history, List<String> accidents, List<String> searches, List<String> restrictions, float gibddAccidentsTotalTime, float gibddSearchesTotalTime, float gibddHistoryTotalTime, float gibddRestrictionsTotalTime) {
+    public InfoResponse(int gibddDone, int gibddHistoryDone, int gibddAccidentsDone, int gibddSearchesDone, int gibddRestrictionsDone, HistoryResponse history, List<Accident> accidents, List<Search> searches, List<Restriction> restrictions, float gibddAccidentsTotalTime, float gibddSearchesTotalTime, float gibddHistoryTotalTime, float gibddRestrictionsTotalTime) {
         this.gibddDone = gibddDone;
         this.gibddHistoryDone = gibddHistoryDone;
         this.gibddAccidentsDone = gibddAccidentsDone;
@@ -121,35 +124,35 @@ public class VinInfoResponse extends BaseResponse {
         this.gibddRestrictionsDone = gibddRestrictionsDone;
     }
 
-    public String getHistory() {
+    public HistoryResponse getHistory() {
         return history;
     }
 
-    public void setHistory(String history) {
+    public void setHistory(HistoryResponse history) {
         this.history = history;
     }
 
-    public List<String> getAccidents() {
+    public List<Accident> getAccidents() {
         return accidents;
     }
 
-    public void setAccidents(List<String> accidents) {
+    public void setAccidents(List<Accident> accidents) {
         this.accidents = accidents;
     }
 
-    public List<String> getSearches() {
+    public List<Search> getSearches() {
         return searches;
     }
 
-    public void setSearches(List<String> searches) {
+    public void setSearches(List<Search> searches) {
         this.searches = searches;
     }
 
-    public List<String> getRestrictions() {
+    public List<Restriction> getRestrictions() {
         return restrictions;
     }
 
-    public void setRestrictions(List<String> restrictions) {
+    public void setRestrictions(List<Restriction> restrictions) {
         this.restrictions = restrictions;
     }
 
@@ -187,18 +190,19 @@ public class VinInfoResponse extends BaseResponse {
 
     @Override
     public String toString() {
-        return "gibddDone = " + gibddDone + "\n" +
-                "gibddHistoryDone = " + gibddHistoryDone + "\n" +
-                "gibddAccidentsDone = " + gibddAccidentsDone + "\n" +
-                "gibddSearchesDone = " + gibddSearchesDone + "\n" +
-                "gibddRestrictionsDone = " + gibddRestrictionsDone + "\n" +
-                "history = " + history + "\n" +
-                "accidents = " + accidents + "\n" +
-                "searches = " + searches + "\n" +
-                "restrictions = " + restrictions + "\n" +
-                "gibddAccidentsTotalTime = " + gibddAccidentsTotalTime + "\n" +
-                "gibddSearchesTotalTime = " + gibddSearchesTotalTime + "\n" +
-                "gibddHistoryTotalTime = " + gibddHistoryTotalTime + "\n" +
-                "gibddRestrictionsTotalTime = " + gibddRestrictionsTotalTime + "\n";
+        return
+//                "gibddDone = " + gibddDone +
+//                "\n" + "gibddHistoryDone = " + gibddHistoryDone +
+//                "\n" + "gibddAccidentsDone = " + gibddAccidentsDone +
+//                "\n" + "gibddSearchesDone = " + gibddSearchesDone +
+//                "\n" + "gibddRestrictionsDone = " + gibddRestrictionsDone +
+                "\n" + history +
+                "\n" + accidents +
+                "\n" + searches +
+                "\n" + restrictions;
+//                "\n" + "gibddAccidentsTotalTime = " + gibddAccidentsTotalTime +
+//                "\n" + "gibddSearchesTotalTime = " + gibddSearchesTotalTime +
+//                "\n" + "gibddHistoryTotalTime = " + gibddHistoryTotalTime +
+//                "\n" + "gibddRestrictionsTotalTime = " + gibddRestrictionsTotalTime;
     }
 }

@@ -4,27 +4,35 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class ProfileResponse extends BaseResponse {
+
     @SerializedName("user_photo")
     @Expose
     private String photoUrl;
+
     @SerializedName("password")
     @Expose
     private String password;
+
     @SerializedName("email")
     @Expose
     private String email;
+
     @SerializedName("first_name")
     @Expose
     private String firstName;
+
     @SerializedName("second_name")
     @Expose
     private String secondName;
+
     @SerializedName("birthday")
     @Expose
     private String birthday;
+
     @SerializedName("phone")
     @Expose
     private String phone;
+
     @SerializedName("is_payed")
     @Expose
     private Integer isPayed;

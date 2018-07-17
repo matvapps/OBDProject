@@ -1,4 +1,4 @@
-package com.carzis.model.response;
+package com.carzis.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

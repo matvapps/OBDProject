@@ -1,6 +1,7 @@
 package com.carzis.main.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,19 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.carzis.R;
 import com.carzis.main.presenter.CheckAutoPresenter;
 import com.carzis.main.view.CheckAutoView;
 import com.carzis.model.AppError;
-import com.carzis.model.response.NumInfoResponse;
-import com.carzis.model.response.VinInfoResponse;
+import com.carzis.model.response.InfoResponse;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 
 /**
  * Created by Alexandr.
  */
-public class CheckAutoFragment extends Fragment implements View.OnClickListener, CheckAutoView{
+public class CheckAutoFragment extends Fragment implements View.OnClickListener, CheckAutoView {
 
     private static final String TAG = CheckAutoFragment.class.getSimpleName();
 
@@ -30,12 +31,22 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
     private View btnSearch;
     private EditText edtxt;
     private TextView carInfoContent;
+    private TextView titleTxt;
+    private TextView subTitleTxt;
 
     private final int CHECK_CAR_BY_NUM = 1;
     private final int CHECK_CAR_BY_VIN = 2;
 
+    private final String CURRENT_CHECK = "current_check";
+    private final String CURRENT_VALUE = "current_value";
+    private final String CURRENT_RESPONSE = "current_response";
+
     private KeyValueStorage keyValueStorage;
     private CheckAutoPresenter checkAutoPresenter;
+
+    private String currentValue;
+    private String currentResponse;
+    private int currentCheck;
 
     @Nullable
     @Override
@@ -48,6 +59,8 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
         btnSearch = rootView.findViewById(R.id.btn_search);
         edtxt = rootView.findViewById(R.id.vin_edtxt);
         carInfoContent = rootView.findViewById(R.id.car_content_info);
+        titleTxt = rootView.findViewById(R.id.check_text);
+        subTitleTxt = rootView.findViewById(R.id.sub_title_text);
 
         checkCarByNum.setOnClickListener(this);
         checkCarByVin.setOnClickListener(this);
@@ -59,7 +72,28 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
         checkAutoPresenter = new CheckAutoPresenter(keyValueStorage.getUserToken());
         checkAutoPresenter.attachView(this);
 
+        if (savedInstanceState != null) {
+            currentCheck = savedInstanceState.getInt(CURRENT_CHECK);
+            currentResponse = savedInstanceState.getString(CURRENT_RESPONSE);
+            currentValue = savedInstanceState.getString(CURRENT_VALUE);
+
+            if (currentCheck == CHECK_CAR_BY_VIN)
+                checkCarByVin.callOnClick();
+            else
+                checkCarByNum.callOnClick();
+
+            Log.d(TAG, "onActivityCreated: " + currentValue);
+
+            carInfoContent.setText(savedInstanceState.getString(CURRENT_RESPONSE));
+            edtxt.setText(savedInstanceState.getString(CURRENT_VALUE));
+        }
+
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -68,18 +102,28 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
             case R.id.check_car_num_btn: {
                 checkCarByNum.setSelected(true);
                 checkCarByVin.setSelected(false);
+                currentCheck = getCheckType();
+                titleTxt.setText("Проверка авто по гос. номеру");
+                subTitleTxt.setText("Введите номер авто в формате А000АА00");
                 break;
             }
             case R.id.check_car_vin_btn: {
                 checkCarByNum.setSelected(false);
                 checkCarByVin.setSelected(true);
+                currentCheck = getCheckType();
+                titleTxt.setText("Проверка авто по VIN коду");
+                subTitleTxt.setText("Введите VIN код в формате 4f2yu08102km26251");
                 break;
             }
             case R.id.btn_search: {
+                currentValue = edtxt.getText().toString();
                 if (getCheckType() == CHECK_CAR_BY_NUM)
                     checkAutoPresenter.getInfoByNum(edtxt.getText().toString());
                 else if (getCheckType() == CHECK_CAR_BY_VIN)
-                    checkAutoPresenter.getInfoByVin(edtxt.getText().toString());
+                    if (edtxt.getText().toString().length() < 17)
+                        Toast.makeText(getContext(), "VIN код должен состоять из 17 знаков", Toast.LENGTH_SHORT).show();
+                    else
+                        checkAutoPresenter.getInfoByVin(edtxt.getText().toString());
                 break;
             }
         }
@@ -95,14 +139,17 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
 
 
     @Override
-    public void onCheckAutoByVin(VinInfoResponse vinInfoResponse) {
+    public void onCheckAutoByVin(InfoResponse infoResponse) {
         Log.d(TAG, "onCheckAutoByVin: ");
-
+        carInfoContent.setText(infoResponse.toString());
+        currentResponse = infoResponse.toString();
     }
 
     @Override
-    public void onCheckAutoByNum(NumInfoResponse numInfoResponse) {
+    public void onCheckAutoByNum(InfoResponse infoResponse) {
         Log.d(TAG, "onCheckAutoByNum: ");
+        carInfoContent.setText(infoResponse.toString());
+        currentResponse = infoResponse.toString();
     }
 
     @Override
@@ -113,5 +160,19 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
     @Override
     public void showError(AppError appError) {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_CHECK, getCheckType());
+        outState.putString(CURRENT_RESPONSE, currentResponse);
+        outState.putString(CURRENT_VALUE, edtxt.getText().toString());
     }
 }

@@ -5,7 +5,7 @@ import android.util.Log;
 import com.carzis.base.Presenter;
 import com.carzis.main.view.CheckAutoView;
 import com.carzis.model.response.NumInfoResponse;
-import com.carzis.model.response.VinInfoResponse;
+import com.carzis.model.response.InfoResponse;
 import com.carzis.repository.remote.ApiUtils;
 import com.carzis.repository.remote.CarzisApi;
 
@@ -30,9 +30,9 @@ public class CheckAutoPresenter implements Presenter<CheckAutoView>{
 
     public void getInfoByVin(String vin) {
         view.showLoading(true);
-        api.getInfoByVin("Bearer " + token, vin).enqueue(new Callback<VinInfoResponse>() {
+        api.getInfoByVin("Bearer " + token, vin).enqueue(new Callback<InfoResponse>() {
             @Override
-            public void onResponse(Call<VinInfoResponse> call, Response<VinInfoResponse> response) {
+            public void onResponse(Call<InfoResponse> call, Response<InfoResponse> response) {
                 view.showLoading(false);
                 Log.d(TAG, "onResponse: " + response.message());
                 if (response.code() == 200)
@@ -40,7 +40,7 @@ public class CheckAutoPresenter implements Presenter<CheckAutoView>{
             }
 
             @Override
-            public void onFailure(Call<VinInfoResponse> call, Throwable t) {
+            public void onFailure(Call<InfoResponse> call, Throwable t) {
                 view.showLoading(false);
             }
         });
@@ -48,9 +48,9 @@ public class CheckAutoPresenter implements Presenter<CheckAutoView>{
 
     public void getInfoByNum(String num) {
         view.showLoading(true);
-        api.getInfoByNum("Bearer " + token, num).enqueue(new Callback<NumInfoResponse>() {
+        api.getInfoByNum("Bearer " + token, num).enqueue(new Callback<InfoResponse>() {
             @Override
-            public void onResponse(Call<NumInfoResponse> call, Response<NumInfoResponse> response) {
+            public void onResponse(Call<InfoResponse> call, Response<InfoResponse> response) {
                 view.showLoading(false);
                 Log.d(TAG, "onResponse: " + response.message());
                 if (response.code() == 200)
@@ -58,7 +58,7 @@ public class CheckAutoPresenter implements Presenter<CheckAutoView>{
             }
 
             @Override
-            public void onFailure(Call<NumInfoResponse> call, Throwable t) {
+            public void onFailure(Call<InfoResponse> call, Throwable t) {
                 view.showLoading(false);
             }
         });

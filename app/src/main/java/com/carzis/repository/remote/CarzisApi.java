@@ -1,12 +1,14 @@
 package com.carzis.repository.remote;
 
+import android.icu.text.IDNA;
+
 import com.carzis.model.response.BaseResponse;
 import com.carzis.model.response.ConfirmRegisterResponse;
 import com.carzis.model.response.NumInfoResponse;
 import com.carzis.model.response.ProfileResponse;
 import com.carzis.model.response.RegisterResponse;
 import com.carzis.model.response.TroubleResponse;
-import com.carzis.model.response.VinInfoResponse;
+import com.carzis.model.response.InfoResponse;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.annotations.Nullable;
@@ -71,12 +73,12 @@ public interface CarzisApi {
                                      @NonNull @Query("brand") String brand);
 
     @GET("load_info_by_vin")
-    Call<VinInfoResponse> getInfoByVin(@Header("Authorization") String token,
-                                       @NonNull @Query("vin") String vin);
+    Call<InfoResponse> getInfoByVin(@Header("Authorization") String token,
+                                    @NonNull @Query("vin") String vin);
 
     @GET("load_info_by_auto_num")
-    Call<NumInfoResponse> getInfoByNum(@Header("Authorization") String token,
-                                       @NonNull @Query("number") String number);
+    Call<InfoResponse> getInfoByNum(@Header("Authorization") String token,
+                                 @NonNull @Query("number") String number);
 
 
 }

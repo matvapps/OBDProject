@@ -1,5 +1,7 @@
 package com.carzis.history;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +10,8 @@ import android.util.Log;
 import com.carzis.R;
 import com.carzis.model.AppError;
 import com.carzis.model.HistoryItem;
+import com.carzis.model.PID;
+import com.carzis.pidlist.PidListActvity;
 import com.carzis.repository.local.database.LocalRepository;
 
 import java.text.SimpleDateFormat;
@@ -32,10 +36,26 @@ public class HistoryActivity extends AppCompatActivity implements HistoryView {
     private LocalRepository localRepository;
     private LineChartData lineData;
 
+    private static final String CAR_NAME = "car_name";
+    private static final String PID_CODE = "pid_code";
+
+    private String carName;
+    private String pidCode;
+
+    public static void start(Context context, String carName, String pidCode) {
+        Intent intent = new Intent(context, HistoryActivity.class);
+        intent.putExtra(CAR_NAME, carName);
+        intent.putExtra(PID_CODE, pidCode);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+
+        this.carName = getIntent().getStringExtra(CAR_NAME);
+        this.pidCode = getIntent().getStringExtra(PID_CODE);
 
         chart = findViewById(R.id.chart);
 
@@ -45,7 +65,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryView {
         localRepository.attachView(this);
         Calendar now = Calendar.getInstance();
 
-        localRepository.getAllHistoryItemsByCar("BMW");
+        localRepository.getAllHistoryItemsByCar(carName);
 //        generateData(new ArrayList<HistoryItem>());
 
     }
@@ -67,7 +87,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryView {
 //            Toast.makeText(this, time.get(Calendar.SECOND) + " second after", Toast.LENGTH_SHORT).show();
 
             if (i > 0 && i < items.size() - 1) {
-                if(!(itemLabels.get(i - 1).get(Calendar.DAY_OF_MONTH) == time.get(Calendar.DAY_OF_MONTH)
+                if (!(itemLabels.get(i - 1).get(Calendar.DAY_OF_MONTH) == time.get(Calendar.DAY_OF_MONTH)
                         && itemLabels.get(i - 1).get(Calendar.MONTH) == time.get(Calendar.MONTH))) {
                     isOneDay = false;
                 }
@@ -202,10 +222,10 @@ public class HistoryActivity extends AppCompatActivity implements HistoryView {
         chart.setZoomType(ZoomType.HORIZONTAL);
     }
 
-    public float getMax(ArrayList<String> list){
+    public float getMax(ArrayList<String> list) {
         float max = 0;
-        for(int i=0; i<list.size(); i++){
-            if(Float.parseFloat(list.get(i)) > max){
+        for (int i = 0; i < list.size(); i++) {
+            if (Float.parseFloat(list.get(i)) > max) {
                 max = Float.parseFloat(list.get(i));
             }
         }
@@ -215,9 +235,12 @@ public class HistoryActivity extends AppCompatActivity implements HistoryView {
     @Override
     public void onGetHistoryItems(List<HistoryItem> items, String carName) {
         Log.d("TAG", "onGetHistoryItems: " + carName);
-        for (HistoryItem item : items) {
-            Log.d("TAG", "onGetHistoryItems: " + item.getPidId() + " " + item.getValue());
-
+        for (int i = 0; i < items.size(); i++) {
+            HistoryItem item = items.get(i);
+            if (!item.getPidId().equals(pidCode)) {
+                items.remove(i);
+//                Log.d("TAG", "onGetHistoryItems: " + item.getPidId() + " " + item.getValue());
+            }
         }
         generateData(items);
     }

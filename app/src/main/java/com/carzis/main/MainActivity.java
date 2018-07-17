@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
         keyValueStorage = new KeyValueStorage(this);
         obdReader = new OBDReader(this);
 
+        Log.d(TAG, "onCreate: " + keyValueStorage.getUserToken());
 
 //        obdReader.connectDevice(deviceadress, devicename);
         obdReader.setOnReceiveFaultCodeListener(this);
@@ -305,15 +306,27 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
 
         if (getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE) {
-        }
-        else {
+        } else {
             content.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }
 
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.content_body, fragment, TAG);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commitAllowingStateLoss();
+        for (Fragment item : getSupportFragmentManager().getFragments()) {
+            if (!item.getClass().getSimpleName().equals(currentFragment)) {
+                FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+                trans.remove(item);
+                trans.commit();
+                getSupportFragmentManager().popBackStack();
+//                getSupportFragmentManager().beginTransaction().remove(item).commit();
+            }
+        }
+
+        Fragment frag = getSupportFragmentManager().findFragmentByTag(fragment.getClass().getSimpleName());
+        if (frag == null) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.content_body, fragment, TAG);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commitAllowingStateLoss();
+        }
     }
 
     private Fragment getFragment(Fragment fragment) {
@@ -340,8 +353,7 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 if (getResources().getConfiguration().orientation
                         == Configuration.ORIENTATION_LANDSCAPE) {
                     content.setImageResource(R.drawable.bg_land);
-                }
-                else {
+                } else {
                     content.setImageResource(R.drawable.bg_vert);
                 }
                 hideMenu();
