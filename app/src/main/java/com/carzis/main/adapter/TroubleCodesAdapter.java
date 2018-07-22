@@ -55,7 +55,10 @@ public class TroubleCodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (!contains(troubleItem.getCode()))
             return;
 
-        this.defaultItems.set(getPositionOf(troubleItem), troubleItem);
+        if (!(getPositionOf(troubleItem) == -1))
+            this.defaultItems.set(getPositionOf(troubleItem), troubleItem);
+        else
+            addItem(troubleItem);
     }
 
     public int getPositionOf(Trouble troubleItem) {

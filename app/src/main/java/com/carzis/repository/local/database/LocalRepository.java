@@ -2,6 +2,7 @@ package com.carzis.repository.local.database;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 
 import com.carzis.history.HistoryView;
 import com.carzis.main.view.MyCarsView;
@@ -26,6 +27,8 @@ import static com.carzis.model.AppError.GET_TROUBLE_FROM_LOCAL_REPO_ERROR;
  * Created by Alexandr.
  */
 public class LocalRepository {
+
+    private final String TAG = LocalRepository.class.getSimpleName();
 
     private Context context;
     private AppDatabase appDatabase;
@@ -62,12 +65,15 @@ public class LocalRepository {
                 .subscribe(new DisposableSingleObserver<Trouble>() {
                     @Override
                     public void onSuccess(Trouble trouble) {
+                        Log.d(TAG, "onSuccess: " + trouble.getCode());
                         troubleCodesView.onGetTroubleCode(trouble);
                         troubleCodesView.showLoading(false);
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        Log.d(TAG, "onError: " + e.getMessage());
+                        troubleCodesView.onGetTroubleCode(new Trouble(code, "", "", "нет описания"));
                         troubleCodesView.showLoading(false);
                         troubleCodesView.showError(GET_TROUBLE_FROM_LOCAL_REPO_ERROR);
                     }

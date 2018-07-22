@@ -231,6 +231,10 @@ public class OBDReader {
         sendEcuMessage(RESET);
     }
 
+    public void getTroubleCodes() {
+        sendEcuMessage(PID.TROUBLE_CODES.getCommand());
+    }
+
     public void sendEcuMessage(String message) {
 //        if (mWifiService != null) {
 //            if (mWifiService.isConnected()) {
@@ -456,8 +460,10 @@ public class OBDReader {
                         faultCode = troubleCodesArray.get(i);
 
                         if (faultCode != null) {
-                            if (onReceiveFaultCodeListener != null)
+                            if (onReceiveFaultCodeListener != null) {
                                 onReceiveFaultCodeListener.onReceiveFaultCode(faultCode);
+                                Log.d(TAG, "getFaultInfo: " + faultCode);
+                            }
                         }
                     }
                 } else {

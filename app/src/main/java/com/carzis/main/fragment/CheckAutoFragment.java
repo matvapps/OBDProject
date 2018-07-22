@@ -12,17 +12,26 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.ConsumeResponseListener;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.carzis.R;
 import com.carzis.main.presenter.CheckAutoPresenter;
 import com.carzis.main.view.CheckAutoView;
 import com.carzis.model.AppError;
 import com.carzis.model.response.InfoResponse;
 import com.carzis.repository.local.prefs.KeyValueStorage;
+import com.github.mmin18.widget.RealtimeBlurView;
+
+import java.util.List;
 
 /**
  * Created by Alexandr.
  */
-public class CheckAutoFragment extends Fragment implements View.OnClickListener, CheckAutoView {
+public class CheckAutoFragment extends Fragment implements View.OnClickListener, CheckAutoView, PurchasesUpdatedListener {
 
     private static final String TAG = CheckAutoFragment.class.getSimpleName();
 
@@ -33,6 +42,7 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
     private TextView carInfoContent;
     private TextView titleTxt;
     private TextView subTitleTxt;
+    private RealtimeBlurView blurView;
 
     private final int CHECK_CAR_BY_NUM = 1;
     private final int CHECK_CAR_BY_VIN = 2;
@@ -41,6 +51,7 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
     private final String CURRENT_VALUE = "current_value";
     private final String CURRENT_RESPONSE = "current_response";
 
+    private BillingClient mBillingClient;
     private KeyValueStorage keyValueStorage;
     private CheckAutoPresenter checkAutoPresenter;
 
@@ -61,6 +72,7 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
         carInfoContent = rootView.findViewById(R.id.car_content_info);
         titleTxt = rootView.findViewById(R.id.check_text);
         subTitleTxt = rootView.findViewById(R.id.sub_title_text);
+        blurView = rootView.findViewById(R.id.blur_image);
 
         checkCarByNum.setOnClickListener(this);
         checkCarByVin.setOnClickListener(this);
@@ -71,6 +83,23 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
         keyValueStorage = new KeyValueStorage(getContext());
         checkAutoPresenter = new CheckAutoPresenter(keyValueStorage.getUserToken());
         checkAutoPresenter.attachView(this);
+
+        mBillingClient = BillingClient.newBuilder(getContext()).setListener(this).build();
+        mBillingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(@BillingClient.BillingResponse int billingResponseCode) {
+                if (billingResponseCode == BillingClient.BillingResponse.OK) {
+                    // The billing client is ready. You can query purchases here.
+                }
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+                // Try to restart the connection on the next request to
+                // Google Play by calling the startConnection() method.
+            }
+        });
+
 
         if (savedInstanceState != null) {
             currentCheck = savedInstanceState.getInt(CURRENT_CHECK);
@@ -124,7 +153,6 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
                         Toast.makeText(getContext(), "VIN код должен состоять из 17 знаков", Toast.LENGTH_SHORT).show();
                     else
                         checkAutoPresenter.getInfoByVin(edtxt.getText().toString());
-                break;
             }
         }
     }
@@ -143,6 +171,14 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
         Log.d(TAG, "onCheckAutoByVin: ");
         carInfoContent.setText(infoResponse.toString());
         currentResponse = infoResponse.toString();
+        blurView.setVisibility(View.VISIBLE);
+
+        BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                .setSku("com.carzis.product.checkauto")
+                .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
+                .build();
+        mBillingClient.launchBillingFlow(getActivity(), flowParams);
+
     }
 
     @Override
@@ -150,6 +186,13 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
         Log.d(TAG, "onCheckAutoByNum: ");
         carInfoContent.setText(infoResponse.toString());
         currentResponse = infoResponse.toString();
+        blurView.setVisibility(View.VISIBLE);
+
+        BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                .setSku("com.carzis.product.checkauto")
+                .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
+                .build();
+        mBillingClient.launchBillingFlow(getActivity(), flowParams);
     }
 
     @Override
@@ -175,4 +218,40 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
         outState.putString(CURRENT_RESPONSE, currentResponse);
         outState.putString(CURRENT_VALUE, edtxt.getText().toString());
     }
+
+    @Override
+    public void onPurchasesUpdated(int responseCode, @Nullable List<Purchase> purchases) {
+        Toast.makeText(getContext(), "onPurchaseUpdated" + responseCode, Toast.LENGTH_SHORT).show();
+        if (responseCode == BillingClient.BillingResponse.OK
+                && purchases != null) {
+            for (Purchase purchase : purchases) {
+                handlePurchase(purchase);
+            }
+
+        } else if (responseCode == BillingClient.BillingResponse.ITEM_ALREADY_OWNED
+                && purchases != null) {
+            Toast.makeText(getContext(), "Item already owned", Toast.LENGTH_SHORT).show();
+            for (Purchase purchase : purchases) {
+                handlePurchase(purchase);
+            }
+        } else if (responseCode == BillingClient.BillingResponse.USER_CANCELED) {
+            // Handle an error caused by a user cancelling the purchase flow.
+        }
+    }
+
+    private void handlePurchase(Purchase purchase) {
+        Log.d(TAG, "handlePurchase: " + purchase.getOrderId());
+        if (purchase.getOrderId().equals("com.carzis.product.checkauto")) {
+
+            mBillingClient.consumeAsync(purchase.getPurchaseToken(), new ConsumeResponseListener() {
+                @Override
+                public void onConsumeResponse(int responseCode, String purchaseToken) {
+                    Toast.makeText(getContext(), "DELETE BLUR", Toast.LENGTH_SHORT).show();
+                    blurView.setVisibility(View.GONE);
+                }
+            });
+
+        }
+    }
+
 }

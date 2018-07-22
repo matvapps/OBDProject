@@ -64,7 +64,7 @@ import static com.carzis.dialoglist.DialogListActivity.DIALOG_LIST_ACTIVITY_CODE
 import static com.carzis.dialoglist.DialogListActivity.STRING_EXTRA;
 
 public class MainActivity extends AppCompatActivity implements DashboardToActivityCallbackListener,
-        TroublesToActivityCallbackListener, OnReceiveDataListener, OnReceiveFaultCodeListener, MyCarsView, PurchasesUpdatedListener{
+        TroublesToActivityCallbackListener, OnReceiveDataListener, OnReceiveFaultCodeListener, MyCarsView {
 
     private final String TAG = MainActivity.class.getSimpleName();
 
@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
     private Button feedbackBtn;
     private SwitchCompat useAddingToHistorySwitch;
 
-    private BillingClient mBillingClient;
     private LocalRepository localRepository;
     private KeyValueStorage keyValueStorage;
     private CarPresenter carPresenter;
@@ -192,21 +191,6 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
         obdReader = new OBDReader(this);
         carPresenter = new CarPresenter(keyValueStorage.getUserToken());
         carPresenter.attachView(this);
-
-        mBillingClient = BillingClient.newBuilder(this).setListener(this).build();
-        mBillingClient.startConnection(new BillingClientStateListener() {
-            @Override
-            public void onBillingSetupFinished(@BillingClient.BillingResponse int billingResponseCode) {
-                if (billingResponseCode == BillingClient.BillingResponse.OK) {
-                    // The billing client is ready. You can query purchases here.
-                }
-            }
-            @Override
-            public void onBillingServiceDisconnected() {
-                // Try to restart the connection on the next request to
-                // Google Play by calling the startConnection() method.
-            }
-        });
 
         Log.d(TAG, "onCreate: " + keyValueStorage.getUserToken());
 
@@ -543,7 +527,7 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
 
     @Override
     public void getTroubleCodes() {
-
+        obdReader.getTroubleCodes();
     }
 
     @Override
@@ -685,11 +669,6 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
 
     @Override
     public void showError(AppError appError) {
-
-    }
-
-    @Override
-    public void onPurchasesUpdated(int responseCode, @Nullable List<Purchase> purchases) {
 
     }
 

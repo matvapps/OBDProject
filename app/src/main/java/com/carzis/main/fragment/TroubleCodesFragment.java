@@ -69,7 +69,6 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
         View rootView = inflater.inflate(R.layout.fragment_trouble_codes, container, false);
 
         keyValueStorage = new KeyValueStorage(getContext());
-        troublesToActivityCallbackListener.getTroubleCodes();
 
         troubleCodesList = rootView.findViewById(R.id.trouble_codes_list);
         troubleFullDescText = rootView.findViewById(R.id.trouble_code_full_desc);
@@ -122,6 +121,9 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
                 });
 
         carEngineBtn.callOnClick();
+
+        troublesToActivityCallbackListener.getTroubleCodes();
+
         return rootView;
     }
 
@@ -150,6 +152,7 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
 //            troubleCodesAdapter.addItem(new Trouble(troubleCode));
 
         // TODO: check for brand
+        Log.d(TAG, "onPassTroubleCode: " + troubleCode);
         troubleCodePresenter.getTroubleCodeDescription(keyValueStorage.getUserToken(), troubleCode, keyValueStorage.getLanguage(), "");
 //        localRepository.getTrouble(troubleCode);
     }
@@ -229,6 +232,7 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
 
     @Override
     public void onRemoteRepoError(String code) {
+        Log.d(TAG, "onRemoteRepoError: " + code);
         localRepository.getTrouble(code);
     }
 

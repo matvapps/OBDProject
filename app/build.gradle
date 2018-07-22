@@ -23,8 +23,10 @@ android {
         applicationId "com.carzis"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 2
-        versionName "0.0.2"
+        renderscriptTargetApi 19
+        renderscriptSupportModeEnabled true    // Enable RS support
+        versionCode 3
+        versionName "0.0.3"
         multiDexEnabled true
         project.ext.set("archivesBaseName", "Carzis-" + defaultConfig.versionName);
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -94,6 +96,10 @@ dependencies {
 
     //Billing library
     implementation 'com.android.billingclient:billing:1.1'
+
+    //BlurView
+    implementation 'com.github.mmin18:realtimeblurview:1.1.2'
+
 
     // Plots
 //    implementation 'com.jjoe64:graphview:4.2.2'
