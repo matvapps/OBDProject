@@ -23,9 +23,10 @@ android {
         applicationId "com.carzis"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 30
-        versionName "30.0"
+        versionCode 2
+        versionName "0.0.2"
         multiDexEnabled true
+        project.ext.set("archivesBaseName", "Carzis-" + defaultConfig.versionName);
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -91,6 +92,8 @@ dependencies {
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    //Billing library
+    implementation 'com.android.billingclient:billing:1.1'
 
     // Plots
 //    implementation 'com.jjoe64:graphview:4.2.2'

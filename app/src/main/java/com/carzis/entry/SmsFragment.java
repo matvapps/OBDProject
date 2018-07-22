@@ -25,7 +25,7 @@ import java.util.ArrayList;
 /**
  * Created by Alexandr.
  */
-public class SmsFragment extends Fragment implements ActivityToSmsFragmentCallbackListener{
+public class SmsFragment extends Fragment implements ActivityToSmsFragmentCallbackListener {
 
     private final String TAG = SmsFragment.class.getSimpleName();
     private final String SMS = "sms";
@@ -128,11 +128,10 @@ public class SmsFragment extends Fragment implements ActivityToSmsFragmentCallba
 
     @Override
     public void onGetSms(String message) {
-//        Toast.makeText(getContext(), "smsFragment = " + message, Toast.LENGTH_SHORT).show();
-        smsCodePart1.setText(message.charAt(0));
-        smsCodePart2.setText(message.charAt(1));
-        smsCodePart3.setText(message.charAt(2));
-        smsCodePart4.setText(message.charAt(3));
+        smsCodePart1.setText(message.substring(0, 1));
+        smsCodePart2.setText(message.substring(1, 2));
+        smsCodePart3.setText(message.substring(2, 3));
+        smsCodePart4.setText(message.substring(3, 4));
     }
 
 //    private BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -196,8 +195,6 @@ public class SmsFragment extends Fragment implements ActivityToSmsFragmentCallba
 
         }
     }
-
-
 
 
 }

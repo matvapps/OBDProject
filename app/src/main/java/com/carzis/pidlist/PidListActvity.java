@@ -6,7 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.carzis.R;
 import com.carzis.history.HistoryActivity;
@@ -17,33 +18,48 @@ import com.carzis.model.PID;
 import com.carzis.obd.PidItem;
 import com.carzis.repository.local.database.LocalRepository;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class PidListActvity extends AppCompatActivity implements HistoryView, PidItemClickListener{
 
     private final String TAG = PidListActvity.class.getSimpleName();
     private static final String CAR_NAME = "car_name";
+    private static final String CAR_ID = "car_id";
+
 
     private RecyclerView pidListView;
+    private TextView timeTextView;
+    private View backBtn;
 
     private LocalRepository localRepository;
     private PidListAdapter pidListAdapter;
 
     private String carName;
+    private String carId;
 
-    public static void start(Context context, String carName) {
+    public static void start(Context context, String carName, String carId) {
         Intent intent = new Intent(context, PidListActvity.class);
         intent.putExtra(CAR_NAME, carName);
+        intent.putExtra(CAR_ID, carId);
         context.startActivity(intent);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         carName = getIntent().getStringExtra(CAR_NAME);
+        carId = getIntent().getStringExtra(CAR_ID);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pid_list_actvity);
+
+        timeTextView = findViewById(R.id.time_text_view);
+        backBtn = findViewById(R.id.back_btn);
+
+        backBtn.setOnClickListener(view -> finish());
 
         pidListView = findViewById(R.id.pidlist);
         pidListView.setLayoutManager(new LinearLayoutManager(this));
@@ -57,6 +73,8 @@ public class PidListActvity extends AppCompatActivity implements HistoryView, Pi
         pidListAdapter.setPidItemClickListener(this);
 
         pidListView.setAdapter(pidListAdapter);
+
+        startTimeThread();
 
     }
 
@@ -80,6 +98,28 @@ public class PidListActvity extends AppCompatActivity implements HistoryView, Pi
         return false;
     }
 
+    private void startTimeThread() {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+                        Thread.sleep(1000);
+                        runOnUiThread(() -> {
+                            Calendar calendar = Calendar.getInstance();
+                            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                            String timeString = timeFormat.format(calendar.getTime());
+                            timeTextView.setText(timeString);
+                        });
+                    }
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        };
+        thread.start();
+    }
+
     @Override
     public void showLoading(boolean load) {
 
@@ -92,6 +132,6 @@ public class PidListActvity extends AppCompatActivity implements HistoryView, Pi
 
     @Override
     public void onClick(String pidId) {
-        HistoryActivity.start(this, carName, pidId);
+        HistoryActivity.start(this, carName, carId, pidId);
     }
 }

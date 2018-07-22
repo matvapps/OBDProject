@@ -19,7 +19,6 @@ import com.carzis.entry.register.RegisterPresenter;
 import com.carzis.entry.register.RegisterView;
 import com.carzis.main.MainActivity;
 import com.carzis.model.AppError;
-import com.carzis.model.User;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 import com.carzis.util.AndroidUtility;
 import com.stfalcon.smsverifycatcher.SmsVerifyCatcher;
@@ -113,6 +112,7 @@ public class LogRegActivity extends AppCompatActivity implements RegisterCallbac
                         activityToSmsFragmentCallbackListener.onGetSms(message);
                 });
 //        smsVerifyCatcher.setPhoneNumberFilter("932737847");
+        smsVerifyCatcher.setPhoneNumberFilter("Webservis");
 
         if (savedInstanceState != null) {
             switch (currentFragment) {
@@ -237,7 +237,7 @@ public class LogRegActivity extends AppCompatActivity implements RegisterCallbac
             case REGISTER_USER_ERROR:
                 break;
             case REGISTER_USER_DEVICE_ID_EXIST_ERROR:
-                Toast.makeText(this, "Устройство с таким id уже зарегистрировано", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Устройство с таким id уже зарегистрировано", Toast.LENGTH_SHORT).show();
                 break;
         }
 //        Toast.makeText(this, appError.value + "", Toast.LENGTH_SHORT).show();

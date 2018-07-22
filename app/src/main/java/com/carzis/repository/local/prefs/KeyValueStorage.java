@@ -139,6 +139,11 @@ public class KeyValueStorage {
         editor.putString(CONNECT_TYPE, connectType);
     }
 
+    public void resetDashboardDevices() {
+        editor.putString(USER_DASHBOARD_DEVICES, "");
+        editor.commit();
+    }
+
     public void addDeviceToDashboard(PID pid) {
         String devices = preferences.getString(USER_DASHBOARD_DEVICES, "");
         devices += " " + pid.getCommand();

@@ -76,7 +76,9 @@ public class MyCarsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         carViewHolder.itemView.setOnClickListener(view -> {
             if (onItemClickListener != null)
-                onItemClickListener.onClick(items.get(position).getName());
+                onItemClickListener.onClick(items.get(position).getName(),
+                        String.valueOf(items.get(position).getId()));
+
 //            if (!carViewHolder.itemView.isSelected()) {
 //                selectedItemName = items.get(position).getName();
 //                carViewHolder.itemView.setSelected(true);

@@ -11,7 +11,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -169,14 +168,7 @@ public class DeviceListActivity extends Activity {
         // Set result CANCELED in case the user backs out
         setResult(Activity.RESULT_CANCELED);
 
-        // Initialize the button to perform device discovery
-        Button scanButton = (Button) findViewById(com.carzis.R.id.button_scan);
-        scanButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                doDiscovery();
-                v.setVisibility(View.GONE);
-            }
-        });
+
 
         // Initialize array adapters. One for already paired devices and
         // one for newly discovered devices
@@ -192,6 +184,16 @@ public class DeviceListActivity extends Activity {
         ListView newDevicesListView = (ListView) findViewById(R.id.new_devices);
         newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
         newDevicesListView.setOnItemClickListener(mDeviceClickListener);
+
+        // Initialize the button to perform device discovery
+        Button scanButton = (Button) findViewById(com.carzis.R.id.button_scan);
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                doDiscovery();
+                newDevicesListView.setVisibility(View.VISIBLE);
+                v.setVisibility(View.GONE);
+            }
+        });
 
 
         // Register for broadcasts when a device is discovered

@@ -92,6 +92,8 @@ public class DashboardFragment extends Fragment implements ActivityToDashboardCa
         String devicesStr = devices.replaceAll("\\s+", "");
         dashboardItemsAdapter.setItems(new ArrayList<>());
 
+        Log.d(TAG, "setupDevices: " + devicesStr + " length " + devicesStr.length());
+
         for (int i = 0; i < devicesStr.length(); i += 4) {
             String pidStr = devicesStr.substring(i, i + 4);
 

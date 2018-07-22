@@ -37,5 +37,9 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="SwitchCompatStyle">
+        <item name="thumbTint">@color/color_thumb</item>
+        <item name="trackTint">@color/color_track</item>
+    </style>
 
 </resources>

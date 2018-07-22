@@ -121,5 +121,49 @@
             android:textSize="15sp"
             android:textStyle="bold"
             app:fontFamily="@font/gte_esti_pto_text_regular" />
+
+
+        <LinearLayout
+            android:id="@+id/save_to_history"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:text="Запись истории"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:fontFamily="@font/gte_esti_pto_text_regular" />
+
+
+            <android.support.v7.widget.SwitchCompat
+                style="@style/SwitchCompatStyle"
+                android:id="@+id/save_to_history_chbx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/message_to_developers"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:background="@android:color/transparent"
+            android:gravity="start|center_vertical"
+            android:text="Обратная связь"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:fontFamily="@font/gte_esti_pto_text_regular"
+            android:layout_marginBottom="35dp"/>
+
+
     </LinearLayout>
 </ScrollView>

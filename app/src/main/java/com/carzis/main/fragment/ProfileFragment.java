@@ -3,7 +3,6 @@ package com.carzis.main.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import com.carzis.main.view.ProfileView;
 import com.carzis.model.AppError;
 import com.carzis.model.response.ProfileResponse;
 import com.carzis.repository.local.prefs.KeyValueStorage;
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -63,7 +63,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
                 view -> AdditionalActivity.start(getActivity(), AdditionalActivity.SETTINGS_PROFILE_FRAGMENT));
 
         backgroundUserImage = rootView.findViewById(R.id.big_user_photo);
-        userImage = rootView.findViewById(R.id.user_image);
+        userImage = rootView.findViewById(R.id.user_photo);
         userName = rootView.findViewById(R.id.user_name);
         userBDay = rootView.findViewById(R.id.user_bday);
         userPhone = rootView.findViewById(R.id.user_phone);
@@ -92,7 +92,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
             bday = "";
         } else {
             Calendar cal = Calendar.getInstance();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss", Locale.getDefault());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
             try {
                 cal.setTime(simpleDateFormat.parse(bday));
             } catch (ParseException e) {
@@ -101,10 +101,14 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
             SimpleDateFormat bdayFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
             bday = bdayFormat.format(cal.getTime());
-            Log.d(TAG, "onGetProfile: " + bday);
 
         }
 
+        if (!profileResponse.getPhotoUrl().equals("null")) {
+            String imageUrl = "http://carzis.com" + profileResponse.getPhotoUrl();
+            Picasso.get().load(imageUrl).into(backgroundUserImage);
+            Picasso.get().load(imageUrl).into(userImage);
+        }
 
         userBDay.setText(bday);
 

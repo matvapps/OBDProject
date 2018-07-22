@@ -48,10 +48,14 @@ public class AdditionalActivity extends AppCompatActivity {
 
     private void showFragment(Fragment fragment) {
         String TAG = fragment.getClass().getSimpleName();
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container, fragment, TAG);
+
+        Fragment frag = getSupportFragmentManager().findFragmentByTag(fragment.getClass().getSimpleName());
+        if (frag == null) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.container, fragment, TAG);
 //        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commitAllowingStateLoss();
+            fragmentTransaction.commitAllowingStateLoss();
+        }
     }
 
 

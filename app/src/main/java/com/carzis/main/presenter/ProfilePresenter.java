@@ -57,7 +57,8 @@ public class ProfilePresenter implements Presenter<ProfileView> {
                 email,
                 firstName,
                 secondName,
-                String.valueOf(date)).enqueue(new Callback<ProfileResponse>() {
+                String.valueOf(date))
+                .enqueue(new Callback<ProfileResponse>() {
             @Override
             public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
                 Log.d(TAG, "onResponse: " + response.message());
@@ -83,7 +84,8 @@ public class ProfilePresenter implements Presenter<ProfileView> {
                 firstName,
                 secondName,
                 String.valueOf(date),
-                userImage).enqueue(new Callback<ProfileResponse>() {
+                userImage)
+                .enqueue(new Callback<ProfileResponse>() {
             @Override
             public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
                 Log.d(TAG, "onResponse: " + response.message());

@@ -15,11 +15,10 @@ import android.widget.EditText;
 
 import com.carzis.R;
 import com.carzis.additionalscreen.fragment.AddDeviceFragment;
-import com.carzis.additionalscreen.listener.OnCarClickListener;
 import com.carzis.main.adapter.MyCarsAdapter;
 import com.carzis.main.view.MyCarsView;
-import com.carzis.model.Car;
 import com.carzis.model.AppError;
+import com.carzis.model.Car;
 import com.carzis.pidlist.PidListActvity;
 import com.carzis.repository.local.database.LocalRepository;
 import com.carzis.repository.local.prefs.KeyValueStorage;
@@ -32,7 +31,7 @@ import java.util.Objects;
 /**
  * Created by Alexandr.
  */
-public class MyCarsFragment extends Fragment implements MyCarsView{
+public class MyCarsFragment extends Fragment implements MyCarsView {
 
     private final String TAG = AddDeviceFragment.class.getSimpleName();
 
@@ -53,7 +52,7 @@ public class MyCarsFragment extends Fragment implements MyCarsView{
         View rootView = inflater.inflate(R.layout.fragment_my_cars, container, false);
 
         carListView = rootView.findViewById(R.id.car_list);
-        searchViewBtn  = rootView.findViewById(R.id.search_btn);
+        searchViewBtn = rootView.findViewById(R.id.search_btn);
         searchStrEditText = rootView.findViewById(R.id.search_edtxt);
 
         keyValueStorage = new KeyValueStorage(Objects.requireNonNull(getContext()));
@@ -63,12 +62,8 @@ public class MyCarsFragment extends Fragment implements MyCarsView{
         localRepository.getAllCars();
 
         myCarsAdapter = new MyCarsAdapter(getContext());
-        myCarsAdapter.setOnItemClickListener(new OnCarClickListener() {
-            @Override
-            public void onClick(String carName) {
-                PidListActvity.start(getActivity(), carName);
-            }
-        });
+        myCarsAdapter.setOnItemClickListener(
+                (carName, carId) -> PidListActvity.start(getActivity(), carName, carId));
 
         int spanCount = 4;
         if (isLayoutPortrait(getContext()))
@@ -107,6 +102,11 @@ public class MyCarsFragment extends Fragment implements MyCarsView{
     @Override
     public void onGetCars(List<Car> cars) {
         myCarsAdapter.setItems(cars);
+    }
+
+    @Override
+    public void onDeleteCar() {
+
     }
 
     @Override

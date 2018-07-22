@@ -6,6 +6,9 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background">
 
+
+
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,7 +17,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_additonal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 
     <LinearLayout
@@ -27,9 +39,9 @@
         android:background="@drawable/gray_field_background"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <CheckBox
             android:layout_width="20dp"
@@ -59,7 +71,7 @@
         android:background="@drawable/gray_field_background"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/for_day"
         app:layout_constraintStart_toEndOf="@+id/for_day"
         app:layout_constraintTop_toTopOf="@+id/for_day">
@@ -92,7 +104,7 @@
         android:background="@drawable/gray_field_background"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/for_month"
         app:layout_constraintStart_toEndOf="@+id/for_month"
         app:layout_constraintTop_toTopOf="@+id/for_month">
@@ -120,7 +132,7 @@
         android:id="@+id/chart"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="40dp"
         android:layout_marginEnd="45dp"
         android:layout_marginLeft="45dp"
         android:layout_marginRight="45dp"

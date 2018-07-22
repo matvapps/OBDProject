@@ -65,4 +65,14 @@ public class HistoryItem {
     public void setTime(@NonNull String time) {
         this.time = time;
     }
+
+    @Override
+    public String toString() {
+        return "HistoryItem{" +
+                "carName='" + carName + '\'' +
+                ", pidId='" + pidId + '\'' +
+                ", value='" + value + '\'' +
+                ", time='" + time + '\'' +
+                '}';
+    }
 }

@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 @Entity
 public class Car {
 
+    private String id;
     private String brand;
     private String model;
     private String year;
@@ -20,7 +21,8 @@ public class Car {
     @NonNull
     private String name;
 
-    public Car(String brand, String model, String year, String engine_num, String bodywork_num, String name) {
+    public Car(String id, String brand, String model, String year, String engine_num, String bodywork_num, String name) {
+        this.id = id;
         this.brand = brand;
         this.model = model;
         this.year = year;
@@ -28,6 +30,7 @@ public class Car {
         this.bodywork_num = bodywork_num;
         this.name = name;
     }
+
 
 
     public String getBrand() {
@@ -76,5 +79,26 @@ public class Car {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "id=" + id +
+                ", brand='" + brand + '\'' +
+                ", model='" + model + '\'' +
+                ", year='" + year + '\'' +
+                ", engine_num='" + engine_num + '\'' +
+                ", bodywork_num='" + bodywork_num + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

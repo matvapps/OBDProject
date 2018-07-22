@@ -1,14 +1,15 @@
 package com.carzis.repository.remote;
 
-import android.icu.text.IDNA;
-
 import com.carzis.model.response.BaseResponse;
+import com.carzis.model.response.CarMetricResponse;
+import com.carzis.model.response.CarResponse;
 import com.carzis.model.response.ConfirmRegisterResponse;
-import com.carzis.model.response.NumInfoResponse;
+import com.carzis.model.response.InfoResponse;
 import com.carzis.model.response.ProfileResponse;
 import com.carzis.model.response.RegisterResponse;
 import com.carzis.model.response.TroubleResponse;
-import com.carzis.model.response.InfoResponse;
+
+import java.util.List;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.annotations.Nullable;
@@ -66,6 +67,20 @@ public interface CarzisApi {
                                         @Nullable @Query("second_name") String secondName,
                                         @Nullable @Query("birthday") String birthday);
 
+    @POST("car_metric")
+    Call<BaseResponse> addCarMetric(@Header("Authorization") String token,
+                                    @Nullable @Query("car_id") String carId,
+                                    @Nullable @Query("metric_code") String metricCode,
+                                    @Nullable @Query("metric_value") String metricValue);
+
+    @GET("metrics")
+    Call<List<CarMetricResponse>> getCarMetrics(@Header("Authorization") String token,
+                                                @Nullable @Query("car_id") String carId,
+                                                @Nullable @Query("metric_code") String metricCode,
+                                                @Nullable @Query("from") String from,
+                                                @Nullable @Query("to") String to);
+
+
     @GET("load_dtc_description")
     Call<TroubleResponse> getTrouble(@Header("Authorization") String token,
                                      @NonNull @Query("code") String code,
@@ -79,6 +94,10 @@ public interface CarzisApi {
     @GET("load_info_by_auto_num")
     Call<InfoResponse> getInfoByNum(@Header("Authorization") String token,
                                  @NonNull @Query("number") String number);
+
+
+    @GET("cars")
+    Call<List<CarResponse>> getCars(@Header("Authorization") String token);
 
 
 }

@@ -11,4 +11,5 @@ import java.util.List;
 public interface MyCarsView extends BaseView {
     void onGetCar(Car car);
     void onGetCars(List<Car> cars);
+    void onDeleteCar();
 }

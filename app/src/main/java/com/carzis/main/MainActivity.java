@@ -3,11 +3,14 @@ package com.carzis.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -17,10 +20,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.carzis.R;
 import com.carzis.additionalscreen.AdditionalActivity;
 import com.carzis.connect.BluetoothService;
 import com.carzis.connect.ConnectActivity;
+import com.carzis.dialoglist.DialogListActivity;
 import com.carzis.main.fragment.CheckAutoFragment;
 import com.carzis.main.fragment.DashboardFragment;
 import com.carzis.main.fragment.MyCarsFragment;
@@ -30,6 +38,11 @@ import com.carzis.main.listener.ActivityToDashboardCallbackListener;
 import com.carzis.main.listener.ActivityToTroublesCallbackListener;
 import com.carzis.main.listener.DashboardToActivityCallbackListener;
 import com.carzis.main.listener.TroublesToActivityCallbackListener;
+import com.carzis.main.presenter.CarPresenter;
+import com.carzis.main.view.MyCarsView;
+import com.carzis.model.AppError;
+import com.carzis.model.Car;
+import com.carzis.model.HistoryItem;
 import com.carzis.model.PID;
 import com.carzis.obd.OBDReader;
 import com.carzis.obd.OnReceiveDataListener;
@@ -41,12 +54,17 @@ import com.carzis.util.Utility;
 import com.github.florent37.viewanimator.ViewAnimator;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
+import static com.carzis.dialoglist.DialogListActivity.DIALOG_LIST_ACTIVITY_CODE;
+import static com.carzis.dialoglist.DialogListActivity.STRING_EXTRA;
+
 public class MainActivity extends AppCompatActivity implements DashboardToActivityCallbackListener,
-        TroublesToActivityCallbackListener, OnReceiveDataListener, OnReceiveFaultCodeListener {
+        TroublesToActivityCallbackListener, OnReceiveDataListener, OnReceiveFaultCodeListener, MyCarsView, PurchasesUpdatedListener{
 
     private final String TAG = MainActivity.class.getSimpleName();
 
@@ -73,19 +91,24 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
     private Button checkCarMenuBtn;
     private Button profileMenuBtn;
     private Button settingsMenuBtn;
-    private Button historyMenuBtn;
+    private Button feedbackBtn;
+    private SwitchCompat useAddingToHistorySwitch;
 
+    private BillingClient mBillingClient;
     private LocalRepository localRepository;
     private KeyValueStorage keyValueStorage;
+    private CarPresenter carPresenter;
     private OBDReader obdReader;
 
     public ActivityToDashboardCallbackListener activityToDashboardCallbackListener;
     public ActivityToTroublesCallbackListener activityToTroublesCallbackListener;
 
+    private List<Car> userCars = new ArrayList<>();
 
     private String devicename = null;
     private String deviceadress = null;
     private String deviceprotocol = null;
+    private String carName = null;
 
 
     public static void start(Activity activity) {
@@ -167,12 +190,31 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
         localRepository = new LocalRepository(this);
         keyValueStorage = new KeyValueStorage(this);
         obdReader = new OBDReader(this);
+        carPresenter = new CarPresenter(keyValueStorage.getUserToken());
+        carPresenter.attachView(this);
+
+        mBillingClient = BillingClient.newBuilder(this).setListener(this).build();
+        mBillingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(@BillingClient.BillingResponse int billingResponseCode) {
+                if (billingResponseCode == BillingClient.BillingResponse.OK) {
+                    // The billing client is ready. You can query purchases here.
+                }
+            }
+            @Override
+            public void onBillingServiceDisconnected() {
+                // Try to restart the connection on the next request to
+                // Google Play by calling the startConnection() method.
+            }
+        });
 
         Log.d(TAG, "onCreate: " + keyValueStorage.getUserToken());
 
 //        obdReader.connectDevice(deviceadress, devicename);
         obdReader.setOnReceiveFaultCodeListener(this);
         obdReader.setOnReceiveDataListener(this);
+
+
 //        localRepository = new LocalRepository(this);
 //        keyValueStorage = new KeyValueStorage(this);
 //
@@ -257,6 +299,18 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                             SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                             String timeString = timeFormat.format(calendar.getTime());
                             timeText.setText(timeString);
+
+                            if (useAddingToHistorySwitch.isChecked() && carName != null) {
+
+                                Log.d(TAG, "run: save to local: " +  String.valueOf(calendar.get(Calendar.SECOND)));
+                                localRepository
+                                        .addHistoryItem(
+                                                new HistoryItem(carName,
+                                                        PID.CONTROL_MODULE_VOLTAGE.getCommand(),
+                                                        String.valueOf(calendar.get(Calendar.SECOND)),
+                                                        Long.toString(Calendar.getInstance().getTimeInMillis() / 1000L)));
+                            }
+
                         });
                     }
                 } catch (InterruptedException ex) {
@@ -394,7 +448,6 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
             case R.id.settings_menu_btn: {
                 SettingsActivity.start(this,
                         obdReader.getBluetoothService().getState() == BluetoothService.STATE_CONNECTED);
-
 //                troubleCodeInt++;
 //                String troubleCode = "P000" + troubleCodeInt;
 //
@@ -405,7 +458,14 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
 //                hideMenu();
                 break;
             }
-
+            case R.id.message_to_developers: {
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                intent.setData(Uri.parse("mailto:carziselm327@gmail.com"));
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+                break;
+            }
         }
     };
 
@@ -417,6 +477,8 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
         checkCarMenuBtn = findViewById(R.id.check_car_menu_btn);
         profileMenuBtn = findViewById(R.id.profile_menu_btn);
         settingsMenuBtn = findViewById(R.id.settings_menu_btn);
+        useAddingToHistorySwitch = findViewById(R.id.save_to_history_chbx);
+        feedbackBtn = findViewById(R.id.message_to_developers);
 
 
         connectToBtMenuBtn.setOnClickListener(onMenuItemClickListener);
@@ -426,6 +488,17 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
         checkCarMenuBtn.setOnClickListener(onMenuItemClickListener);
         profileMenuBtn.setOnClickListener(onMenuItemClickListener);
         settingsMenuBtn.setOnClickListener(onMenuItemClickListener);
+        useAddingToHistorySwitch.setOnClickListener(onMenuItemClickListener);
+        feedbackBtn.setOnClickListener(onMenuItemClickListener);
+
+        useAddingToHistorySwitch.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (useAddingToHistorySwitch.isChecked())
+                carPresenter.getCars();
+            else
+                carName = null;
+
+            Toast.makeText(this, useAddingToHistorySwitch.isChecked() + "", Toast.LENGTH_SHORT).show();
+        });
 
     }
 
@@ -436,7 +509,7 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 .duration(300)
 
                 .andAnimate(movingContainer)
-                .translationX(Utility.convertDpToPx(this, 180))
+                .translationX(Utility.convertDpToPx(this, 198))
                 .duration(300)
 
                 .onStart(() -> menuView.setVisibility(View.VISIBLE))
@@ -478,6 +551,16 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
         Log.d(TAG, "onReceiveData: PID: " + pid + ", " + value);
         if (activityToDashboardCallbackListener != null)
             activityToDashboardCallbackListener.onPassRealDataToFragment(pid, value);
+
+        if (useAddingToHistorySwitch.isChecked() && carName != null) {
+            localRepository
+                    .addHistoryItem(
+                            new HistoryItem(carName,
+                                    pid.getCommand(),
+                                    value,
+                                    Long.toString(Calendar.getInstance().getTimeInMillis() / 1000L)));
+        }
+
     }
 
     @Override
@@ -485,6 +568,18 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
         Log.d(TAG, "onReceiveVoltage: " + voltage);
         if (activityToDashboardCallbackListener != null)
             activityToDashboardCallbackListener.onPassRealDataToFragment(PID.VOLTAGE, voltage);
+
+        if (useAddingToHistorySwitch.isChecked() && carName != null) {
+//            localRepository
+//                    .addHistoryItem(
+//                            new HistoryItem(carName,
+//                                    PID.VOLTAGE.getCommand(),
+//                                    voltage.replace("V", ""),
+//                                    Long.toString(Calendar.getInstance().getTimeInMillis() / 1000L)));
+
+
+
+        }
     }
 
     @Override
@@ -506,7 +601,7 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         switch (requestCode) {
-            case REQUEST_CONNECT_TO_DEVICE:
+            case REQUEST_CONNECT_TO_DEVICE: {
                 if (resultCode == RESULT_OK) {
                     String deviceName = data.getStringExtra(ConnectActivity.EXTRA_DEVICE_NAME);
                     String deviceAddress = data.getStringExtra(ConnectActivity.EXTRA_DEVICE_ADDRESS);
@@ -525,6 +620,18 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                         hideMenu();
                 }
                 break;
+            }
+            case DIALOG_LIST_ACTIVITY_CODE: {
+                if (resultCode == RESULT_OK) {
+                    carName = data.getStringExtra(STRING_EXTRA);
+                    carName = carName.substring(carName.indexOf("\"") + 1, carName.lastIndexOf("\""));
+                    Toast.makeText(this, carName, Toast.LENGTH_SHORT).show();
+                } else if (resultCode == RESULT_CANCELED) {
+                    Toast.makeText(this, "Отменено пользователем", Toast.LENGTH_SHORT).show();
+                    useAddingToHistorySwitch.setChecked(false);
+                }
+                break;
+            }
         }
     }
 
@@ -538,6 +645,52 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         currentFragment = savedInstanceState.getString(FRAGMENT);
+    }
+
+    @Override
+    public void onGetCar(Car car) {
+
+    }
+
+    @Override
+    public void onGetCars(List<Car> cars) {
+        ArrayList<String> carTitles = new ArrayList<>();
+        for (Car car : cars) {
+            carTitles.add(car.getBrand() + " " + car.getModel() + "\t\"" + car.getName() + "\"");
+        }
+
+        Log.d(TAG, "onGetCars: " + cars);
+
+        String title = "Выберите авто для записи в историю: ";
+        DialogListActivity.startForResult(this, title, carTitles);
+    }
+
+    private String getCarIdByName(String name) {
+        for (Car car :userCars) {
+            if (car.getName().equals(name))
+                return car.getId();
+        }
+        return "";
+    }
+
+    @Override
+    public void onDeleteCar() {
+
+    }
+
+    @Override
+    public void showLoading(boolean load) {
+
+    }
+
+    @Override
+    public void showError(AppError appError) {
+
+    }
+
+    @Override
+    public void onPurchasesUpdated(int responseCode, @Nullable List<Purchase> purchases) {
+
     }
 
 //    @Override

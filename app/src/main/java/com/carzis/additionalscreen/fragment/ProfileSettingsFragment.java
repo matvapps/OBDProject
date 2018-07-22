@@ -216,7 +216,8 @@ public class ProfileSettingsFragment extends Fragment implements ProfileView {
             email = null;
 
         if (!month.equals("Месяц") && !day.equals("День") && !year.equals("Год")) {
-            bday.set(Calendar.MONTH, monthSpinner.getSelectedItemPosition());
+            Log.d(TAG, "onSave: " + monthSpinner.getSelectedItemPosition());
+            bday.set(Calendar.MONTH, monthSpinner.getSelectedItemPosition() - 1);
             bday.set(Calendar.DAY_OF_MONTH, daySpinner.getSelectedItemPosition());
             bday.set(Calendar.YEAR, Integer.valueOf(year));
             unixTime = bday.getTimeInMillis() / 1000L;
@@ -302,7 +303,7 @@ public class ProfileSettingsFragment extends Fragment implements ProfileView {
                             }
 
                             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-                            body = MultipartBody.Part.createFormData("photo", file.getName(), reqFile);
+                            body = MultipartBody.Part.createFormData("user_photo", file.getName(), reqFile);
 
                         }
 
@@ -339,7 +340,7 @@ public class ProfileSettingsFragment extends Fragment implements ProfileView {
             bday = "";
         } else {
             Calendar cal = Calendar.getInstance();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss", Locale.getDefault());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
             try {
                 cal.setTime(simpleDateFormat.parse(bday));
             } catch (ParseException e) {

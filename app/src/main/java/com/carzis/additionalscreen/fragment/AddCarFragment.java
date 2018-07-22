@@ -66,7 +66,7 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
 
         if (!carNameStr.isEmpty() && !carBrandStr.isEmpty()
                 && !carModelStr.isEmpty() && !carYearStr.isEmpty()) {
-            localRepository.addCar(new Car(carBrandStr, carModelStr, carYearStr, carEngineNumStr, carBodyNumStr, carNameStr));
+            localRepository.addCar(new Car("", carBrandStr, carModelStr, carYearStr, carEngineNumStr, carBodyNumStr, carNameStr));
             getActivity().finish();
         } else
             Toast.makeText(getContext(), "Обязательные поля не заполнены", Toast.LENGTH_SHORT).show();

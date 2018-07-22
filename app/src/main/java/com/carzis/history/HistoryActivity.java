@@ -6,18 +6,20 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.carzis.R;
 import com.carzis.model.AppError;
 import com.carzis.model.HistoryItem;
-import com.carzis.model.PID;
-import com.carzis.pidlist.PidListActvity;
 import com.carzis.repository.local.database.LocalRepository;
+import com.carzis.repository.local.prefs.KeyValueStorage;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.model.Axis;
@@ -32,19 +34,27 @@ public class HistoryActivity extends AppCompatActivity implements HistoryView {
 
     public final String TAG = HistoryActivity.class.getSimpleName();
 
-    private LineChartView chart;
+    private KeyValueStorage keyValueStorage;
     private LocalRepository localRepository;
+    private HistoryPresenter historyPresenter;
     private LineChartData lineData;
+
+    private LineChartView chart;
+    private TextView timeTextView;
+    private View backBtn;
 
     private static final String CAR_NAME = "car_name";
     private static final String PID_CODE = "pid_code";
+    private static final String CAR_ID = "car_id";
 
     private String carName;
     private String pidCode;
+    private String carId;
 
-    public static void start(Context context, String carName, String pidCode) {
+    public static void start(Context context, String carName, String carId, String pidCode) {
         Intent intent = new Intent(context, HistoryActivity.class);
         intent.putExtra(CAR_NAME, carName);
+        intent.putExtra(CAR_ID, carId);
         intent.putExtra(PID_CODE, pidCode);
         context.startActivity(intent);
     }
@@ -56,17 +66,28 @@ public class HistoryActivity extends AppCompatActivity implements HistoryView {
 
         this.carName = getIntent().getStringExtra(CAR_NAME);
         this.pidCode = getIntent().getStringExtra(PID_CODE);
+        this.carId = getIntent().getStringExtra(CAR_ID);
 
         chart = findViewById(R.id.chart);
+        timeTextView = findViewById(R.id.time_text_view);
+        backBtn = findViewById(R.id.back_btn);
+
+        backBtn.setOnClickListener(view -> finish());
 
         List<Line> values = new ArrayList<Line>();
 
+        keyValueStorage = new KeyValueStorage(this);
         localRepository = new LocalRepository(this);
+        historyPresenter = new HistoryPresenter(keyValueStorage.getUserToken());
+        historyPresenter.attachView(this);
         localRepository.attachView(this);
         Calendar now = Calendar.getInstance();
 
-        localRepository.getAllHistoryItemsByCar(carName);
+//        localRepository.getAllHistoryItemsByCar(carName);
+        historyPresenter.getCarMetric(carName,"1", "speed");
 //        generateData(new ArrayList<HistoryItem>());
+
+        startTimeThread();
 
     }
 
@@ -80,7 +101,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryView {
         ArrayList<Calendar> itemLabels = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
             long millis = Long.parseLong(items.get(i).getTime());
-//            Toast.makeText(this, "millis: " + millis , Toast.LENGTH_SHORT).show();
+            Log.d("HelloWorld", "TimeInMillis HistoryActivity: " + millis);
             Calendar time = Calendar.getInstance();
 //            Toast.makeText(this, time.get(Calendar.SECOND) + " second before", Toast.LENGTH_SHORT).show();
             time.setTimeInMillis(millis);
@@ -107,10 +128,12 @@ public class HistoryActivity extends AppCompatActivity implements HistoryView {
             values.add(new PointValue(i, Float.parseFloat(items.get(i).getValue())));
             if (isOneDay) {
                 SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+                Log.d(TAG, "generateData: " + sdf.format(itemLabels.get(i).getTime()));
 //                Toast.makeText(this, itemLabels.get(i).get(Calendar.SECOND), Toast.LENGTH_SHORT).show();
                 axisValues.add(new AxisValue(i).setLabel(sdf.format(itemLabels.get(i).getTime())));
             } else {
-
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM hh:mm:ss");
+                axisValues.add(new AxisValue(i).setLabel(sdf.format(itemLabels.get(i).getTime())));
             }
         }
 
@@ -162,7 +185,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryView {
             length = itemLabels.size();
         }
 
-        Viewport v = new Viewport(0, getMax(itemValues) + 5, length, 0);
+        Viewport v = new Viewport(0, getMax(itemValues) + 10, length, 0);
         chart.setMaximumViewport(v);
         chart.setCurrentViewport(v);
 
@@ -234,7 +257,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryView {
 
     @Override
     public void onGetHistoryItems(List<HistoryItem> items, String carName) {
-        Log.d("TAG", "onGetHistoryItems: " + carName);
+        Log.d("TAG", "onGetHistoryItems: " + items);
         for (int i = 0; i < items.size(); i++) {
             HistoryItem item = items.get(i);
             if (!item.getPidId().equals(pidCode)) {
@@ -243,6 +266,28 @@ public class HistoryActivity extends AppCompatActivity implements HistoryView {
             }
         }
         generateData(items);
+    }
+
+    private void startTimeThread() {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+                        Thread.sleep(1000);
+                        runOnUiThread(() -> {
+                            Calendar calendar = Calendar.getInstance();
+                            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                            String timeString = timeFormat.format(calendar.getTime());
+                            timeTextView.setText(timeString);
+                        });
+                    }
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        };
+        thread.start();
     }
 
     @Override

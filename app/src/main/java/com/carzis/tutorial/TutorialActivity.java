@@ -23,6 +23,7 @@ public class TutorialActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         KeyValueStorage keyValueStorage = new KeyValueStorage(this);
+        keyValueStorage.resetDashboardDevices();
         if (!keyValueStorage.isFirstTimeLaunch()) {
             LogRegActivity.start(this);
             finish();

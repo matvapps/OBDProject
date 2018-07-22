@@ -27,7 +27,7 @@ public class AuthPresenter implements Presenter<AuthView>{
 
     public void auth(String phone, Integer password, String deviceId, String deviceName) {
         view.showLoading(true);
-        api.auth(phone, password, deviceId, deviceName).enqueue(new Callback<ConfirmRegisterResponse>() {
+        api.auth(phone, password, deviceName, deviceId).enqueue(new Callback<ConfirmRegisterResponse>() {
             @Override
             public void onResponse(Call<ConfirmRegisterResponse> call, Response<ConfirmRegisterResponse> response) {
                 view.showLoading(false);
