@@ -9,12 +9,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.carzis.R;
+import com.carzis.base.BaseActivity;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 
 import java.io.BufferedReader;
@@ -36,7 +36,7 @@ import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 /**
  * Created by Alexandr.
  */
-public class ConnectActivity extends AppCompatActivity {
+public class ConnectActivity extends BaseActivity {
 
     private static final String TAG = ConnectActivity.class.getSimpleName();
 
@@ -306,7 +306,7 @@ public class ConnectActivity extends AppCompatActivity {
                     serverIntent = new Intent(this, DeviceListActivity.class);
                     startActivityForResult(serverIntent, REQUEST_GET_CONNECT_DEVICE_DATA);
                 } else {
-                    Toast.makeText(this, "Bluetooth не включен", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.bt_not_enabled, Toast.LENGTH_SHORT).show();
                 }
                 break;
         }

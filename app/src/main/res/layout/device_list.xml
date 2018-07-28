@@ -55,7 +55,7 @@
         android:layout_height="38dp"
         android:layout_gravity="center"
         android:layout_margin="16dp"
-        android:background="@drawable/button_blue_rect"
+        android:background="@drawable/button_blue_rect_selector"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:text="@string/button_scan"

@@ -3,20 +3,23 @@ package com.carzis.pidlist;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.carzis.R;
+import com.carzis.base.BaseActivity;
 import com.carzis.history.HistoryActivity;
+import com.carzis.history.HistoryPresenter;
 import com.carzis.history.HistoryView;
 import com.carzis.model.AppError;
+import com.carzis.model.CarMetric;
 import com.carzis.model.HistoryItem;
-import com.carzis.model.PID;
+import com.carzis.obd.PID;
 import com.carzis.obd.PidItem;
 import com.carzis.repository.local.database.LocalRepository;
+import com.carzis.repository.local.prefs.KeyValueStorage;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,7 +27,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class PidListActvity extends AppCompatActivity implements HistoryView, PidItemClickListener{
+public class PidListActvity extends BaseActivity implements HistoryView, PidItemClickListener{
 
     private final String TAG = PidListActvity.class.getSimpleName();
     private static final String CAR_NAME = "car_name";
@@ -37,6 +40,8 @@ public class PidListActvity extends AppCompatActivity implements HistoryView, Pi
 
     private LocalRepository localRepository;
     private PidListAdapter pidListAdapter;
+    private HistoryPresenter historyPresenter;
+    private KeyValueStorage keyValueStorage;
 
     private String carName;
     private String carId;
@@ -64,16 +69,19 @@ public class PidListActvity extends AppCompatActivity implements HistoryView, Pi
         pidListView = findViewById(R.id.pidlist);
         pidListView.setLayoutManager(new LinearLayoutManager(this));
 
+        keyValueStorage = new KeyValueStorage(this);
+
         localRepository = new LocalRepository(this);
         localRepository.attachView(this);
-
-        localRepository.getAllHistoryItemsByCar(carName);
+        historyPresenter = new HistoryPresenter(keyValueStorage.getUserToken());
+        historyPresenter.attachView(this);
 
         pidListAdapter = new PidListAdapter();
         pidListAdapter.setPidItemClickListener(this);
 
         pidListView.setAdapter(pidListAdapter);
 
+        historyPresenter.getAllCarMetric(carId, carName);
         startTimeThread();
 
     }
@@ -81,13 +89,25 @@ public class PidListActvity extends AppCompatActivity implements HistoryView, Pi
     @Override
     public void onGetHistoryItems(List<HistoryItem> items, String carName) {
         List<PidItem> pidItems = new ArrayList<>();
-        for (HistoryItem item :items) {
-            if (!existInList(pidItems, item.getPidId())) {
-                pidItems.add(new PidItem(PID.getEnumByString(item.getPidId())));
+        if(items != null) {
+            for (HistoryItem item : items) {
+                if (!existInList(pidItems, item.getPidId())) {
+                    pidItems.add(new PidItem(PID.getEnumByString(item.getPidId())));
+                }
             }
         }
 
         pidListAdapter.setItems(pidItems);
+    }
+
+    @Override
+    public void onCarMetricAdded(CarMetric carMetric) {
+
+    }
+
+    @Override
+    public void onRemoteRepoError() {
+        localRepository.getAllHistoryItemsByCar(carName);
     }
 
     private boolean existInList(List<PidItem> items, String pidCode) {

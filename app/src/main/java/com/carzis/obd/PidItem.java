@@ -1,7 +1,5 @@
 package com.carzis.obd;
 
-import com.carzis.model.PID;
-
 import org.mariuszgromada.math.mxparser.Argument;
 import org.mariuszgromada.math.mxparser.Expression;
 import org.mariuszgromada.math.mxparser.Function;

@@ -24,7 +24,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Ваши авто: " />
+        android:text="@string/your_cars" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"

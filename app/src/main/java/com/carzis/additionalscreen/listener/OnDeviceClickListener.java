@@ -1,6 +1,6 @@
 package com.carzis.additionalscreen.listener;
 
-import com.carzis.model.PID;
+import com.carzis.obd.PID;
 
 /**
  * Created by Alexandr.

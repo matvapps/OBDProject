@@ -1,5 +1,6 @@
 package com.carzis.repository.remote;
 
+import com.carzis.model.CarMetric;
 import com.carzis.model.response.BaseResponse;
 import com.carzis.model.response.CarMetricResponse;
 import com.carzis.model.response.CarResponse;
@@ -15,6 +16,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.annotations.Nullable;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
@@ -67,16 +69,29 @@ public interface CarzisApi {
                                         @Nullable @Query("second_name") String secondName,
                                         @Nullable @Query("birthday") String birthday);
 
+    @POST("add_car")
+    Call<BaseResponse>  addCar(@Header("Authorization") String token,
+                               @Nullable @Query("car_identifier") String carIdentifier,
+                               @Nullable @Query("user_car_name") String userCarName,
+                               @Nullable @Query("car_mark") String carMark,
+                               @Nullable @Query("car_model") String carModel,
+                               @Nullable @Query("engine_number") String engineNumber,
+                               @Nullable @Query("body_number") String bodyNumber);
+
     @POST("car_metric")
     Call<BaseResponse> addCarMetric(@Header("Authorization") String token,
-                                    @Nullable @Query("car_id") String carId,
-                                    @Nullable @Query("metric_code") String metricCode,
-                                    @Nullable @Query("metric_value") String metricValue);
+                                    @Body CarMetric... carMetrics);
 
     @GET("metrics")
     Call<List<CarMetricResponse>> getCarMetrics(@Header("Authorization") String token,
                                                 @Nullable @Query("car_id") String carId,
                                                 @Nullable @Query("metric_code") String metricCode,
+                                                @Nullable @Query("from") String from,
+                                                @Nullable @Query("to") String to);
+
+    @GET("metrics")
+    Call<List<CarMetricResponse>> getCarMetrics(@Header("Authorization") String token,
+                                                @Nullable @Query("car_id") String carId,
                                                 @Nullable @Query("from") String from,
                                                 @Nullable @Query("to") String to);
 

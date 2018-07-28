@@ -2,7 +2,6 @@ package com.carzis.entry;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.carzis.R;
+import com.carzis.base.BaseFragment;
 import com.carzis.entry.register.RegisterCallbackListener;
 
 import br.com.sapereaude.maskedEditText.MaskedEditText;
@@ -17,7 +17,7 @@ import br.com.sapereaude.maskedEditText.MaskedEditText;
 /**
  * Created by Alexandr.
  */
-public class PhoneFragment extends Fragment {
+public class PhoneFragment extends BaseFragment {
 
     private final String TAG = PhoneFragment.class.getSimpleName();
 
@@ -61,9 +61,9 @@ public class PhoneFragment extends Fragment {
                         String phoneStr = coutryCode.getRawText() + phone.getRawText();
                         callbackListener.onInputPhoneFinish(phoneStr);
                     } else
-                        Toast.makeText(getContext(), "Введен неверный номер телефона", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.unreachable_phone, Toast.LENGTH_SHORT).show();
                 } else
-                    Toast.makeText(getContext(), "Введен неверный код страны", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.unreachable_country_code, Toast.LENGTH_SHORT).show();
             }
         });
     }

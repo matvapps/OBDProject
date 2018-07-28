@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -13,13 +12,14 @@ import com.carzis.R;
 import com.carzis.additionalscreen.fragment.AddCarFragment;
 import com.carzis.additionalscreen.fragment.AddDeviceFragment;
 import com.carzis.additionalscreen.fragment.ProfileSettingsFragment;
+import com.carzis.base.BaseActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class AdditionalActivity extends AppCompatActivity {
+public class AdditionalActivity extends BaseActivity {
 
     public static final int SETTINGS_PROFILE_FRAGMENT = 22;
     public static final int ADD_DEVICE_FRAGMENT = 23;
@@ -106,7 +106,7 @@ public class AdditionalActivity extends AppCompatActivity {
 
             case SETTINGS_PROFILE_FRAGMENT: {
                 showFragment(new ProfileSettingsFragment());
-                background.setBackgroundResource(R.drawable.bg_main);
+//                background.setBackgroundResource(R.drawable.bg_main);
                 break;
             }
             case ADD_DEVICE_FRAGMENT: {
@@ -115,12 +115,12 @@ public class AdditionalActivity extends AppCompatActivity {
                 bundle.putStringArrayList(SUPPORTED_PIDS_EXTRA, supportedPids);
                 addDeviceFragment.setArguments(bundle);
                 showFragment(addDeviceFragment);
-                background.setBackgroundResource(R.drawable.bg_main);
+//                background.setBackgroundResource(R.drawable.bg_main);
                 break;
             }
             case ADD_CAR_FRAGMENT: {
                 showFragment(new AddCarFragment());
-                background.setBackgroundResource(R.drawable.bg_main);
+//                background.setBackgroundResource(R.drawable.bg_main);
                 break;
             }
 

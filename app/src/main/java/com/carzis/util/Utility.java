@@ -3,7 +3,7 @@ package com.carzis.util;
 import android.content.Context;
 
 import com.carzis.R;
-import com.carzis.model.PID;
+import com.carzis.obd.PID;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

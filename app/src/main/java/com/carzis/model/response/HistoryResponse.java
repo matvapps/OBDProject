@@ -199,6 +199,6 @@ public class HistoryResponse extends BaseResponse {
                 "\t" + "Л/С: " + powerHp + '\n' +
                 "\t" + "Квт: " + powerKwt + '\n' +
                 "\t" + vehiclePassport + '\n' +
-                "\t" + owernshipPeriodList + '\n';
+                owernshipPeriodList + '\n';
     }
 }

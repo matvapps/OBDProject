@@ -53,7 +53,7 @@ public class SettingsActivity extends AppCompatActivity {
         initStringEdtxt = findViewById(R.id.init_string_edtxt);
 
         deviceName.setText(getLocalBluetoothName());
-        title.setText("Настройки");
+        title.setText(R.string.settings);
         backBtn.setOnClickListener(view -> finish());
 
         protocolSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -125,7 +125,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     public List<String> getProtocols() {
         List<String> protocols = new ArrayList<>();
-        protocols.add("Автоматическое определение протокола");
+        protocols.add(getString(R.string.automatically_add_protocols));
         protocols.add("SAE J1850 PWM (41.6 kbaud)");
         protocols.add("SAE J1850 VPW (10.4 kbaud)");
         protocols.add("ISO 9141-2 (5 baud init, 10.4 kbaud)");

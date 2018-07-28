@@ -4,7 +4,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,12 +12,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.carzis.R;
 import com.carzis.additionalscreen.AdditionalActivity;
 import com.carzis.additionalscreen.adapter.DeviceListAdapter;
+import com.carzis.base.BaseFragment;
 import com.carzis.model.DashboardItem;
-import com.carzis.model.PID;
+import com.carzis.obd.PID;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 import com.carzis.util.custom.view.GridSpacingItemDecoration;
 
@@ -29,7 +35,7 @@ import java.util.Objects;
 /**
  * Created by Alexandr.
  */
-public class AddDeviceFragment extends Fragment {
+public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedListener {
 
     private final String TAG = AddDeviceFragment.class.getSimpleName();
 
@@ -37,10 +43,13 @@ public class AddDeviceFragment extends Fragment {
     private NestedScrollView scrollViewContainer;
     private TextView textView;
 
-    private List<String> supportedPids;
+    private BillingClient mBillingClient;
     private DeviceListAdapter deviceListAdapter;
     private KeyValueStorage keyValueStorage;
+
     private String userDashboardDevices;
+    private List<String> supportedPids;
+
 
     @Nullable
     @Override
@@ -77,15 +86,26 @@ public class AddDeviceFragment extends Fragment {
         deviceListAdapter = new DeviceListAdapter();
 
         deviceListAdapter.setOnItemClickListener((pid, enabled) -> {
-            if (enabled) {
-                keyValueStorage.addDeviceToDashboard(pid);
-                Log.d(TAG, "onCreateView: " + keyValueStorage.getUserDashboardDevices());
-            } else {
-                keyValueStorage.removeDeviceFromDashboard(pid);
-                Log.d(TAG, "onCreateView: " + keyValueStorage.getUserDashboardDevices()
-                );
-            }
+            Toast.makeText(getActivity(), R.string.pay_for_diagonostics, Toast.LENGTH_SHORT).show();
 //            setupUserDashboardDevices();
+        });
+
+        mBillingClient = BillingClient.newBuilder(getContext()).setListener(this).build();
+        mBillingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(@BillingClient.BillingResponse int billingResponseCode) {
+                if (billingResponseCode == BillingClient.BillingResponse.OK) {
+                    BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                            .setSku("com.carzis.product.diagnostics")
+                            .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
+                            .build();
+                    mBillingClient.launchBillingFlow(getActivity(), flowParams);
+                }
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+            }
         });
 
         deviceListView.setAdapter(deviceListAdapter);
@@ -146,7 +166,7 @@ public class AddDeviceFragment extends Fragment {
         if (supportedPids.size() == 0)
             return items;
 
-        for (String item :supportedPids) {
+        for (String item : supportedPids) {
             PID pid = PID.getEnumByString(item);
 //            PidItem pidItem = new PidItem(pid);
             DashboardItem dashboardItem = new DashboardItem("-", pid);
@@ -158,4 +178,34 @@ public class AddDeviceFragment extends Fragment {
     }
 
 
+    @Override
+    public void onPurchasesUpdated(int responseCode, @Nullable List<Purchase> purchases) {
+        if (responseCode == BillingClient.BillingResponse.OK
+                && purchases != null) {
+            deviceListAdapter.setOnItemClickListener((pid, enabled) -> {
+                if (enabled) {
+                    keyValueStorage.addDeviceToDashboard(pid);
+                    Log.d(TAG, "onCreateView: " + keyValueStorage.getUserDashboardDevices());
+                } else {
+                    keyValueStorage.removeDeviceFromDashboard(pid);
+                    Log.d(TAG, "onCreateView: " + keyValueStorage.getUserDashboardDevices()
+                    );
+                }
+//            setupUserDashboardDevices();
+            });
+        } else if (responseCode == BillingClient.BillingResponse.ITEM_ALREADY_OWNED) {
+            deviceListAdapter.setOnItemClickListener((pid, enabled) -> {
+                if (enabled) {
+                    keyValueStorage.addDeviceToDashboard(pid);
+                    Log.d(TAG, "onCreateView: " + keyValueStorage.getUserDashboardDevices());
+                } else {
+                    keyValueStorage.removeDeviceFromDashboard(pid);
+                    Log.d(TAG, "onCreateView: " + keyValueStorage.getUserDashboardDevices()
+                    );
+                }
+//            setupUserDashboardDevices();
+            });
+        } else if (responseCode == BillingClient.BillingResponse.USER_CANCELED) {
+        }
+    }
 }

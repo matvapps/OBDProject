@@ -3,6 +3,7 @@ package com.carzis.obd;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothHeadset;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
@@ -11,7 +12,6 @@ import android.widget.Toast;
 
 import com.carzis.R;
 import com.carzis.connect.BluetoothService;
-import com.carzis.model.PID;
 import com.carzis.util.Utility;
 
 import java.util.ArrayList;
@@ -179,14 +179,14 @@ public class OBDReader {
         defaultCommandsList.add(PID.PIDS_SUP_41_60.getCommand());
         defaultCommandsList.add(PID.VEHICLE_SPEED.getCommand());
         defaultCommandsList.add(PID.ENGINE_RPM.getCommand());
-        defaultCommandsList.add(PID.TROUBLE_CODES.getCommand());
+        defaultCommandsList.add(PID.FREEZE_DTCS.getCommand());
 //        defaultCommandsList.addAll(Arrays.asList(PidItem.PIDS));
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         bluetoothService = new BluetoothService(context, mBtHandler);
 
         if (bluetoothAdapter == null) {
-            Toast.makeText(context, "Bluetooth не доступен", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.no_bt_connection, Toast.LENGTH_SHORT).show();
         } else {
             if (bluetoothService != null) {
                 if (bluetoothService.getState() == BluetoothService.STATE_NONE) {
@@ -206,7 +206,7 @@ public class OBDReader {
             currentdevice = device;
 
         } catch (Exception e) {
-            Toast.makeText(context, "Не получилось подключиться к " + name, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.didnt_connect_to) + name, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -223,6 +223,11 @@ public class OBDReader {
 //        sendEcuMessage(PID.PIDS_SUP_41_60.getCommand());
 //    }
 
+    public boolean isConnected() {
+        return bluetoothAdapter != null && bluetoothAdapter.isEnabled()
+                && bluetoothAdapter.getProfileConnectionState(BluetoothHeadset.HEADSET) == BluetoothHeadset.STATE_CONNECTED;
+    }
+
     public void reset() {
         whichCommand = 0;
         initialized = false;
@@ -232,7 +237,11 @@ public class OBDReader {
     }
 
     public void getTroubleCodes() {
-        sendEcuMessage(PID.TROUBLE_CODES.getCommand());
+        sendEcuMessage(PID.SAVED_TROUBLE_CODES.getCommand());
+    }
+
+    public void cleanSavedTroubleCodes() {
+        sendEcuMessage(PID.CLEAN_SAVED_TROUBLE_CODES.getCommand());
     }
 
     public void sendEcuMessage(String message) {
@@ -262,7 +271,7 @@ public class OBDReader {
                 bluetoothService.write(send);
             }
         } catch (Exception e) {
-            Toast.makeText(context, "Ошибка отправки сообщения ECU", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.error_send_message_ecu, Toast.LENGTH_SHORT).show();
         }
 //        }
     }
@@ -348,7 +357,6 @@ public class OBDReader {
             devicename = devicename.replaceAll("STOPPED", "");
             deviceprotocol = deviceprotocol.replaceAll("STOPPED", "");
 
-            // TODO: use this for display obd device name and protocol
 //            Toast.makeText(context, "Device name: " + devicename, Toast.LENGTH_SHORT).show();
 //            Toast.makeText(context, "Device protocol: " + deviceprotocol, Toast.LENGTH_SHORT).show();
 //            Status.setText(devicename + " " + deviceprotocol);

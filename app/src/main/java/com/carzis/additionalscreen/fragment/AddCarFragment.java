@@ -3,7 +3,6 @@ package com.carzis.additionalscreen.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +11,20 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.carzis.R;
+import com.carzis.base.BaseFragment;
+import com.carzis.main.presenter.CarPresenter;
+import com.carzis.main.view.MyCarsView;
 import com.carzis.model.Car;
 import com.carzis.repository.local.database.LocalRepository;
+import com.carzis.repository.local.prefs.KeyValueStorage;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
  * Created by Alexandr.
  */
-public class AddCarFragment extends Fragment implements View.OnClickListener {
+public class AddCarFragment extends BaseFragment implements View.OnClickListener, MyCarsView {
 
 
     private EditText carName;
@@ -31,7 +35,17 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
     private EditText carBodyNum;
     private Button addNewCar;
 
+    private String carNameStr;
+    private String carBrandStr;
+    private String carModelStr;
+    private String carYearStr;
+    private String carEngineNumStr;
+    private String carBodyNumStr;
 
+    private boolean addedTolocal = false;
+
+    private KeyValueStorage keyValueStorage;
+    private CarPresenter carPresenter;
     private LocalRepository localRepository;
 
 
@@ -47,7 +61,11 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
         carEngineNum = rootView.findViewById(R.id.car_engine_num_edtxt);
         carBodyNum = rootView.findViewById(R.id.car_body_num_edtxt);
 
+        keyValueStorage = new KeyValueStorage(getContext());
+        carPresenter = new CarPresenter(keyValueStorage.getUserToken());
+        carPresenter.attachView(this);
         localRepository = new LocalRepository(Objects.requireNonNull(getContext()));
+        localRepository.attachView(this);
 
         addNewCar = rootView.findViewById(R.id.add_car_btn);
         addNewCar.setOnClickListener(this);
@@ -57,19 +75,54 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        String carNameStr = carName.getText().toString();
-        String carBrandStr = carBrand.getText().toString();
-        String carModelStr = carModel.getText().toString();
-        String carYearStr = carYear.getText().toString();
-        String carEngineNumStr = carEngineNum.getText().toString();
-        String carBodyNumStr = carBodyNum.getText().toString();
+        carNameStr = carName.getText().toString();
+        carBrandStr = carBrand.getText().toString();
+        carModelStr = carModel.getText().toString();
+        carYearStr = carYear.getText().toString();
+        carEngineNumStr = carEngineNum.getText().toString();
+        carBodyNumStr = carBodyNum.getText().toString();
 
         if (!carNameStr.isEmpty() && !carBrandStr.isEmpty()
                 && !carModelStr.isEmpty() && !carYearStr.isEmpty()) {
-            localRepository.addCar(new Car("", carBrandStr, carModelStr, carYearStr, carEngineNumStr, carBodyNumStr, carNameStr));
-            getActivity().finish();
+
+            if (carEngineNumStr.equals(""))
+                carEngineNumStr = "null";
+            if (carBodyNumStr.equals(""))
+                carBodyNumStr = "null";
+
+            carPresenter.addCar(carNameStr + keyValueStorage.getUserToken(), carNameStr, carBrandStr, carModelStr, carEngineNumStr, carBodyNumStr);
         } else
-            Toast.makeText(getContext(), "Обязательные поля не заполнены", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.non_optional_fields_is_empty, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onGetCar(Car car) {
+
+    }
+
+    @Override
+    public void onGetCars(List<Car> cars) {
+
+    }
+
+    @Override
+    public void onRemoteRepoError() {
+    }
+
+    @Override
+    public void onCarAdded() {
+        if (addedTolocal)
+            getActivity().finish();
+        else {
+            localRepository.addCar(new Car(carNameStr + keyValueStorage.getUserToken(), carBrandStr, carModelStr, carYearStr, carEngineNumStr, carBodyNumStr, carNameStr));
+            addedTolocal = true;
+        }
+
+    }
+
+    @Override
+    public void onDeleteCar() {
 
     }
 }

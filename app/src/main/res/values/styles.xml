@@ -42,4 +42,11 @@
         <item name="trackTint">@color/color_track</item>
     </style>
 
+    <style name="AlertDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+        <!--<item name="android:windowBackground">@drawable/dialog_background</item>-->
+    </style>
+
 </resources>

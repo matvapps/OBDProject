@@ -6,11 +6,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.carzis.R;
+import com.carzis.base.BaseActivity;
 import com.carzis.entry.auth.AuthPresenter;
 import com.carzis.entry.auth.AuthView;
 import com.carzis.entry.register.ActivityToSmsFragmentCallbackListener;
@@ -23,7 +23,7 @@ import com.carzis.repository.local.prefs.KeyValueStorage;
 import com.carzis.util.AndroidUtility;
 import com.stfalcon.smsverifycatcher.SmsVerifyCatcher;
 
-public class LogRegActivity extends AppCompatActivity implements RegisterCallbackListener,
+public class LogRegActivity extends BaseActivity implements RegisterCallbackListener,
         RegisterView, AuthView {
 
     private final String TAG = LogRegActivity.class.getSimpleName();
@@ -230,9 +230,10 @@ public class LogRegActivity extends AppCompatActivity implements RegisterCallbac
 
     @Override
     public void showError(AppError appError) {
+        super.showError(appError);
         switch (appError) {
             case AUTH_USER_ERROR:
-                Toast.makeText(this, "Ошибка авторизации", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.auth_error, Toast.LENGTH_SHORT).show();
                 break;
             case REGISTER_USER_ERROR:
                 break;

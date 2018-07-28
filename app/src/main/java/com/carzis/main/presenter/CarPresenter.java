@@ -1,8 +1,12 @@
 package com.carzis.main.presenter;
 
+import android.util.Log;
+
 import com.carzis.base.Presenter;
 import com.carzis.main.view.MyCarsView;
+import com.carzis.model.AppError;
 import com.carzis.model.Car;
+import com.carzis.model.response.BaseResponse;
 import com.carzis.model.response.CarResponse;
 import com.carzis.repository.remote.ApiUtils;
 import com.carzis.repository.remote.CarzisApi;
@@ -18,6 +22,8 @@ import retrofit2.Response;
  * Created by Alexandr.
  */
 public class CarPresenter implements Presenter<MyCarsView> {
+
+    private final String TAG = CarPresenter.class.getSimpleName();
 
     private MyCarsView view;
     private CarzisApi api;
@@ -55,14 +61,45 @@ public class CarPresenter implements Presenter<MyCarsView> {
                         cars.add(car);
                     }
                     view.onGetCars(cars);
+                } else {
+                    view.onRemoteRepoError();
                 }
             }
 
             @Override
             public void onFailure(Call<List<CarResponse>> call, Throwable t) {
                 view.showLoading(false);
+                view.showError(AppError.CAR_ERROR);
+                view.onRemoteRepoError();
             }
         });
+    }
+
+    public void addCar(String carIdentifier, String carName, String carMark,
+                       String carModel, String engineNumber, String bodyNumber) {
+
+        view.showLoading(true);
+        api.addCar(token, carIdentifier, carName,
+                carMark, carModel, engineNumber, bodyNumber)
+                .enqueue(new Callback<BaseResponse>() {
+
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                view.showLoading(false);
+                Log.d(TAG, "onResponse: " + response.message());
+                if (response.code() == 200) {
+                    view.onCarAdded();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                view.showLoading(false);
+                view.showError(AppError.PROFILE_ERROR);
+            }
+        });
+
     }
 
 

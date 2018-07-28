@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.carzis.base.Presenter;
 import com.carzis.main.view.ProfileView;
+import com.carzis.model.AppError;
 import com.carzis.model.response.ProfileResponse;
 import com.carzis.repository.remote.ApiUtils;
 import com.carzis.repository.remote.CarzisApi;
@@ -43,6 +44,7 @@ public class ProfilePresenter implements Presenter<ProfileView> {
             @Override
             public void onFailure(Call<ProfileResponse> call, Throwable t) {
                 profileView.showLoading(false);
+                profileView.showError(AppError.PROFILE_ERROR);
                 Log.d(TAG, "onFailure: " + t);
             }
         });
@@ -53,6 +55,7 @@ public class ProfilePresenter implements Presenter<ProfileView> {
                               String firstName,
                               String secondName,
                               Long date) {
+        profileView.showLoading(true);
         api.updateProfile("Bearer " + token,
                 email,
                 firstName,
@@ -61,13 +64,16 @@ public class ProfilePresenter implements Presenter<ProfileView> {
                 .enqueue(new Callback<ProfileResponse>() {
             @Override
             public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+                profileView.showLoading(false);
                 Log.d(TAG, "onResponse: " + response.message());
                 if (response.code() == 200)
                     profileView.onUpdateProfile();
             }
             @Override
             public void onFailure(Call<ProfileResponse> call, Throwable t) {
+                profileView.showLoading(false);
                 Log.d(TAG, "onFailure: " + t.getMessage());
+                profileView.showError(AppError.PROFILE_ERROR);
             }
         });
 
@@ -88,6 +94,7 @@ public class ProfilePresenter implements Presenter<ProfileView> {
                 .enqueue(new Callback<ProfileResponse>() {
             @Override
             public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+                profileView.showLoading(false);
                 Log.d(TAG, "onResponse: " + response.message());
                 if (response.code() == 200)
                     profileView.onUpdateProfile();
@@ -95,6 +102,7 @@ public class ProfilePresenter implements Presenter<ProfileView> {
             @Override
             public void onFailure(Call<ProfileResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
+                profileView.showError(AppError.PROFILE_ERROR);
             }
         });
 

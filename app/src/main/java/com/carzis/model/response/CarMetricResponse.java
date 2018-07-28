@@ -39,6 +39,12 @@ public class CarMetricResponse extends BaseResponse {
         this.timeCreated = timeCreated;
     }
 
+    public CarMetricResponse(String carId, String metricCode, String metricValue) {
+        this.carId = carId;
+        this.metricCode = metricCode;
+        this.metricValue = metricValue;
+    }
+
     public String getTimeCreated() {
         return timeCreated;
     }

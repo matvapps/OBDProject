@@ -5,6 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:id="@+id/clear_fault_codes"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_blue_rect_selector"
+        android:text="Очистить"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+        app:fontFamily="@font/gte_esti_pto_text_medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/error_list_txt"
         android:layout_width="wrap_content"
@@ -12,7 +28,7 @@
         android:layout_marginLeft="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
-        android:text="Список ошибок"
+        android:text="@string/error_list"
         android:textColor="@android:color/white"
         android:textSize="17sp"
         android:textStyle="bold"
@@ -26,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
-        android:text="Выберите категорию чтоб посмотреть список ошибок"
+        android:text="@string/category_dtc"
         android:textColor="#ffffff"
         android:textSize="9sp"
         app:fontFamily="@font/gte_esti_pto_text_regular"
@@ -99,69 +115,63 @@
         app:layout_constraintTop_toBottomOf="@+id/car_body">
 
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="38dp"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/trouble_codes_list"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+                android:layout_marginTop="38dp"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/trouble_codes_list"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
 
-            <View
-                android:layout_width="0.5dp"
-                android:layout_height="match_parent"
-                android:alpha="0.3"
-                android:background="#979797" />
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent"
+                    android:alpha="0.3"
+                    android:background="#979797" />
 
-            <ScrollView
-                android:id="@+id/trouble_code_full_desc_container"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/trouble_code_full_desc"
-                    android:layout_width="wrap_content"
+                <ScrollView
+                    android:id="@+id/trouble_code_full_desc_container"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@android:color/white"
-                    android:textSize="11sp"
-                    app:fontFamily="@font/gte_esti_pto_text_regular"
-                    tools:text="P0001  — общий диагностический код неисправности (DTC) применяется ко всем автомобилям оборудованным OBD-II, включая,  такими авто как  Ford, Пежо,Опель, VW (Фольксваген), Mazda и т.д.
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/trouble_code_full_desc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="11sp"
+                        app:fontFamily="@font/gte_esti_pto_text_regular"
+                        tools:text="P0001  — общий диагностический код неисправности (DTC) применяется ко всем автомобилям оборудованным OBD-II, включая,  такими авто как  Ford, Пежо,Опель, VW (Фольксваген), Mazda и т.д.
 
 Ошибка P0001 не очень распространенная и чаще встречается на дизельных двигателях Common Rail (CRD) или автомобилях средствах с непосредственным впрыском бензина (GDI).
 
 Этот код указывает на проблеме  к электрической схеме регулятора подачи топлива. Топливная система автомобиля состоит из многих компонентов — топливный бак, топливный насос, фильтр, трубопроводы, форсунки и т. д. Одним из элементов топливной системы высокого давления является топливный насос высокого давления. Его работа заключается в увеличении давления топлива на топливной рампе до необходимого уровня. Такие насосы имеют два контура —  низкого и высокого давления  регулятор объема топлива. Ошибка  P0001 означает, что регулятор объема топлива находится в открытом состоянии." />
 
-            </ScrollView>
+                </ScrollView>
 
-        </LinearLayout>
+            </LinearLayout>
+
+        </FrameLayout>
 
 
-        <!--<ScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_marginTop="38dp"-->
-        <!--android:layout_height="match_parent">-->
 
-        <!--<TextView-->
-        <!--android:id="@+id/content"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:textColor="@android:color/white"-->
-        <!--android:textSize="14sp"-->
-        <!--android:layout_height="wrap_content" />-->
-
-        <!--</ScrollView>-->
 
 
         <LinearLayout
@@ -181,7 +191,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
-                android:text="КОД ОШИБКИ"
+                android:text="@string/code_error"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="10sp"
                 android:textStyle="bold"
@@ -200,7 +210,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
-                android:text="ОПИСАНИЕ"
+                android:text="@string/description"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="10sp"
                 android:textStyle="bold"
@@ -208,6 +218,14 @@
 
 
         </LinearLayout>
+
+        <com.github.mmin18.widget.RealtimeBlurView
+            android:id="@+id/blur_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="38dp"
+            app:realtimeBlurRadius="10dp"
+            app:realtimeOverlayColor="#00ffffff" />
 
     </FrameLayout>
 

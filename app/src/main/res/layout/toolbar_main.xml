@@ -74,7 +74,7 @@
             android:textColor="@android:color/white"
             app:fontFamily="@font/gte_esti_pto_text_bold"
             android:textSize="10sp"
-            android:text="ДОБ. АВТО"/>
+            android:text="@string/add_autor"/>
 
     </LinearLayout>
 

@@ -2,17 +2,17 @@ package com.carzis.tutorial;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
 import com.carzis.R;
+import com.carzis.base.BaseActivity;
 import com.carzis.entry.LogRegActivity;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 
 import me.relex.circleindicator.CircleIndicator;
 
-public class TutorialActivity extends AppCompatActivity {
+public class TutorialActivity extends BaseActivity {
 
     private final String CURRENT_PAGE = "current_page";
 
@@ -34,7 +34,7 @@ public class TutorialActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tutorial);
         nextBtn = findViewById(R.id.next_btn);
 
-        TutorialPageAdapter tutorialPageAdapter = new TutorialPageAdapter(getSupportFragmentManager());
+        TutorialPageAdapter tutorialPageAdapter = new TutorialPageAdapter(getSupportFragmentManager(), this);
 
         ViewPager viewpager = findViewById(R.id.viewpager);
         CircleIndicator indicator = findViewById(R.id.indicator);

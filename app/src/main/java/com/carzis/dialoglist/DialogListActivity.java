@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.carzis.R;
 
@@ -46,7 +45,7 @@ public class DialogListActivity extends Activity {
         titleText = getIntent().getStringExtra(TITLE_EXTRA);
         listItems = getIntent().getStringArrayListExtra(ITEMS_EXTRA);
 
-        Toast.makeText(this, listItems.toString(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, listItems.toString(), Toast.LENGTH_SHORT).show();
 
         title = findViewById(R.id.title);
         list = findViewById(R.id.list);

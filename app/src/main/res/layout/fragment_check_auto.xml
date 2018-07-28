@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="ПРОВЕРКА ПО VIN КОДУ"
+                android:text="@string/check_by_vin"
                 android:textColor="@android:color/white"
                 android:textSize="8sp" />
 
@@ -56,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="ПРОВЕРКА ПО НОМЕРУ"
+                android:text="@string/check_by_num"
                 android:textColor="@android:color/white"
                 android:textSize="8sp" />
 
@@ -68,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Проверка авто по VIN коду"
+            android:text="@string/check_car_by_vin"
             android:textAllCaps="true"
             android:textColor="#ffffff"
             android:textSize="16sp"
@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Введите VIN код в формате 4f2yu08102km26251"
+            android:text="@string/input_vin_format"
             android:textColor="#939596"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="@+id/check_text"
@@ -112,7 +112,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:background="@null"
-                android:hint="Введите ваш код…"
+                android:hint="@string/input_code_hint"
                 android:maxLength="17"
                 android:textColor="#939596"
                 android:textSize="14sp" />
@@ -124,7 +124,7 @@
                 android:layout_marginBottom="3dp"
                 android:layout_marginTop="3dp"
                 android:layout_weight="0.85"
-                android:background="@drawable/button_blue_rect"
+                android:background="@drawable/button_blue_rect_selector"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingLeft="4dp"
@@ -141,7 +141,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="Поиск"
+                    android:text="@string/search_btn"
                     android:textColor="#ffffff"
                     android:textSize="11sp" />
 

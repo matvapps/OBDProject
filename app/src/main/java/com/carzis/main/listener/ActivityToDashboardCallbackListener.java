@@ -1,6 +1,6 @@
 package com.carzis.main.listener;
 
-import com.carzis.model.PID;
+import com.carzis.obd.PID;
 
 import java.util.List;
 

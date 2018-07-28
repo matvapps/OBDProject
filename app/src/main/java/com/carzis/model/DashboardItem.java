@@ -1,5 +1,7 @@
 package com.carzis.model;
 
+import com.carzis.obd.PID;
+
 /**
  * Created by Alexandr.
  */

@@ -4,15 +4,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_main">
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_main"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/search_container"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:padding="-1dp"
-        android:background="@drawable/item_background_noactive"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -40,7 +49,7 @@
                 android:singleLine="true"
                 android:maxLines="1"
                 android:textColorHint="@android:color/white"
-                android:hint="Поиск..."
+                android:hint="@string/search"
                 android:textSize="10sp"
                 android:textColor="@android:color/white"
                 app:fontFamily="@font/gte_esti_pto_text_medium"/>
@@ -50,7 +59,7 @@
                 android:id="@+id/search_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_blue_rect"
+                android:background="@drawable/button_blue_rect_selector"
                 android:gravity="center"
                 android:layout_gravity="end"
                 android:orientation="horizontal">
@@ -66,7 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="НАЙТИ"
+                    android:text="@string/search_big"
                     app:fontFamily="@font/gte_esti_pto_text_bold"
                     android:textColor="#ffffff"
                     android:textSize="12sp" />

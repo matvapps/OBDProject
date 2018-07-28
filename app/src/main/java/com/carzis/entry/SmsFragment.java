@@ -4,7 +4,6 @@ package com.carzis.entry;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.carzis.R;
+import com.carzis.base.BaseFragment;
 import com.carzis.entry.register.ActivityToSmsFragmentCallbackListener;
 import com.carzis.entry.register.RegisterCallbackListener;
 import com.carzis.repository.local.prefs.KeyValueStorage;
@@ -25,7 +25,7 @@ import java.util.ArrayList;
 /**
  * Created by Alexandr.
  */
-public class SmsFragment extends Fragment implements ActivityToSmsFragmentCallbackListener {
+public class SmsFragment extends BaseFragment implements ActivityToSmsFragmentCallbackListener {
 
     private final String TAG = SmsFragment.class.getSimpleName();
     private final String SMS = "sms";
@@ -94,13 +94,12 @@ public class SmsFragment extends Fragment implements ActivityToSmsFragmentCallba
 
         nextBtn.setOnClickListener(v -> {
             if (callbackListener != null) {
-                // TODO:
                 String sms = smsCodePart1.getText().toString() +
                         smsCodePart2.getText().toString() +
                         smsCodePart3.getText().toString() +
                         smsCodePart4.getText().toString();
                 if (sms.length() < 4) {
-                    Toast.makeText(getContext(), "Код должен состоять из 4 цифр", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.code_must, Toast.LENGTH_SHORT).show();
                 } else {
                     callbackListener.onLogRegFinish(isRegistration, Integer.parseInt(sms));
                 }
@@ -164,7 +163,6 @@ public class SmsFragment extends Fragment implements ActivityToSmsFragmentCallba
 
         @Override
         public void afterTextChanged(Editable editable) {
-            // TODO Auto-generated method stub
             String text = editable.toString();
             switch (view.getId()) {
 

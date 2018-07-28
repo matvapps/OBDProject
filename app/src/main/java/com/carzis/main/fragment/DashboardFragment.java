@@ -3,7 +3,6 @@ package com.carzis.main.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,12 +11,13 @@ import android.view.ViewGroup;
 
 import com.carzis.R;
 import com.carzis.additionalscreen.AdditionalActivity;
+import com.carzis.base.BaseFragment;
 import com.carzis.main.MainActivity;
 import com.carzis.main.adapter.DashboardItemsAdapter;
 import com.carzis.main.listener.ActivityToDashboardCallbackListener;
 import com.carzis.main.listener.DashboardToActivityCallbackListener;
 import com.carzis.model.DashboardItem;
-import com.carzis.model.PID;
+import com.carzis.obd.PID;
 import com.carzis.obd.PidItem;
 import com.carzis.repository.local.database.LocalRepository;
 import com.carzis.repository.local.prefs.KeyValueStorage;
@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class DashboardFragment extends Fragment implements ActivityToDashboardCallbackListener {
+public class DashboardFragment extends BaseFragment implements ActivityToDashboardCallbackListener {
     private static final String TAG = DashboardFragment.class.getSimpleName();
 
     private DashboardItemsAdapter dashboardItemsAdapter;

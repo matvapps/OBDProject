@@ -2,7 +2,6 @@ package com.carzis.main.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +11,9 @@ import android.widget.TextView;
 
 import com.carzis.R;
 import com.carzis.additionalscreen.AdditionalActivity;
+import com.carzis.base.BaseFragment;
 import com.carzis.main.presenter.ProfilePresenter;
 import com.carzis.main.view.ProfileView;
-import com.carzis.model.AppError;
 import com.carzis.model.response.ProfileResponse;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 import com.squareup.picasso.Picasso;
@@ -27,7 +26,7 @@ import java.util.Locale;
 /**
  * Created by Alexandr.
  */
-public class ProfileFragment extends Fragment implements ProfileView {
+public class ProfileFragment extends BaseFragment implements ProfileView {
 
     private static final String TAG = ProfileFragment.class.getSimpleName();
 
@@ -53,7 +52,6 @@ public class ProfileFragment extends Fragment implements ProfileView {
         profilePresenter = new ProfilePresenter(keyValueStorage.getUserToken());
         profilePresenter.attachView(this);
 
-        profilePresenter.loadProfile();
         return rootView;
     }
 
@@ -76,11 +74,11 @@ public class ProfileFragment extends Fragment implements ProfileView {
         String secondName = profileResponse.getSecondName();
         String email = profileResponse.getEmail();
 
-        if (firstName.equals("null"))
+        if (firstName == null || firstName.equals("null"))
             firstName = "";
-        if (secondName.equals("null"))
+        if (secondName == null || secondName.equals("null"))
             secondName = "";
-        if (email.equals("null"))
+        if (email == null || email.equals("null"))
             email = "";
 
         userName.setText(String.format("%s %s", firstName, secondName));
@@ -88,7 +86,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
         userEmail.setText(email);
 
         String bday = profileResponse.getBirthday();
-        if (bday.equals("null")) {
+        if (bday == null || bday.equals("null")) {
             bday = "";
         } else {
             Calendar cal = Calendar.getInstance();
@@ -104,11 +102,12 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
         }
 
-        if (!profileResponse.getPhotoUrl().equals("null")) {
-            String imageUrl = "http://carzis.com" + profileResponse.getPhotoUrl();
-            Picasso.get().load(imageUrl).into(backgroundUserImage);
-            Picasso.get().load(imageUrl).into(userImage);
-        }
+        if (profileResponse.getPhotoUrl() != null)
+            if (!profileResponse.getPhotoUrl().equals("null")) {
+                String imageUrl = "http://carzis.com" + profileResponse.getPhotoUrl();
+                Picasso.get().load(imageUrl).into(backgroundUserImage);
+                Picasso.get().load(imageUrl).into(userImage);
+            }
 
         userBDay.setText(bday);
 
@@ -126,13 +125,4 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
     }
 
-    @Override
-    public void showLoading(boolean load) {
-
-    }
-
-    @Override
-    public void showError(AppError appError) {
-
-    }
 }

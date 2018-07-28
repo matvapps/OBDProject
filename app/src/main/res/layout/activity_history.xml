@@ -7,8 +7,6 @@
     android:background="@drawable/gradient_background">
 
 
-
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,118 +27,81 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
 
-    <LinearLayout
-        android:id="@+id/for_month"
+    <EditText
+        android:id="@+id/first_date"
         android:layout_width="115dp"
         android:layout_height="33dp"
-        android:layout_marginLeft="75dp"
-        android:layout_marginStart="75dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginStart="45dp"
         android:layout_marginTop="16dp"
+        android:textColor="@android:color/white"
+        android:hint="@string/frokm"
+        app:fontFamily="@font/gte_esti_pto_text_medium"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textSize="13sp"
+        android:textAlignment="center"
         android:background="@drawable/gray_field_background"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-        <CheckBox
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="16dp"
-            android:button="@drawable/custom_chbx" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:text="За месяц"
-            android:textColor="@android:color/white"
-            app:fontFamily="@font/gte_esti_pto_text_regular" />
+    </EditText>
 
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:text="—"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:fontFamily="@font/gte_esti_pto_text_bold"
+        app:layout_constraintBottom_toBottomOf="@+id/first_date"
+        app:layout_constraintStart_toEndOf="@+id/first_date"
+        app:layout_constraintTop_toTopOf="@+id/first_date" />
 
-    <LinearLayout
-        android:id="@+id/for_week"
+
+    <EditText
+        android:id="@+id/second_date"
         android:layout_width="115dp"
         android:layout_height="33dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:background="@drawable/gray_field_background"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/for_day"
-        app:layout_constraintStart_toEndOf="@+id/for_day"
-        app:layout_constraintTop_toTopOf="@+id/for_day">
-
-        <CheckBox
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:button="@drawable/custom_chbx" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:text="За неделю"
-            android:textColor="@android:color/white"
-            app:fontFamily="@font/gte_esti_pto_text_regular" />
-
-    </LinearLayout>
+        android:textColor="@android:color/white"
+        android:hint="@string/to"
+        app:fontFamily="@font/gte_esti_pto_text_medium"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textSize="13sp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/first_date"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="@+id/first_date"
+        app:layout_constraintVertical_bias="0.0">
 
 
-    <LinearLayout
-        android:id="@+id/for_day"
-        android:layout_width="115dp"
-        android:layout_height="33dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:background="@drawable/gray_field_background"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/for_month"
-        app:layout_constraintStart_toEndOf="@+id/for_month"
-        app:layout_constraintTop_toTopOf="@+id/for_month">
-
-        <CheckBox
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:button="@drawable/custom_chbx" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:text="За день"
-            android:textColor="@android:color/white"
-            app:fontFamily="@font/gte_esti_pto_text_regular" />
-
-    </LinearLayout>
+    </EditText>
 
 
     <lecho.lib.hellocharts.view.LineChartView
         android:id="@+id/chart"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="45dp"
         android:layout_marginLeft="45dp"
         android:layout_marginRight="45dp"
         android:layout_marginStart="45dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/for_month" />
+        app:layout_constraintTop_toBottomOf="@+id/second_date" />
 
 </android.support.constraint.ConstraintLayout>

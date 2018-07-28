@@ -3,42 +3,51 @@ package com.carzis.main.fragment;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.carzis.R;
+import com.carzis.base.BaseFragment;
 import com.carzis.main.MainActivity;
 import com.carzis.main.adapter.TroubleCodesAdapter;
 import com.carzis.main.listener.ActivityToTroublesCallbackListener;
 import com.carzis.main.listener.TroublesToActivityCallbackListener;
 import com.carzis.main.presenter.TroubleCodePresenter;
 import com.carzis.main.view.TroubleCodesView;
-import com.carzis.model.AppError;
 import com.carzis.model.Trouble;
 import com.carzis.repository.local.database.LocalRepository;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 import com.carzis.util.custom.view.TroubleTypeBtn;
+import com.github.mmin18.widget.RealtimeBlurView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /**
  * Created by Alexandr.
  */
-public class TroubleCodesFragment extends Fragment implements ActivityToTroublesCallbackListener,
-        View.OnClickListener, TroubleCodesView {
+public class TroubleCodesFragment extends BaseFragment implements ActivityToTroublesCallbackListener,
+        View.OnClickListener, TroubleCodesView, PurchasesUpdatedListener {
 
     private static final String TAG = TroubleCodesFragment.class.getSimpleName();
 
-
+    private BillingClient mBillingClient;
+    private TroubleCodesAdapter troubleCodesAdapter;
     private LocalRepository localRepository;
     private TroubleCodePresenter troubleCodePresenter;
     private KeyValueStorage keyValueStorage;
@@ -51,12 +60,16 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
     private RecyclerView troubleCodesList;
     private TextView troubleFullDescText;
     private ScrollView fullTroubleCodesDescContainer;
-
     private TextView titleTextView;
+    private Button clearFaultCodes;
     private ImageButton backToTroublesBtn;
+    private RealtimeBlurView blurView;
 
-    private TroubleCodesAdapter troubleCodesAdapter;
+    private ArrayList<String> savedDtcCodes;
+    private boolean useBlur = true;
 
+    private final String USE_BLUR = "use_blur";
+    private final String SAVED_DTC_CODES = "saved_dtc_codes";
     private final String POWER_TRAIN_CODE = "P";
     private final String CHASIS_CODE = "C";
     private final String BODY_CODE = "B";
@@ -77,6 +90,10 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
         carBodyBtn = rootView.findViewById(R.id.car_body);
         carNetworkBtn = rootView.findViewById(R.id.car_electronics);
         fullTroubleCodesDescContainer = rootView.findViewById(R.id.trouble_code_full_desc_container);
+        blurView = rootView.findViewById(R.id.blur_image);
+        clearFaultCodes = rootView.findViewById(R.id.clear_fault_codes);
+
+        savedDtcCodes = new ArrayList<>();
 
         if (isLayoutPortrait(Objects.requireNonNull(getContext()))) {
             titleTextView = rootView.findViewById(R.id.title_text);
@@ -86,7 +103,7 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
                 troubleFullDescText.setVisibility(View.INVISIBLE);
                 fullTroubleCodesDescContainer.setVisibility(View.INVISIBLE);
                 backToTroublesBtn.setVisibility(View.GONE);
-                titleTextView.setText("КОД ОШИБКИ");
+                titleTextView.setText(R.string.error_cod_big);
                 troubleCodesList.setVisibility(View.VISIBLE);
 
             });
@@ -111,7 +128,7 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
                 position -> {
                     updateFullDescription(troubleCodesAdapter.getItem(position));
                     if (isLayoutPortrait(getContext())) {
-                        titleTextView.setText("Описание");
+                        titleTextView.setText(R.string.description_title);
                         backToTroublesBtn.setVisibility(View.VISIBLE);
                         fullTroubleCodesDescContainer.setVisibility(View.VISIBLE);
                         troubleFullDescText.setVisibility(View.VISIBLE);
@@ -121,9 +138,48 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
                 });
 
         carEngineBtn.callOnClick();
-
         troublesToActivityCallbackListener.getTroubleCodes();
 
+        clearFaultCodes.setOnClickListener(view -> {
+            troublesToActivityCallbackListener.cleanTroubleCodes();
+            troubleCodesAdapter.setItems(new ArrayList<>());
+            troubleFullDescText.setText("");
+        });
+
+        if (savedInstanceState != null) {
+            savedDtcCodes = savedInstanceState.getStringArrayList(SAVED_DTC_CODES);
+            for (String item : savedDtcCodes) {
+                onPassTroubleCode(item);
+            }
+
+            useBlur = savedInstanceState.getBoolean(USE_BLUR);
+
+            if (useBlur) {
+                blurView.setVisibility(View.VISIBLE);
+            } else {
+                blurView.setVisibility(View.GONE);
+            }
+        }
+
+        if (useBlur) {
+            mBillingClient = BillingClient.newBuilder(getContext()).setListener(this).build();
+            mBillingClient.startConnection(new BillingClientStateListener() {
+                @Override
+                public void onBillingSetupFinished(@BillingClient.BillingResponse int billingResponseCode) {
+                    if (billingResponseCode == BillingClient.BillingResponse.OK) {
+                        BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                                .setSku("com.carzis.product.diagnostics")
+                                .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
+                                .build();
+                        mBillingClient.launchBillingFlow(getActivity(), flowParams);
+                    }
+                }
+
+                @Override
+                public void onBillingServiceDisconnected() {
+                }
+            });
+        }
         return rootView;
     }
 
@@ -131,7 +187,7 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
         String fullDescription = trouble.getFull_desc();
 
         if (fullDescription.isEmpty())
-            fullDescription = "no description available";
+            fullDescription = getString(R.string.no_description);
 
         troubleFullDescText.setText(fullDescription);
         fullTroubleCodesDescContainer.smoothScrollTo(0, 0);
@@ -143,6 +199,17 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
 
         troublesToActivityCallbackListener = (TroublesToActivityCallbackListener) context;
         ((MainActivity) context).activityToTroublesCallbackListener = this;
+
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putStringArrayList(SAVED_DTC_CODES, savedDtcCodes);
+
+        useBlur = blurView.getVisibility() == View.VISIBLE;
+        outState.putBoolean(USE_BLUR, useBlur);
 
     }
 
@@ -209,9 +276,10 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
     public void onGetTroubleCode(Trouble trouble) {
         Log.d(TAG, "onGetTroubleCode: " + trouble.getRu_desc());
         if (trouble != null) {
-            if (!troubleCodesAdapter.contains(trouble.getCode()))
+            if (!troubleCodesAdapter.contains(trouble.getCode())) {
                 troubleCodesAdapter.addItem(trouble);
-            else
+                savedDtcCodes.add(trouble.getCode());
+            } else
                 troubleCodesAdapter.updateItem(trouble);
 
             // If this is first displayed trouble then automatically show full description
@@ -236,23 +304,34 @@ public class TroubleCodesFragment extends Fragment implements ActivityToTroubles
         localRepository.getTrouble(code);
     }
 
-    @Override
-    public void showLoading(boolean load) {
-
-    }
-
-    @Override
-    public void showError(AppError appError) {
-        switch (appError) {
-            case GET_TROUBLE_FROM_LOCAL_REPO_ERROR:
-
-                break;
-            case GET_TROUBLE_FROM_REMOTE_REPO_ERROR:
-
-                break;
-        }
+//    @Override
+//    public void showLoading(boolean load) {
+//
+//    }
+//
+//    @Override
+//    public void showError(AppError appError) {
+//        switch (appError) {
+//            case GET_TROUBLE_FROM_LOCAL_REPO_ERROR:
+//
+//                break;
+//            case GET_TROUBLE_FROM_REMOTE_REPO_ERROR:
+//
+//                break;
+//        }
 //        Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+//    }
+
+    @Override
+    public void onPurchasesUpdated(int responseCode, @Nullable List<Purchase> purchases) {
+        if (responseCode == BillingClient.BillingResponse.OK
+                && purchases != null) {
+            blurView.setVisibility(View.GONE);
+        } else if (responseCode == BillingClient.BillingResponse.ITEM_ALREADY_OWNED) {
+            blurView.setVisibility(View.GONE);
+        } else if (responseCode == BillingClient.BillingResponse.USER_CANCELED) {
+        }
     }
-//    --------------------------------------------------------
+
 
 }

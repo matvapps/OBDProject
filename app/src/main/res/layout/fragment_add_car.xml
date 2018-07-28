@@ -1,238 +1,257 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.constraint.ConstraintLayout
+    <ImageView
+        android:id="@+id/background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/car_name_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:text="Имя авто:"
-            android:textColor="@android:color/white"
-            android:textSize="13sp"
-            app:fontFamily="@font/gte_esti_pto_text_regular"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_main" />
 
 
-        <EditText
-            android:id="@+id/car_name_edtxt"
-            android:layout_width="200dp"
-            android:layout_height="38dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/gray_field_background"
-            android:hint="Имя"
-            android:maxLines="1"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:singleLine="true"
-            android:textColor="#85858a"
-            android:textColorHint="#85858a"
-            android:textSize="13sp"
-            app:fontFamily="@font/gte_esti_pto_text_regular"
-            app:layout_constraintStart_toStartOf="@+id/car_name_txt"
-            app:layout_constraintTop_toBottomOf="@+id/car_name_txt" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/car_name_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/car_name"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                app:fontFamily="@font/gte_esti_pto_text_regular"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
-        <TextView
-            android:id="@+id/car_brand_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Марка авто:"
-            android:textColor="@android:color/white"
-            android:textSize="13sp"
-            app:fontFamily="@font/gte_esti_pto_text_regular"
-            app:layout_constraintStart_toStartOf="@+id/car_name_edtxt"
-            app:layout_constraintTop_toBottomOf="@+id/car_name_edtxt" />
+            <EditText
+                android:id="@+id/car_name_edtxt"
+                android:layout_width="200dp"
+                android:layout_height="38dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/gray_field_background"
+                android:hint="@string/car_name_hint"
+                android:maxLines="1"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:singleLine="true"
+                android:inputType="text"
+                android:textColor="#85858a"
+                android:textColorHint="#85858a"
+                android:textSize="13sp"
+                app:fontFamily="@font/gte_esti_pto_text_regular"
+                app:layout_constraintStart_toStartOf="@+id/car_name_txt"
+                app:layout_constraintTop_toBottomOf="@+id/car_name_txt" />
 
 
-        <EditText
-            android:id="@+id/car_brand_edtxt"
-            android:layout_width="200dp"
-            android:layout_height="38dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/gray_field_background"
-            android:hint="Марка"
-            android:maxLines="1"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:singleLine="true"
-            android:textColor="#85858a"
-            android:textColorHint="#85858a"
-            android:textSize="13sp"
-            app:fontFamily="@font/gte_esti_pto_text_regular"
-            app:layout_constraintStart_toStartOf="@+id/car_brand_txt"
-            app:layout_constraintTop_toBottomOf="@+id/car_brand_txt" />
+            <TextView
+                android:id="@+id/car_brand_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/car_brand_txt"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                app:fontFamily="@font/gte_esti_pto_text_regular"
+                app:layout_constraintStart_toStartOf="@+id/car_name_edtxt"
+                app:layout_constraintTop_toBottomOf="@+id/car_name_edtxt" />
 
 
-        <TextView
-            android:id="@+id/car_model_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:fontFamily="@font/gte_esti_pto_text_regular"
-            android:text="Модель авто:"
-            android:textColor="@android:color/white"
-            android:textSize="13sp"
-            app:layout_constraintStart_toStartOf="@+id/car_brand_edtxt"
-            app:layout_constraintTop_toBottomOf="@+id/car_brand_edtxt" />
+            <EditText
+                android:id="@+id/car_brand_edtxt"
+                android:layout_width="200dp"
+                android:layout_height="38dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/gray_field_background"
+                android:hint="@string/car_brand_hint"
+                android:maxLines="1"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="#85858a"
+                android:textColorHint="#85858a"
+                android:textSize="13sp"
+                app:fontFamily="@font/gte_esti_pto_text_regular"
+                app:layout_constraintStart_toStartOf="@+id/car_brand_txt"
+                app:layout_constraintTop_toBottomOf="@+id/car_brand_txt" />
 
 
-        <EditText
-            android:id="@+id/car_model_edtxt"
-            android:layout_width="200dp"
-            android:layout_height="38dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/gray_field_background"
-            android:hint="Модель"
-            android:maxLines="1"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:singleLine="true"
-            android:textColor="#85858a"
-            android:textColorHint="#85858a"
-            android:textSize="13sp"
-            app:fontFamily="@font/gte_esti_pto_text_regular"
-            app:layout_constraintStart_toStartOf="@+id/car_model_txt"
-            app:layout_constraintTop_toBottomOf="@+id/car_model_txt" />
+            <TextView
+                android:id="@+id/car_model_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:fontFamily="@font/gte_esti_pto_text_regular"
+                android:text="@string/car_model_txt"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="@+id/car_brand_edtxt"
+                app:layout_constraintTop_toBottomOf="@+id/car_brand_edtxt" />
 
 
-        <TextView
-            android:id="@+id/car_date_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Год авто:"
-            android:textColor="@android:color/white"
-            android:textSize="13sp"
-            app:fontFamily="@font/gte_esti_pto_text_regular"
-            app:layout_constraintStart_toStartOf="@+id/car_model_edtxt"
-            app:layout_constraintTop_toBottomOf="@+id/car_model_edtxt" />
+            <EditText
+                android:id="@+id/car_model_edtxt"
+                android:layout_width="200dp"
+                android:layout_height="38dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/gray_field_background"
+                android:hint="@string/car_model_hint"
+                android:maxLines="1"
+                android:paddingLeft="16dp"
+                android:inputType="text"
+                android:paddingRight="16dp"
+                android:singleLine="true"
+                android:textColor="#85858a"
+                android:textColorHint="#85858a"
+                android:textSize="13sp"
+                app:fontFamily="@font/gte_esti_pto_text_regular"
+                app:layout_constraintStart_toStartOf="@+id/car_model_txt"
+                app:layout_constraintTop_toBottomOf="@+id/car_model_txt" />
 
 
-        <EditText
-            android:id="@+id/car_date_edtxt"
-            android:layout_width="200dp"
-            android:layout_height="38dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/gray_field_background"
-            android:hint="Год"
-            android:inputType="date"
-            android:maxLines="1"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:singleLine="true"
-            android:textColor="#85858a"
-            android:textColorHint="#85858a"
-            android:textSize="13sp"
-            app:fontFamily="@font/gte_esti_pto_text_regular"
-            app:layout_constraintStart_toStartOf="@+id/car_date_txt"
-            app:layout_constraintTop_toBottomOf="@+id/car_date_txt" />
+            <TextView
+                android:id="@+id/car_date_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/car_year_txt"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                app:fontFamily="@font/gte_esti_pto_text_regular"
+                app:layout_constraintStart_toStartOf="@+id/car_model_edtxt"
+                app:layout_constraintTop_toBottomOf="@+id/car_model_edtxt" />
 
 
-        <TextView
-            android:id="@+id/car_engine_num_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Номер двигателя:"
-            android:textColor="@android:color/white"
-            android:textSize="13sp"
-            app:fontFamily="@font/gte_esti_pto_text_regular"
-            app:layout_constraintStart_toStartOf="@+id/car_date_edtxt"
-            app:layout_constraintTop_toBottomOf="@+id/text" />
+            <EditText
+                android:id="@+id/car_date_edtxt"
+                android:layout_width="200dp"
+                android:layout_height="38dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/gray_field_background"
+                android:hint="@string/car_year_hint"
+                android:inputType="date"
+                android:maxLines="1"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:singleLine="true"
+                android:textColor="#85858a"
+                android:textColorHint="#85858a"
+                android:textSize="13sp"
+                app:fontFamily="@font/gte_esti_pto_text_regular"
+                app:layout_constraintStart_toStartOf="@+id/car_date_txt"
+                app:layout_constraintTop_toBottomOf="@+id/car_date_txt" />
 
 
-        <EditText
-            android:id="@+id/car_engine_num_edtxt"
-            android:layout_width="200dp"
-            android:layout_height="38dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/gray_field_background"
-            android:hint="Номер"
-            android:maxLines="1"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:singleLine="true"
-            android:textColor="#85858a"
-            android:textColorHint="#85858a"
-            android:textSize="13sp"
-            app:fontFamily="@font/gte_esti_pto_text_regular"
-            app:layout_constraintStart_toStartOf="@+id/car_engine_num_txt"
-            app:layout_constraintTop_toBottomOf="@+id/car_engine_num_txt" />
+            <TextView
+                android:id="@+id/car_engine_num_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/engine_num"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                app:fontFamily="@font/gte_esti_pto_text_regular"
+                app:layout_constraintStart_toStartOf="@+id/car_date_edtxt"
+                app:layout_constraintTop_toBottomOf="@+id/text" />
 
 
-        <TextView
-            android:id="@+id/car_body_num_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Номер кузова:"
-            android:textColor="@android:color/white"
-            android:textSize="13sp"
-            app:fontFamily="@font/gte_esti_pto_text_regular"
-            app:layout_constraintStart_toStartOf="@+id/car_engine_num_edtxt"
-            app:layout_constraintTop_toBottomOf="@+id/car_engine_num_edtxt" />
+            <EditText
+                android:id="@+id/car_engine_num_edtxt"
+                android:layout_width="200dp"
+                android:layout_height="38dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/gray_field_background"
+                android:hint="@string/engine_num_hint"
+                android:maxLines="1"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:singleLine="true"
+                android:textColor="#85858a"
+                android:textColorHint="#85858a"
+                android:textSize="13sp"
+                app:fontFamily="@font/gte_esti_pto_text_regular"
+                app:layout_constraintStart_toStartOf="@+id/car_engine_num_txt"
+                app:layout_constraintTop_toBottomOf="@+id/car_engine_num_txt" />
 
 
-        <EditText
-            android:id="@+id/car_body_num_edtxt"
-            android:layout_width="200dp"
-            android:layout_height="38dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/gray_field_background"
-            android:hint="Номер"
-            android:maxLines="1"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:singleLine="true"
-            android:textColor="#85858a"
-            android:textColorHint="#85858a"
-            android:textSize="13sp"
-            app:fontFamily="@font/gte_esti_pto_text_regular"
-            app:layout_constraintStart_toStartOf="@+id/car_body_num_txt"
-            app:layout_constraintTop_toBottomOf="@+id/car_body_num_txt" />
+            <TextView
+                android:id="@+id/car_body_num_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/body_num"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                app:fontFamily="@font/gte_esti_pto_text_regular"
+                app:layout_constraintStart_toStartOf="@+id/car_engine_num_edtxt"
+                app:layout_constraintTop_toBottomOf="@+id/car_engine_num_edtxt" />
 
 
-        <Button
-            android:id="@+id/add_car_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/button_blue_rect"
-            android:fontFamily="@font/gte_esti_pto_text_bold"
-            android:paddingLeft="32dp"
-            android:paddingRight="32dp"
-            android:text="ДОБАВИТЬ"
-            android:textColor="@android:color/white"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/car_body_num_edtxt"
-            app:layout_constraintTop_toBottomOf="@+id/car_body_num_edtxt" />
+            <EditText
+                android:id="@+id/car_body_num_edtxt"
+                android:layout_width="200dp"
+                android:layout_height="38dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/gray_field_background"
+                android:hint="@string/body_num_hint"
+                android:maxLines="1"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:singleLine="true"
+                android:textColor="#85858a"
+                android:textColorHint="#85858a"
+                android:textSize="13sp"
+                app:fontFamily="@font/gte_esti_pto_text_regular"
+                app:layout_constraintStart_toStartOf="@+id/car_body_num_txt"
+                app:layout_constraintTop_toBottomOf="@+id/car_body_num_txt" />
 
 
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="14dp"
-            android:layout_marginTop="24dp"
-            android:text="Необязательные поля"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="13sp"
-            app:fontFamily="@font/gte_esti_pto_text_regular"
-            app:layout_constraintStart_toStartOf="@+id/car_date_edtxt"
-            app:layout_constraintTop_toBottomOf="@+id/car_date_edtxt" />
+            <Button
+                android:id="@+id/add_car_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/button_blue_rect_selector"
+                android:fontFamily="@font/gte_esti_pto_text_bold"
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp"
+                android:text="@string/add_big"
+                android:textColor="@android:color/white"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/car_body_num_edtxt"
+                app:layout_constraintTop_toBottomOf="@+id/car_body_num_edtxt" />
 
-    </android.support.constraint.ConstraintLayout>
 
-</ScrollView>
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="14dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/optional_fields"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="13sp"
+                app:fontFamily="@font/gte_esti_pto_text_regular"
+                app:layout_constraintStart_toStartOf="@+id/car_date_edtxt"
+                app:layout_constraintTop_toBottomOf="@+id/car_date_edtxt" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </ScrollView>
+
+</FrameLayout>
+
+

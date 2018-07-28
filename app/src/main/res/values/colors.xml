@@ -19,6 +19,7 @@
     <color name="mainBackgroundColor">#010C1E</color>
     <color name="darkerGray">#aaa</color>
     <color name="appBlue">#052CA3</color>
+    <color name="btn_blue_pressed">#022173</color>
     <color name="transparent">#00000000</color>
     <color name="color">#7965a5ca</color>
     <color name="colorDeviceBlue">#2BBDEC</color>

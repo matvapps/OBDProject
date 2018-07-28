@@ -35,6 +35,6 @@
         android:visibility="gone"
         android:textColor="@android:color/white"
         android:layout_gravity="bottom|end"
-        android:text="Начать"/>
+        android:text="@string/start"/>
 
 </FrameLayout>

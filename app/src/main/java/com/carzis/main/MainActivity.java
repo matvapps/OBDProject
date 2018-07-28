@@ -5,11 +5,9 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,15 +18,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.BillingClientStateListener;
-import com.android.billingclient.api.Purchase;
-import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.carzis.R;
 import com.carzis.additionalscreen.AdditionalActivity;
+import com.carzis.base.BaseActivity;
 import com.carzis.connect.BluetoothService;
 import com.carzis.connect.ConnectActivity;
 import com.carzis.dialoglist.DialogListActivity;
+import com.carzis.history.HistoryPresenter;
+import com.carzis.history.HistoryView;
 import com.carzis.main.fragment.CheckAutoFragment;
 import com.carzis.main.fragment.DashboardFragment;
 import com.carzis.main.fragment.MyCarsFragment;
@@ -40,10 +37,10 @@ import com.carzis.main.listener.DashboardToActivityCallbackListener;
 import com.carzis.main.listener.TroublesToActivityCallbackListener;
 import com.carzis.main.presenter.CarPresenter;
 import com.carzis.main.view.MyCarsView;
-import com.carzis.model.AppError;
 import com.carzis.model.Car;
+import com.carzis.model.CarMetric;
 import com.carzis.model.HistoryItem;
-import com.carzis.model.PID;
+import com.carzis.obd.PID;
 import com.carzis.obd.OBDReader;
 import com.carzis.obd.OnReceiveDataListener;
 import com.carzis.obd.OnReceiveFaultCodeListener;
@@ -63,8 +60,8 @@ import java.util.Locale;
 import static com.carzis.dialoglist.DialogListActivity.DIALOG_LIST_ACTIVITY_CODE;
 import static com.carzis.dialoglist.DialogListActivity.STRING_EXTRA;
 
-public class MainActivity extends AppCompatActivity implements DashboardToActivityCallbackListener,
-        TroublesToActivityCallbackListener, OnReceiveDataListener, OnReceiveFaultCodeListener, MyCarsView {
+public class MainActivity extends BaseActivity implements DashboardToActivityCallbackListener,
+        TroublesToActivityCallbackListener, OnReceiveDataListener, OnReceiveFaultCodeListener, MyCarsView, HistoryView {
 
     private final String TAG = MainActivity.class.getSimpleName();
 
@@ -94,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
     private Button feedbackBtn;
     private SwitchCompat useAddingToHistorySwitch;
 
+    private HistoryPresenter historyPresenter;
     private LocalRepository localRepository;
     private KeyValueStorage keyValueStorage;
     private CarPresenter carPresenter;
@@ -190,9 +188,9 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
         keyValueStorage = new KeyValueStorage(this);
         obdReader = new OBDReader(this);
         carPresenter = new CarPresenter(keyValueStorage.getUserToken());
+        historyPresenter = new HistoryPresenter(keyValueStorage.getUserToken());
+        historyPresenter.attachView(this);
         carPresenter.attachView(this);
-
-        Log.d(TAG, "onCreate: " + keyValueStorage.getUserToken());
 
 //        obdReader.connectDevice(deviceadress, devicename);
         obdReader.setOnReceiveFaultCodeListener(this);
@@ -283,17 +281,10 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                             SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                             String timeString = timeFormat.format(calendar.getTime());
                             timeText.setText(timeString);
-
-                            if (useAddingToHistorySwitch.isChecked() && carName != null) {
-
-                                Log.d(TAG, "run: save to local: " +  String.valueOf(calendar.get(Calendar.SECOND)));
-                                localRepository
-                                        .addHistoryItem(
-                                                new HistoryItem(carName,
-                                                        PID.CONTROL_MODULE_VOLTAGE.getCommand(),
-                                                        String.valueOf(calendar.get(Calendar.SECOND)),
-                                                        Long.toString(Calendar.getInstance().getTimeInMillis() / 1000L)));
-                            }
+//
+//                            if (useAddingToHistorySwitch.isChecked() && carName != null) {
+//                                historyPresenter.addMetric(getCarIdByName(carName), "010A", calendar.get(Calendar.SECOND) + "");
+//                            }
 
                         });
                     }
@@ -312,11 +303,11 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
 
             if (menuView.getVisibility() == View.VISIBLE) {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setMessage("Вы точно хотите выйти?");
-                alertDialogBuilder.setPositiveButton("Да",
+                alertDialogBuilder.setMessage(R.string.are_your_want_exit);
+                alertDialogBuilder.setPositiveButton(R.string.yes,
                         (arg0, arg1) -> exit());
 
-                alertDialogBuilder.setNegativeButton("Нет",
+                alertDialogBuilder.setNegativeButton(R.string.no,
                         (arg0, arg1) -> {
 
                         });
@@ -370,6 +361,8 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
     private Fragment getFragment(Fragment fragment) {
         return getSupportFragmentManager().findFragmentByTag(fragment.getClass().getSimpleName());
     }
+
+    int troubleCodeInt = 0;
 
     private View.OnClickListener onMenuItemClickListener = view -> {
         switch (view.getId()) {
@@ -429,12 +422,13 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 hideMenu();
                 break;
             }
+
             case R.id.settings_menu_btn: {
                 SettingsActivity.start(this,
                         obdReader.getBluetoothService().getState() == BluetoothService.STATE_CONNECTED);
 //                troubleCodeInt++;
 //                String troubleCode = "P000" + troubleCodeInt;
-//
+
 //                activityToTroublesCallbackListener.onPassTroubleCode(troubleCode);
 ////                showFragment(new ProfileSettingsFragment());
 //                addView.setVisibility(View.INVISIBLE);
@@ -476,12 +470,16 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
         feedbackBtn.setOnClickListener(onMenuItemClickListener);
 
         useAddingToHistorySwitch.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (useAddingToHistorySwitch.isChecked())
-                carPresenter.getCars();
-            else
-                carName = null;
 
-            Toast.makeText(this, useAddingToHistorySwitch.isChecked() + "", Toast.LENGTH_SHORT).show();
+            if (useAddingToHistorySwitch.isChecked()) {
+                carPresenter.getCars();
+            } else {
+                if (carName != null)
+                    Toast.makeText(this, getString(R.string.recording_history_canceled) + carName, Toast.LENGTH_SHORT).show();
+                carName = null;
+            }
+
+//            Toast.makeText(this, useAddingToHistorySwitch.isChecked() + "", Toast.LENGTH_SHORT).show();
         });
 
     }
@@ -493,7 +491,7 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 .duration(300)
 
                 .andAnimate(movingContainer)
-                .translationX(Utility.convertDpToPx(this, 198))
+                .translationX(Utility.convertDpToPx(this, 202))
                 .duration(300)
 
                 .onStart(() -> menuView.setVisibility(View.VISIBLE))
@@ -503,7 +501,7 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
     private void hideMenu() {
         ViewAnimator
                 .animate(menuView)
-                .translationX(-Utility.convertDpToPx(this, 180))
+                .translationX(-Utility.convertDpToPx(this, 202))
                 .duration(300)
 
                 .andAnimate(movingContainer)
@@ -531,18 +529,18 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
     }
 
     @Override
+    public void cleanTroubleCodes() {
+        obdReader.cleanSavedTroubleCodes();
+    }
+
+    @Override
     public void onReceiveData(PID pid, String value) {
         Log.d(TAG, "onReceiveData: PID: " + pid + ", " + value);
         if (activityToDashboardCallbackListener != null)
             activityToDashboardCallbackListener.onPassRealDataToFragment(pid, value);
 
         if (useAddingToHistorySwitch.isChecked() && carName != null) {
-            localRepository
-                    .addHistoryItem(
-                            new HistoryItem(carName,
-                                    pid.getCommand(),
-                                    value,
-                                    Long.toString(Calendar.getInstance().getTimeInMillis() / 1000L)));
+            historyPresenter.addMetric(getCarIdByName(carName), pid.getCommand(), value);
         }
 
     }
@@ -554,26 +552,18 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
             activityToDashboardCallbackListener.onPassRealDataToFragment(PID.VOLTAGE, voltage);
 
         if (useAddingToHistorySwitch.isChecked() && carName != null) {
-//            localRepository
-//                    .addHistoryItem(
-//                            new HistoryItem(carName,
-//                                    PID.VOLTAGE.getCommand(),
-//                                    voltage.replace("V", ""),
-//                                    Long.toString(Calendar.getInstance().getTimeInMillis() / 1000L)));
-
-
-
+            historyPresenter.addMetric(getCarIdByName(carName), PID.VOLTAGE.getCommand(), voltage.replace("V", ""));
         }
     }
 
     @Override
     public void onConnected(String deviceName) {
-        connectToBtMenuBtn.setText(String.format("Подключено к %s", deviceName));
+        connectToBtMenuBtn.setText(String.format(getString(R.string.connected_to), deviceName));
     }
 
     @Override
     public void onDisconnected() {
-        connectToBtMenuBtn.setText("Подкл. к устройству");
+        connectToBtMenuBtn.setText(R.string.connected_to_device);
     }
 
     @Override
@@ -599,7 +589,7 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                     obdReader.connectDevice(deviceAddress, deviceName);
 
                 } else {
-                    Toast.makeText(this, "Отменено пользователем", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.canceled_by_use, Toast.LENGTH_SHORT).show();
                     if (menuView.getVisibility() == View.VISIBLE)
                         hideMenu();
                 }
@@ -609,9 +599,9 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
                 if (resultCode == RESULT_OK) {
                     carName = data.getStringExtra(STRING_EXTRA);
                     carName = carName.substring(carName.indexOf("\"") + 1, carName.lastIndexOf("\""));
-                    Toast.makeText(this, carName, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.starts_recording_for) + carName, Toast.LENGTH_SHORT).show();
                 } else if (resultCode == RESULT_CANCELED) {
-                    Toast.makeText(this, "Отменено пользователем", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.canceled_by_user, Toast.LENGTH_SHORT).show();
                     useAddingToHistorySwitch.setChecked(false);
                 }
                 break;
@@ -638,6 +628,8 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
 
     @Override
     public void onGetCars(List<Car> cars) {
+        userCars = cars;
+
         ArrayList<String> carTitles = new ArrayList<>();
         for (Car car : cars) {
             carTitles.add(car.getBrand() + " " + car.getModel() + "\t\"" + car.getName() + "\"");
@@ -645,30 +637,55 @@ public class MainActivity extends AppCompatActivity implements DashboardToActivi
 
         Log.d(TAG, "onGetCars: " + cars);
 
-        String title = "Выберите авто для записи в историю: ";
+        String title = getString(R.string.choose_car_for_history_recording);
         DialogListActivity.startForResult(this, title, carTitles);
     }
 
+    @Override
+    public void onGetHistoryItems(List<HistoryItem> items, String carName) {
+
+    }
+
+    @Override
+    public void onCarMetricAdded(CarMetric carMetric) {
+//        localRepository
+//                .addHistoryItem(
+//                        new HistoryItem(
+//                                getCarNameById(carMetric.getCarId()),
+//                                carMetric.getMetricCode(),
+//                                carMetric.getMetricValue(),
+//                                Calendar.getInstance().getTimeInMillis() + ""));
+    }
+
+    @Override
+    public void onRemoteRepoError() {
+        useAddingToHistorySwitch.setChecked(false);
+    }
+
+    @Override
+    public void onCarAdded() {
+
+    }
+
     private String getCarIdByName(String name) {
-        for (Car car :userCars) {
+        for (Car car : userCars) {
             if (car.getName().equals(name))
                 return car.getId();
         }
         return "";
     }
 
+    private String getCarNameById(String id) {
+        for (Car car : userCars) {
+            if (car.getId().equals(id))
+                return car.getName();
+        }
+        return "";
+    }
+
+
     @Override
     public void onDeleteCar() {
-
-    }
-
-    @Override
-    public void showLoading(boolean load) {
-
-    }
-
-    @Override
-    public void showError(AppError appError) {
 
     }
 

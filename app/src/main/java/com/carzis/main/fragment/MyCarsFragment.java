@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,9 +14,10 @@ import android.widget.EditText;
 
 import com.carzis.R;
 import com.carzis.additionalscreen.fragment.AddDeviceFragment;
+import com.carzis.base.BaseFragment;
 import com.carzis.main.adapter.MyCarsAdapter;
+import com.carzis.main.presenter.CarPresenter;
 import com.carzis.main.view.MyCarsView;
-import com.carzis.model.AppError;
 import com.carzis.model.Car;
 import com.carzis.pidlist.PidListActvity;
 import com.carzis.repository.local.database.LocalRepository;
@@ -31,7 +31,7 @@ import java.util.Objects;
 /**
  * Created by Alexandr.
  */
-public class MyCarsFragment extends Fragment implements MyCarsView {
+public class MyCarsFragment extends BaseFragment implements MyCarsView {
 
     private final String TAG = AddDeviceFragment.class.getSimpleName();
 
@@ -39,12 +39,11 @@ public class MyCarsFragment extends Fragment implements MyCarsView {
     private View searchViewBtn;
     private EditText searchStrEditText;
 
-
+    private CarPresenter carPresenter;
     private LocalRepository localRepository;
     private MyCarsAdapter myCarsAdapter;
 
     private KeyValueStorage keyValueStorage;
-
 
     @Nullable
     @Override
@@ -56,10 +55,12 @@ public class MyCarsFragment extends Fragment implements MyCarsView {
         searchStrEditText = rootView.findViewById(R.id.search_edtxt);
 
         keyValueStorage = new KeyValueStorage(Objects.requireNonNull(getContext()));
+        carPresenter = new CarPresenter(keyValueStorage.getUserToken());
+        carPresenter.attachView(this);
         localRepository = new LocalRepository(Objects.requireNonNull(getContext()));
         localRepository.attachView(this);
 
-        localRepository.getAllCars();
+//        localRepository.getAllCars();
 
         myCarsAdapter = new MyCarsAdapter(getContext());
         myCarsAdapter.setOnItemClickListener(
@@ -79,6 +80,8 @@ public class MyCarsFragment extends Fragment implements MyCarsView {
 
         searchViewBtn.setOnClickListener(view -> myCarsAdapter.search(searchStrEditText.getText().toString()));
 
+//        carPresenter.getCars();
+
         return rootView;
     }
 
@@ -86,7 +89,7 @@ public class MyCarsFragment extends Fragment implements MyCarsView {
     public void onResume() {
         super.onResume();
 
-        localRepository.getAllCars();
+        carPresenter.getCars();
     }
 
     @Override
@@ -105,17 +108,18 @@ public class MyCarsFragment extends Fragment implements MyCarsView {
     }
 
     @Override
+    public void onRemoteRepoError() {
+        localRepository.getAllCars();
+    }
+
+    @Override
+    public void onCarAdded() {
+
+    }
+
+    @Override
     public void onDeleteCar() {
 
     }
 
-    @Override
-    public void showLoading(boolean load) {
-
-    }
-
-    @Override
-    public void showError(AppError appError) {
-
-    }
 }

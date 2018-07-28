@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.carzis.R;
 import com.carzis.main.MainActivity;
 import com.carzis.obd.OBDReader;
 
@@ -32,6 +33,8 @@ public class BluetoothService {
     public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
     public static final int STATE_CONNECTED = 3;  // now connected to a remote device
     //public static final UUID BluetoothSerialUuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+    private Context context;
 
     //INSECURE	"8ce255c0-200a-11e0-ac64-0800200c9a66"
     //SECURE	"fa87c0d0-afac-11de-8a39-0800200c9a66"
@@ -61,6 +64,7 @@ public class BluetoothService {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mBTHandler = handler;
+        this.context = context;
     }
 
     /**
@@ -228,7 +232,7 @@ public class BluetoothService {
         // Send a failure phone back to the Activity
         Message msg = mBTHandler.obtainMessage(OBDReader.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(MainActivity.TOAST, "Не получилось подключится к устройству");
+        bundle.putString(MainActivity.TOAST, context.getString(R.string.cannot_connect_to_device));
         msg.setData(bundle);
         mBTHandler.sendMessage(msg);
         setState(STATE_NONE);
@@ -244,7 +248,7 @@ public class BluetoothService {
         // Send a failure phone back to the Activity
         Message msg = mBTHandler.obtainMessage(OBDReader.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(MainActivity.TOAST, "Соеденение потеряно");
+        bundle.putString(MainActivity.TOAST, context.getString(R.string.connection_lost));
         msg.setData(bundle);
         mBTHandler.sendMessage(msg);
 

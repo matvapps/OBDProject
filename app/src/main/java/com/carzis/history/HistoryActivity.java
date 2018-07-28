@@ -1,25 +1,30 @@
 package com.carzis.history;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.carzis.R;
-import com.carzis.model.AppError;
+import com.carzis.base.BaseActivity;
+import com.carzis.model.CarMetric;
 import com.carzis.model.HistoryItem;
 import com.carzis.repository.local.database.LocalRepository;
 import com.carzis.repository.local.prefs.KeyValueStorage;
+import com.carzis.util.custom.view.MyDatePickerFragment;
+import com.carzis.util.custom.view.MyTimePickerFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.model.Axis;
@@ -30,7 +35,7 @@ import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.LineChartView;
 
-public class HistoryActivity extends AppCompatActivity implements HistoryView {
+public class HistoryActivity extends BaseActivity implements HistoryView, View.OnClickListener {
 
     public final String TAG = HistoryActivity.class.getSimpleName();
 
@@ -42,6 +47,8 @@ public class HistoryActivity extends AppCompatActivity implements HistoryView {
     private LineChartView chart;
     private TextView timeTextView;
     private View backBtn;
+    private EditText firstDate;
+    private EditText secondDate;
 
     private static final String CAR_NAME = "car_name";
     private static final String PID_CODE = "pid_code";
@@ -50,6 +57,9 @@ public class HistoryActivity extends AppCompatActivity implements HistoryView {
     private String carName;
     private String pidCode;
     private String carId;
+
+    private Calendar firstTime = null;
+    private Calendar secondTime = null;
 
     public static void start(Context context, String carName, String carId, String pidCode) {
         Intent intent = new Intent(context, HistoryActivity.class);
@@ -71,24 +81,26 @@ public class HistoryActivity extends AppCompatActivity implements HistoryView {
         chart = findViewById(R.id.chart);
         timeTextView = findViewById(R.id.time_text_view);
         backBtn = findViewById(R.id.back_btn);
+        firstDate = findViewById(R.id.first_date);
+        secondDate = findViewById(R.id.second_date);
+
+        firstDate.setFocusable(false);
+        secondDate.setFocusable(false);
+
+        firstDate.setOnClickListener(this);
+        secondDate.setOnClickListener(this);
 
         backBtn.setOnClickListener(view -> finish());
-
-        List<Line> values = new ArrayList<Line>();
 
         keyValueStorage = new KeyValueStorage(this);
         localRepository = new LocalRepository(this);
         historyPresenter = new HistoryPresenter(keyValueStorage.getUserToken());
         historyPresenter.attachView(this);
         localRepository.attachView(this);
-        Calendar now = Calendar.getInstance();
 
-//        localRepository.getAllHistoryItemsByCar(carName);
-        historyPresenter.getCarMetric(carName,"1", "speed");
-//        generateData(new ArrayList<HistoryItem>());
+        chart.post(this::onTimeUpdate);
 
         startTimeThread();
-
     }
 
     public void generateData(List<HistoryItem> items) {
@@ -127,13 +139,17 @@ public class HistoryActivity extends AppCompatActivity implements HistoryView {
         for (int i = 0; i < items.size(); i++) {
             values.add(new PointValue(i, Float.parseFloat(items.get(i).getValue())));
             if (isOneDay) {
-                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-                Log.d(TAG, "generateData: " + sdf.format(itemLabels.get(i).getTime()));
-//                Toast.makeText(this, itemLabels.get(i).get(Calendar.SECOND), Toast.LENGTH_SHORT).show();
-                axisValues.add(new AxisValue(i).setLabel(sdf.format(itemLabels.get(i).getTime())));
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                Calendar time = itemLabels.get(i);
+
+                Log.d(TAG, "generateData: " + TimeZone.getDefault().getID());
+
+                axisValues.add(new AxisValue(i).setLabel(sdf.format(time.getTime())));
             } else {
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM hh:mm:ss");
-                axisValues.add(new AxisValue(i).setLabel(sdf.format(itemLabels.get(i).getTime())));
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM HH:mm:ss");
+                Calendar time = itemLabels.get(i);
+
+                axisValues.add(new AxisValue(i).setLabel(sdf.format(time.getTime())));
             }
         }
 
@@ -268,6 +284,16 @@ public class HistoryActivity extends AppCompatActivity implements HistoryView {
         generateData(items);
     }
 
+    @Override
+    public void onCarMetricAdded(CarMetric carMetric) {
+
+    }
+
+    @Override
+    public void onRemoteRepoError() {
+
+    }
+
     private void startTimeThread() {
         Thread thread = new Thread() {
             @Override
@@ -290,13 +316,89 @@ public class HistoryActivity extends AppCompatActivity implements HistoryView {
         thread.start();
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
-    public void showLoading(boolean load) {
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.first_date: {
+                MyTimePickerFragment myTimePickerFragment = new MyTimePickerFragment();
+                myTimePickerFragment.setTimeChangeListener(timePicker -> {
+                    ((EditText) view)
+                            .setText(String.format("%d:%d", timePicker.getCurrentHour(), timePicker.getCurrentMinute()));
+
+                    firstTime =  Calendar.getInstance();
+                    firstTime.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
+                    firstTime.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+
+                    MyDatePickerFragment myDatePickerFragment = new MyDatePickerFragment();
+                    myDatePickerFragment.setDateChangeListener(datePicker -> {
+                        String str = ((EditText) view).getText().toString();
+                        ((EditText) view)
+                                .setText(String.format("%s  %d/%d/%d", str, datePicker.getDayOfMonth(), datePicker.getMonth() + 1, datePicker.getYear()));
+
+                        firstTime.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+                        firstTime.set(Calendar.MONTH, datePicker.getMonth());
+                        firstTime.set(Calendar.YEAR, datePicker.getYear());
+
+                        onTimeUpdate();
+
+                    });
+                    myDatePickerFragment.show(getSupportFragmentManager(), "date picker");
+                });
+
+                myTimePickerFragment.show(getSupportFragmentManager(), "time picker");
+                break;
+            }
+            case R.id.second_date: {
+                MyTimePickerFragment myTimePickerFragment = new MyTimePickerFragment();
+                myTimePickerFragment.setTimeChangeListener(timePicker -> {
+                    ((EditText) view)
+                            .setText(String.format("%d:%d", timePicker.getCurrentHour(), timePicker.getCurrentMinute()));
+
+                    secondTime =  Calendar.getInstance();
+                    secondTime.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
+                    secondTime.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+
+                    MyDatePickerFragment myDatePickerFragment = new MyDatePickerFragment();
+                    myDatePickerFragment.setDateChangeListener(datePicker -> {
+                        String str = ((EditText) view).getText().toString();
+                        ((EditText) view)
+                                .setText(String.format("%s  %d/%d/%d", str, datePicker.getDayOfMonth(), datePicker.getMonth() + 1, datePicker.getYear()));
+
+                        secondTime.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+                        secondTime.set(Calendar.MONTH, datePicker.getMonth());
+                        secondTime.set(Calendar.YEAR, datePicker.getYear());
+
+                        onTimeUpdate();
+
+                    });
+                    myDatePickerFragment.show(getSupportFragmentManager(), "date picker");
+                });
+
+                myTimePickerFragment.show(getSupportFragmentManager(), "time picker");
+                break;
+            }
+        }
+    }
+
+    private void onTimeUpdate() {
+        long firstMillis;
+        long secondMillis;
+
+        if (firstTime == null)
+            firstMillis = 0;
+        else
+            firstMillis = firstTime.getTimeInMillis() / 1000L;
+
+
+        if (secondTime == null)
+            secondMillis = 999999999999999999L;
+        else
+            secondMillis = secondTime.getTimeInMillis() / 1000L;
+
+
+        historyPresenter.getCarMetric(carName, carId, pidCode, String.valueOf(firstMillis), String.valueOf(secondMillis));
 
     }
 
-    @Override
-    public void showError(AppError appError) {
-
-    }
 }

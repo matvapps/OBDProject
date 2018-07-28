@@ -56,7 +56,7 @@ public class ConnectMainActivity extends AppCompatActivity {
     final List<String> commandslist = new ArrayList<String>();
     private final List<Double> avgconsumption = new ArrayList<Double>();
     final List<String> troubleCodesArray = new ArrayList<String>();
-    // init String it can be change by user TODO:
+
     private String[] initializeCommands;
 
 
@@ -279,7 +279,6 @@ public class ConnectMainActivity extends AppCompatActivity {
         avgconsumption.clear();
 //        mConversationArrayAdapter.clear();
 
-        // TODO:
 //        resetgauges();
 
         sendEcuMessage(RESET);
@@ -336,7 +335,6 @@ public class ConnectMainActivity extends AppCompatActivity {
                 return;
             }
 
-//            TODO:
 //            if (commandmode) {
 //                getFaultInfo(tmpmsg);
 //                return;
@@ -366,7 +364,6 @@ public class ConnectMainActivity extends AppCompatActivity {
         }
 
         if (VoltText != null) {
-            // TODO: update volt item in dashboard fragment
 //            dashboardItemsAdapter.updateItem(
 //                    new DashboardItem(VoltText, DashboardItem.DashboardDevice.VOLTAGE));
         }
@@ -503,17 +500,14 @@ public class ConnectMainActivity extends AppCompatActivity {
                         Log.e(TAG, "Fault Code: " + substr + " : " + faultCode + " desc: " + faultDesc);
 
                         if (faultCode != null && faultDesc != null) {
-//                            TODO: found fault device_id
 //                            mConversationArrayAdapter.add(mConnectedDeviceName + ":  TroubleCode -> " + faultCode + "\n" + faultDesc);
                         } else if (faultCode != null && faultDesc == null) {
-                            // TODO: found fault device_id
 //                            mConversationArrayAdapter.add(mConnectedDeviceName + ":  TroubleCode -> " + faultCode +
 //                                    "\n" + "Definition not found for device_id: " + faultCode);
                         }
                     }
                 } else {
                     faultCode = "No error found...";
-                    // TODO:
 //                    mConversationArrayAdapter.add(mConnectedDeviceName + ":  TroubleCode -> " + faultCode);
                 }
             }
@@ -613,7 +607,6 @@ public class ConnectMainActivity extends AppCompatActivity {
                 }
             }
             m_getPids = true;
-//            TODO:
 //            mConversationArrayAdapter.add(mConnectedDeviceName + ": " + supportedPID.toString());
             whichCommand = 0;
             sendEcuMessage("ATRV");
@@ -639,7 +632,6 @@ public class ConnectMainActivity extends AppCompatActivity {
                 int calcLoad = (int) val;
 
 //                engineLoad.setText(Integer.toString(calcLoad) + " %");
-//                TODO:
 //                mConversationArrayAdapter.add("Engine Load: " + Integer.toString(calcLoad) + " %");
 
                 String consumption = null;
@@ -654,7 +646,6 @@ public class ConnectMainActivity extends AppCompatActivity {
 
                 }
 //                Fuel.setText(consumption + " - " + String.format("%10.1f", calculateAverage(avgconsumption)).trim() + " l/h");
-//                TODO:
 //                mConversationArrayAdapter.add("Fuel Consumption: " + consumption + " - " + String.format("%10.1f", calculateAverage(avgconsumption)).trim() + " l/h");
 
                 break;
@@ -666,7 +657,6 @@ public class ConnectMainActivity extends AppCompatActivity {
                 coolantTemp = tempC;
 //                coolantTemperature.setText(Integer.toString(coolantTemp) + " C°");
 //                mConversationArrayAdapter.add("Enginetemp: " + Integer.toString(tempC) + " C°");
-                //TODO:
                 Log.d(TAG, "CoolantTemp: " + tempC);
                 // dashboardItemsAdapter.updateItem(new DashboardItem(tempC, DashboardItem.DashboardDevice.COOLANT_TEMP));
                 break;
@@ -674,10 +664,8 @@ public class ConnectMainActivity extends AppCompatActivity {
             case 11://PID(0B)
 
                 // A
-//                TODO:
 //                mConversationArrayAdapter.add("Intake Man Pressure: " + Integer.toString(A) + " kPa");
                 Log.d(TAG, "Intake Man Pressure: " + A);
-                // TODO
 //                dashboardItemsAdapter.updateItem(new DashboardItem(String.valueOf(A), DashboardItem.DashboardDevice.ENGINE_OIL_PRESSURE));
 
                 break;
@@ -689,7 +677,6 @@ public class ConnectMainActivity extends AppCompatActivity {
                 intval = (int) val;
                 rpmval = intval;
                 Log.d(TAG, "Tachometer: " + intval);
-//                TODO
 //                tachometer.moveTo(intval);
 
                 break;
@@ -699,7 +686,6 @@ public class ConnectMainActivity extends AppCompatActivity {
 
                 // A
                 Log.d(TAG, "Speedometer : " + A);
-//                TODO:
 //                speedometer.moveTo(A);
 
                 break;
@@ -710,7 +696,6 @@ public class ConnectMainActivity extends AppCompatActivity {
                 tempC = A - 40;
                 intakeairtemp = tempC;
 //                airTemperature.setText(Integer.toString(intakeairtemp) + " C°");
-//                TODO:
 //                mConversationArrayAdapter.add("Intakeairtemp: " + Integer.toString(intakeairtemp) + " C°");
                 Log.d(TAG, "Intakeairtemp: " + intakeairtemp);
 //                if (dashboardItemsAdapter != null)
@@ -724,7 +709,6 @@ public class ConnectMainActivity extends AppCompatActivity {
                 intval = (int) val;
 //                Maf.setText(Integer.toString(intval) + " g/s");
                 Log.d(TAG, "MAF AIR FLOW: " + A);
-//                TODO:
 //                mConversationArrayAdapter.add("Maf Air Flow: " + Integer.toString(intval) + " g/s");
 
                 break;
@@ -734,7 +718,6 @@ public class ConnectMainActivity extends AppCompatActivity {
                 //A*100/255
                 val = A * 100 / 255;
                 intval = (int) val;
-//                TODO:
 //                mConversationArrayAdapter.add(" Throttle position: " + Integer.toString(intval) + " %");
 
                 break;
@@ -744,7 +727,6 @@ public class ConnectMainActivity extends AppCompatActivity {
                 // ((A*256)+B)*0.079
                 val = ((A * 256) + B) * 0.079;
                 intval = (int) val;
-//                TODO:
 //                mConversationArrayAdapter.add("Fuel Rail Pressure: " + Integer.toString(intval) + " kPa");
                 Log.d(TAG, "Fuel Rail pressure: " + Integer.toString(intval) + " kPa");
                 break;
@@ -752,7 +734,6 @@ public class ConnectMainActivity extends AppCompatActivity {
             case 47: {
 
                 int fuelLevel = A * 100 / 255;
-//                TODO:
 //                dashboardItemsAdapter.updateItem(new DashboardItem(String.valueOf(fuelLevel), DashboardItem.DashboardDevice.FUEL_AMOUNT));
                 break;
             }
@@ -762,7 +743,6 @@ public class ConnectMainActivity extends AppCompatActivity {
                 //(256*A)+B km
                 val = (A * 256) + B;
                 intval = (int) val;
-//                TODO:
 //                mConversationArrayAdapter.add("Distance traveled: " + Integer.toString(intval) + " km");
                 Log.d(TAG, "Distance traveled: " + Integer.toString(intval) + " km");
                 break;
@@ -772,10 +752,8 @@ public class ConnectMainActivity extends AppCompatActivity {
                 // A-40 [DegC]
                 tempC = A - 40;
                 ambientairtemp = tempC;
-//                TODO:
 //                mConversationArrayAdapter.add("Ambientairtemp: " + Integer.toString(ambientairtemp) + " C°");
                 Log.d(TAG, "Ambientairtemp: " + Integer.toString(ambientairtemp) + " C°");
-//                TODO:
 //                dashboardItemsAdapter.updateItem(new DashboardItem(String.valueOf(ambientairtemp), DashboardItem.DashboardDevice.INTAKE_AIR_TEMP));
 
                 break;
@@ -785,7 +763,6 @@ public class ConnectMainActivity extends AppCompatActivity {
                 //A-40
                 tempC = A - 40;
                 engineoiltemp = tempC;
-//                TODO:
 //                mConversationArrayAdapter.add("Engineoiltemp: " + Integer.toString(engineoiltemp) + " C°");
                 Log.d(TAG, "Engineoiltemp: " + Integer.toString(ambientairtemp) + " C°");
 
@@ -854,7 +831,6 @@ public class ConnectMainActivity extends AppCompatActivity {
                     byte[] writeBuf = (byte[]) msg.obj;
                     String writeMessage = new String(writeBuf);
 
-                    // TODO:
 //                    if (commandmode || !initialized) {
 //                        mConversationArrayAdapter.add("Command:  " + writeMessage);
 //                    }

@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
 import com.carzis.R;
-import com.carzis.model.PID;
+import com.carzis.obd.PID;
 
 /**
  * Created by Alexandr.

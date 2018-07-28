@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.carzis.R;
-import com.carzis.model.PID;
 import com.carzis.obd.PidItem;
 import com.carzis.util.Utility;
 

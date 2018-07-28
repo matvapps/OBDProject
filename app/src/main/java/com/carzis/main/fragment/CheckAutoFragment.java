@@ -3,7 +3,6 @@ package com.carzis.main.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +14,12 @@ import android.widget.Toast;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
-import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.carzis.R;
+import com.carzis.base.BaseFragment;
 import com.carzis.main.presenter.CheckAutoPresenter;
 import com.carzis.main.view.CheckAutoView;
-import com.carzis.model.AppError;
 import com.carzis.model.response.InfoResponse;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 import com.github.mmin18.widget.RealtimeBlurView;
@@ -31,7 +29,7 @@ import java.util.List;
 /**
  * Created by Alexandr.
  */
-public class CheckAutoFragment extends Fragment implements View.OnClickListener, CheckAutoView, PurchasesUpdatedListener {
+public class CheckAutoFragment extends BaseFragment implements View.OnClickListener, CheckAutoView, PurchasesUpdatedListener {
 
     private static final String TAG = CheckAutoFragment.class.getSimpleName();
 
@@ -47,6 +45,7 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
     private final int CHECK_CAR_BY_NUM = 1;
     private final int CHECK_CAR_BY_VIN = 2;
 
+    private final String USE_BLUR = "use_blur";
     private final String CURRENT_CHECK = "current_check";
     private final String CURRENT_VALUE = "current_value";
     private final String CURRENT_RESPONSE = "current_response";
@@ -58,6 +57,7 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
     private String currentValue;
     private String currentResponse;
     private int currentCheck;
+    private boolean useBlur = true;
 
     @Nullable
     @Override
@@ -89,6 +89,8 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
             @Override
             public void onBillingSetupFinished(@BillingClient.BillingResponse int billingResponseCode) {
                 if (billingResponseCode == BillingClient.BillingResponse.OK) {
+
+
                     // The billing client is ready. You can query purchases here.
                 }
             }
@@ -115,6 +117,13 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
 
             carInfoContent.setText(savedInstanceState.getString(CURRENT_RESPONSE));
             edtxt.setText(savedInstanceState.getString(CURRENT_VALUE));
+            useBlur = savedInstanceState.getBoolean(USE_BLUR);
+
+            if (useBlur) {
+                blurView.setVisibility(View.VISIBLE);
+            } else {
+                blurView.setVisibility(View.GONE);
+            }
         }
 
         return rootView;
@@ -169,40 +178,41 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onCheckAutoByVin(InfoResponse infoResponse) {
         Log.d(TAG, "onCheckAutoByVin: ");
-        carInfoContent.setText(infoResponse.toString());
         currentResponse = infoResponse.toString();
+        currentResponse = currentResponse.replaceAll("\\[", "");
+        currentResponse = currentResponse.replaceAll("]", "");
+        carInfoContent.setText(currentResponse);
         blurView.setVisibility(View.VISIBLE);
 
-        BillingFlowParams flowParams = BillingFlowParams.newBuilder()
-                .setSku("com.carzis.product.checkauto")
-                .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
-                .build();
-        mBillingClient.launchBillingFlow(getActivity(), flowParams);
-
+        if (infoResponse.getHistory() == null) {
+            Toast.makeText(getContext(), R.string.no_info_about_car, Toast.LENGTH_SHORT).show();
+        } else {
+            BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                    .setSku("com.carzis.product.autocheck")
+                    .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
+                    .build();
+            mBillingClient.launchBillingFlow(getActivity(), flowParams);
+        }
     }
 
     @Override
     public void onCheckAutoByNum(InfoResponse infoResponse) {
         Log.d(TAG, "onCheckAutoByNum: ");
-        carInfoContent.setText(infoResponse.toString());
         currentResponse = infoResponse.toString();
+        currentResponse = currentResponse.replaceAll("\\[", "");
+        currentResponse = currentResponse.replaceAll("]", "");
+        carInfoContent.setText(currentResponse);
         blurView.setVisibility(View.VISIBLE);
 
-        BillingFlowParams flowParams = BillingFlowParams.newBuilder()
-                .setSku("com.carzis.product.checkauto")
-                .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
-                .build();
-        mBillingClient.launchBillingFlow(getActivity(), flowParams);
-    }
-
-    @Override
-    public void showLoading(boolean load) {
-
-    }
-
-    @Override
-    public void showError(AppError appError) {
-
+        if (infoResponse.getHistory() == null) {
+            Toast.makeText(getContext(), R.string.no_info_about_car, Toast.LENGTH_SHORT).show();
+        } else {
+            BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                    .setSku("com.carzis.product.autocheck")
+                    .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
+                    .build();
+            mBillingClient.launchBillingFlow(getActivity(), flowParams);
+        }
     }
 
     @Override
@@ -214,14 +224,16 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        useBlur = blurView.getVisibility() == View.VISIBLE;
+
         outState.putInt(CURRENT_CHECK, getCheckType());
         outState.putString(CURRENT_RESPONSE, currentResponse);
         outState.putString(CURRENT_VALUE, edtxt.getText().toString());
+        outState.putBoolean(USE_BLUR, useBlur);
     }
 
     @Override
     public void onPurchasesUpdated(int responseCode, @Nullable List<Purchase> purchases) {
-        Toast.makeText(getContext(), "onPurchaseUpdated" + responseCode, Toast.LENGTH_SHORT).show();
         if (responseCode == BillingClient.BillingResponse.OK
                 && purchases != null) {
             for (Purchase purchase : purchases) {
@@ -230,7 +242,6 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
 
         } else if (responseCode == BillingClient.BillingResponse.ITEM_ALREADY_OWNED
                 && purchases != null) {
-            Toast.makeText(getContext(), "Item already owned", Toast.LENGTH_SHORT).show();
             for (Purchase purchase : purchases) {
                 handlePurchase(purchase);
             }
@@ -241,14 +252,10 @@ public class CheckAutoFragment extends Fragment implements View.OnClickListener,
 
     private void handlePurchase(Purchase purchase) {
         Log.d(TAG, "handlePurchase: " + purchase.getOrderId());
-        if (purchase.getOrderId().equals("com.carzis.product.checkauto")) {
+        if (purchase.getSku().equals("com.carzis.product.autocheck")) {
 
-            mBillingClient.consumeAsync(purchase.getPurchaseToken(), new ConsumeResponseListener() {
-                @Override
-                public void onConsumeResponse(int responseCode, String purchaseToken) {
-                    Toast.makeText(getContext(), "DELETE BLUR", Toast.LENGTH_SHORT).show();
-                    blurView.setVisibility(View.GONE);
-                }
+            mBillingClient.consumeAsync(purchase.getPurchaseToken(), (responseCode, purchaseToken) -> {
+                blurView.setVisibility(View.GONE);
             });
 
         }

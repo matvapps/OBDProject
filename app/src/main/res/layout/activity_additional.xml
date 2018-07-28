@@ -8,6 +8,12 @@
     android:background="#010C1E"
     tools:context=".additionalscreen.AdditionalActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_main"/>
+
     <LinearLayout
         android:id="@+id/background"
         android:layout_width="match_parent"
@@ -19,11 +25,10 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"/>
 
-        <FrameLayout
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
+            <FrameLayout
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
     </LinearLayout>
 

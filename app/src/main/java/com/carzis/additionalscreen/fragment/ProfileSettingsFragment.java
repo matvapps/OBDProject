@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,9 +21,9 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.carzis.R;
+import com.carzis.base.BaseFragment;
 import com.carzis.main.presenter.ProfilePresenter;
 import com.carzis.main.view.ProfileView;
-import com.carzis.model.AppError;
 import com.carzis.model.response.ProfileResponse;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 import com.carzis.util.custom.view.CustomSpinnerAdapter;
@@ -51,7 +50,7 @@ import okhttp3.RequestBody;
 /**
  * Created by Alexandr.
  */
-public class ProfileSettingsFragment extends Fragment implements ProfileView {
+public class ProfileSettingsFragment extends BaseFragment implements ProfileView {
 
     private static final String TAG = ProfileSettingsFragment.class.getSimpleName();
     private static final int GALLERY_REQUEST = 100;
@@ -111,12 +110,7 @@ public class ProfileSettingsFragment extends Fragment implements ProfileView {
                 policyChbx.setVisibility(View.VISIBLE);
         });
 
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onSave();
-            }
-        });
+        saveBtn.setOnClickListener(view -> onSave());
 
         addUserImage.setOnClickListener(view -> {
             Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
@@ -135,9 +129,6 @@ public class ProfileSettingsFragment extends Fragment implements ProfileView {
         initView(rootView);
 
         keyValueStorage = new KeyValueStorage(Objects.requireNonNull(getContext()));
-
-        profilePresenter = new ProfilePresenter(keyValueStorage.getUserToken());
-        profilePresenter.attachView(this);
         daySpinnerAdapter = new CustomSpinnerAdapter(getContext(), getDays());
         monthSpinnerAdapter = new CustomSpinnerAdapter(getContext(), getMonths());
         yearSpinnerAdapter = new CustomSpinnerAdapter(getContext(), getYears());
@@ -146,17 +137,15 @@ public class ProfileSettingsFragment extends Fragment implements ProfileView {
         daySpinner.setAdapter(daySpinnerAdapter);
         yearSpinner.setAdapter(yearSpinnerAdapter);
 
-        profilePresenter.loadProfile();
+        profilePresenter = new ProfilePresenter(keyValueStorage.getUserToken());
+        profilePresenter.attachView(this);
 
-//        monthSpinnerAdapter.setItems(getMonths());
-//        daySpinnerAdapter.setItems(getDays());
-//        yearSpinnerAdapter.setItems(getYears());
         return rootView;
     }
 
     private List<String> getMonths() {
         List<String> monthsList = new ArrayList<>();
-        monthsList.add("Месяц");
+        monthsList.add(getString(R.string.month));
 
         int[] months = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 
@@ -174,7 +163,7 @@ public class ProfileSettingsFragment extends Fragment implements ProfileView {
 
     private List<String> getDays() {
         List<String> daysList = new ArrayList<>();
-        daysList.add("День");
+        daysList.add(getString(R.string.day));
 
         for (int i = 1; i < 32; i++) {
             daysList.add(String.valueOf(i));
@@ -185,7 +174,7 @@ public class ProfileSettingsFragment extends Fragment implements ProfileView {
 
     private List<String> getYears() {
         List<String> yearList = new ArrayList<>();
-        yearList.add("Год");
+        yearList.add(getString(R.string.year));
 
         int startYear = Calendar.getInstance().get(Calendar.YEAR);
 
@@ -215,7 +204,7 @@ public class ProfileSettingsFragment extends Fragment implements ProfileView {
         if (email.equals(""))
             email = null;
 
-        if (!month.equals("Месяц") && !day.equals("День") && !year.equals("Год")) {
+        if (!month.equals(getString(R.string.month)) && !day.equals(getString(R.string.day)) && !year.equals(getString(R.string.year))) {
             Log.d(TAG, "onSave: " + monthSpinner.getSelectedItemPosition());
             bday.set(Calendar.MONTH, monthSpinner.getSelectedItemPosition() - 1);
             bday.set(Calendar.DAY_OF_MONTH, daySpinner.getSelectedItemPosition());
@@ -325,18 +314,20 @@ public class ProfileSettingsFragment extends Fragment implements ProfileView {
         String secondName = profileResponse.getSecondName();
         String email = profileResponse.getEmail();
 
-        if (firstName.equals("null"))
+        if (firstName == null || firstName.equals("null"))
             firstName = "";
-        if (secondName.equals("null"))
+        if (secondName == null || secondName.equals("null"))
             secondName = "";
-        if (email.equals("null"))
+        if (email == null || email.equals("null"))
             email = "";
+
+
         nameEditText.setText(firstName);
         surnameEditText.setText(secondName);
-        emailEditText.setText(profileResponse.getEmail());
+        emailEditText.setText(email);
 
         String bday = profileResponse.getBirthday();
-        if (bday.equals("null")) {
+        if (bday == null || bday.equals("null")) {
             bday = "";
         } else {
             Calendar cal = Calendar.getInstance();
@@ -352,6 +343,14 @@ public class ProfileSettingsFragment extends Fragment implements ProfileView {
             yearSpinner.setSelection(getYearIndex(String.valueOf(cal.get(Calendar.YEAR))));
 
         }
+
+        if (profileResponse.getPhotoUrl() != null)
+            if (!profileResponse.getPhotoUrl().equals("null")) {
+                String imageUrl = "http://carzis.com" + profileResponse.getPhotoUrl();
+                Picasso.get().load(imageUrl).into(userImage);
+                userImage.setPadding(0, 0, 0, 0);
+            }
+
     }
 
     private int getYearIndex(String year) {
@@ -370,12 +369,8 @@ public class ProfileSettingsFragment extends Fragment implements ProfileView {
     }
 
     @Override
-    public void showLoading(boolean load) {
-
-    }
-
-    @Override
-    public void showError(AppError appError) {
-
+    public void onResume() {
+        super.onResume();
+        profilePresenter.loadProfile();
     }
 }

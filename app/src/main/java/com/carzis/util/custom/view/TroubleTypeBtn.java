@@ -74,7 +74,7 @@ public class TroubleTypeBtn extends LinearLayout {
 
     public void setSelected(boolean selected) {
         if (selected) {
-            background.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.button_blue_rect));
+            background.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.button_blue_rect_selector));
             imageView.setAlpha(1f);
             textView.setTextColor(Color.WHITE);
         } else {

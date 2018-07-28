@@ -142,12 +142,12 @@ public class LocalRepository {
 
             @Override
             public void onComplete() {
-
+                myCarsView.onCarAdded();
             }
 
             @Override
             public void onError(Throwable e) {
-
+                Log.d(TAG, "onError: " + e.getMessage());
             }
         });
     }

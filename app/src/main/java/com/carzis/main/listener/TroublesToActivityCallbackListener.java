@@ -5,4 +5,5 @@ package com.carzis.main.listener;
  */
 public interface TroublesToActivityCallbackListener {
     void getTroubleCodes();
+    void cleanTroubleCodes();
 }

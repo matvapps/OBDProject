@@ -39,7 +39,7 @@ public class TutorialItemFragment extends Fragment {
         subTitleView = rootView.findViewById(R.id.sub_title_text);
         backgroundImage = rootView.findViewById(R.id.background);
 
-        backgroundImage.setBackgroundResource(imageID);
+        backgroundImage.setImageResource(imageID);
         titleView.setText(title);
         subTitleView.setText(subTitle);
 
@@ -49,7 +49,7 @@ public class TutorialItemFragment extends Fragment {
             title = savedInstanceState.getString(CURRENT_TITLE);
             subTitle = savedInstanceState.getString(CURRENT_SUBTITLE);
 
-            backgroundImage.setBackgroundResource(imageID);
+            backgroundImage.setImageResource(imageID);
             titleView.setText(title);
             subTitleView.setText(subTitle);
         }

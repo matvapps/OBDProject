@@ -5,6 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:id="@+id/clear_fault_codes"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_blue_rect_selector"
+        android:text="Очистить"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+        app:fontFamily="@font/gte_esti_pto_text_medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <TextView
         app:fontFamily="@font/gte_esti_pto_text_regular"
         android:id="@+id/error_list_txt"
@@ -13,7 +30,7 @@
         android:layout_marginLeft="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
-        android:text="Список ошибок"
+        android:text="@string/error_list"
         android:textColor="@android:color/white"
         android:textSize="17sp"
         android:textStyle="bold"
@@ -27,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
-        android:text="Выберите категорию чтоб посмотреть список ошибок"
+        android:text="@string/category_error_list"
         android:textColor="#ffffff"
         android:textSize="9sp"
         app:layout_constraintStart_toStartOf="@+id/error_list_txt"
@@ -102,6 +119,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="38dp">
 
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/trouble_codes_list"
                 android:layout_width="match_parent"
@@ -136,22 +154,16 @@
 
             </ScrollView>
 
+
+            <com.github.mmin18.widget.RealtimeBlurView
+                android:id="@+id/blur_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:realtimeBlurRadius="10dp"
+                app:realtimeOverlayColor="#00ffffff" />
+
+
         </FrameLayout>
-
-
-        <!--<ScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_marginTop="38dp"-->
-        <!--android:layout_height="match_parent">-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/content"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:textColor="@android:color/white"-->
-        <!--android:textSize="14sp"-->
-        <!--android:layout_height="wrap_content" />-->
-
-        <!--</ScrollView>-->
 
 
         <LinearLayout
@@ -185,7 +197,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
-                android:text="КОД ОШИБКИ"
+                android:text="@string/error_code"
                 android:textAllCaps="true"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="10sp"

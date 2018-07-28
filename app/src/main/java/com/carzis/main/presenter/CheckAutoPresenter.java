@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.carzis.base.Presenter;
 import com.carzis.main.view.CheckAutoView;
-import com.carzis.model.response.NumInfoResponse;
+import com.carzis.model.AppError;
 import com.carzis.model.response.InfoResponse;
 import com.carzis.repository.remote.ApiUtils;
 import com.carzis.repository.remote.CarzisApi;
@@ -42,6 +42,7 @@ public class CheckAutoPresenter implements Presenter<CheckAutoView>{
             @Override
             public void onFailure(Call<InfoResponse> call, Throwable t) {
                 view.showLoading(false);
+                view.showError(AppError.CHECK_AUTO_ERROR);
             }
         });
     }
@@ -60,6 +61,7 @@ public class CheckAutoPresenter implements Presenter<CheckAutoView>{
             @Override
             public void onFailure(Call<InfoResponse> call, Throwable t) {
                 view.showLoading(false);
+                view.showError(AppError.CHECK_AUTO_ERROR);
             }
         });
     }
