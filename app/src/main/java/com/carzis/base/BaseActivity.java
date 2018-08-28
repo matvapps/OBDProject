@@ -2,7 +2,9 @@ package com.carzis.base;
 
 import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.carzis.R;
 import com.carzis.model.AppError;
 import com.carzis.util.ConnectionUtility;
 import com.carzis.util.custom.view.LoadingDialog;
@@ -41,5 +43,7 @@ public class BaseActivity extends AppCompatActivity implements BaseView{
             loadingDialog.dismiss();
         if (!noInternetDialog.isShowing() && !ConnectionUtility.isConnected(BaseActivity.this))
             noInternetDialog.show(viewGroup);
+        else
+            Toast.makeText(this, R.string.server_error, Toast.LENGTH_SHORT).show();
     }
 }

@@ -6,4 +6,5 @@ package com.carzis.entry.register;
 public interface RegisterCallbackListener {
     void onInputPhoneFinish(String phone);
     void onLogRegFinish(boolean isRegistration, Integer code);
+    void onResendSms();
 }

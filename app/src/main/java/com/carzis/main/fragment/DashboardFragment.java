@@ -26,6 +26,7 @@ import com.github.matvapps.dashboarddevices.Tachometer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class DashboardFragment extends BaseFragment implements ActivityToDashboardCallbackListener {
@@ -104,7 +105,7 @@ public class DashboardFragment extends BaseFragment implements ActivityToDashboa
 //                Log.d(TAG, "setupDevices: supportedPIDS pids" + supportedDevices);
 //                if (isInSupportedPids(pid.getCommand())) {
 //                    Log.d(TAG, "setupDevices: supportedPIDS addDashboardItem" + pid.getCommand());
-                    dashboardItemsAdapter.addItem(new DashboardItem("-", pid));
+                dashboardItemsAdapter.addItem(new DashboardItem("-", pid));
 //                }
 //                else {
 //                    keyValueStorage.removeDeviceFromDashboard(pid);
@@ -140,502 +141,21 @@ public class DashboardFragment extends BaseFragment implements ActivityToDashboa
         Log.d(TAG, "onPassRealDataToFragment: PID: " + pid + ", value=" + value);
 
         switch (pid) {
-//            case VOLTAGE:
-//
-//                break;
-//            case PIDS_SUP_0_20:
-//
-//                break;
-//            case DTCS_CLEARED_MIL_DTCS:
-//
-//                break;
-//            case FREEZE_DTCS:
-//
-//                break;
-//            case FUEL_SYSTEM_STATUS:
-//
-//                break;
-//            case CALCULATED_ENGINE_LOAD:
-//
-//                break;
-//            case ENGINE_COOLANT_TEMP:
-//
-//                break;
-//            case SH_TERM_FUEL_TRIM_1:
-//
-//                break;
-//            case LN_TERM_FUEL_PERCENT_TRIM_1:
-//
-//                break;
-//            case SH_TERM_FUEL_TRIM_2:
-//
-//                break;
-//            case LN_TERM_FUEL_PERCENT_TRIM_2:
-//
-//                break;
-//            case FUEL_PRESSURE:
-//
-//                break;
-//            case INTAKE_MANIFOLD_PRESSURE:
-//
-//                break;
             case ENGINE_RPM:
                 float turnovers = Float.parseFloat(value);
                 tachometer.moveTo(turnovers);
                 break;
             case VEHICLE_SPEED:
                 float speed = Float.parseFloat(value);
+                if (!Locale.getDefault().getLanguage().equals("ru"))
+                    speed = speed / 1.609344f;
                 speedometer.moveTo(speed);
                 break;
             default:
                 dashboardItemsAdapter.updateItem(new DashboardItem(value, pid));
                 break;
-//            case TIMING_ADVANCE:
-//
-//                break;
-//            case INTAKE_AIR_TEMP:
-//
-//                break;
-//            case MAF_AIR_FLOW:
-//
-//                break;
-//            case THROTTLE_POSITION:
-//
-//                break;
-//            case COMMANDED_SECONDARY_AIR_STATUS:
-//
-//                break;
-//            case OXY_SENS_PRESENT_2_BANKS:
-//
-//                break;
-//            case OXY_SENS_VOLT_1:
-//
-//                break;
-//            case OXY_SENS_VOLT_2:
-//
-//                break;
-//            case OXY_SENS_VOLT_3:
-//
-//                break;
-//            case OXY_SENS_VOLT_4:
-//
-//                break;
-//            case OXY_SENS_VOLT_5:
-//
-//                break;
-//            case OXY_SENS_VOLT_6:
-//
-//                break;
-//            case OXY_SENS_VOLT_7:
-//
-//                break;
-//            case OXY_SENS_VOLT_8:
-//
-//                break;
-//            case OBD_STANDARDS_VEHICLE_CONFORMS_TO:
-//
-//                break;
-//            case OXY_SENS_PRESENT_4_BANKS:
-//
-//                break;
-//            case AUXILIARY_INPUT_STATUS:
-//
-//                break;
-//            case RUN_TIME_SINCE_ENGINE_START:
-//
-//                break;
-//            case PIDS_SUP_21_40:
-//
-//                break;
-//            case DISTANCE_TRAVELED_WITH_MALFUNCTION_ON:
-//
-//                break;
-//            case FUEL_RAIL_PRESSURE_MANIFOLD_VACUUM:
-//
-//                break;
-//            case FUEL_RAIL_GAUGE_PRESSURE_DIESEL_GAS_DIRECT_INJECT:
-//
-//                break;
-//            case OXY_SENS_1_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
-//
-//                break;
-//            case OXY_SENS_2_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
-//
-//                break;
-//            case OXY_SENS_3_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
-//
-//                break;
-//            case OXY_SENS_4_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
-//
-//                break;
-//            case OXY_SENS_5_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
-//
-//                break;
-//            case OXY_SENS_6_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
-//
-//                break;
-//            case OXY_SENS_7_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
-//
-//                break;
-//            case OXY_SENS_8_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
-//
-//                break;
-//            case COMMANDED_EGR:
-//
-//                break;
-//            case EGR_ERROR:
-//
-//                break;
-//            case COMMANDED_EVAPORATIVE_PURGE:
-//
-//                break;
-//            case FUEL_TANK_LEVEL_INPUT:
-//
-//                break;
-//            case WARM_UPS_SINCE_CODES_CLEARED:
-//
-//                break;
-//            case DISTANCE_TRAVELED_SINCE_CODES_CLEARED:
-//
-//                break;
-//            case SYSTEM_VAPOR_PRESSURE:
-//
-//                break;
-//            case ABSOLUTE_BAROMETRIC_PRESSURE:
-//
-//                break;
-//            case OXY_SENS_1_FUEL_AIR_EQUIVALENCE_RATIO_CURRENT:
-//
-//                break;
-//            case OXY_SENS_2_FUEL_AIR_EQUIVALENCE_RATIO_CURRENT:
-//
-//                break;
-//            case OXY_SENS_3_FUEL_AIR_EQUIVALENCE_RATIO_CURRENT:
-//
-//                break;
-//            case OXY_SENS_4_FUEL_AIR_EQUIVALENCE_RATIO_CURRENT:
-//
-//                break;
-//            case OXY_SENS_5_FUEL_AIR_EQUIVALENCE_RATIO_CURRENT:
-//
-//                break;
-//            case OXY_SENS_6_FUEL_AIR_EQUIVALENCE_RATIO_CURRENT:
-//
-//                break;
-//            case OXY_SENS_7_FUEL_AIR_EQUIVALENCE_RATIO_CURRENT:
-//
-//                break;
-//            case OXY_SENS_8_FUEL_AIR_EQUIVALENCE_RATIO_CURRENT:
-//
-//                break;
-//            case CATALYST_TEMP_BANK_1_SENS_1:
-//
-//                break;
-//            case CATALYST_TEMP_BANK_2_SENS_1:
-//
-//                break;
-//            case CATALYST_TEMP_BANK_1_SENS_2:
-//
-//                break;
-//            case CATALYST_TEMP_BANK_2_SENS_2:
-//
-//                break;
-//            case PIDS_SUP_41_60:
-//
-//                break;
-//            case MONITOR_STATUS_THIS_DRIVE_CYCLE:
-//
-//                break;
-//            case CONTROL_MODULE_VOLTAGE:
-//
-//                break;
-//            case ABSOLUTE_LOAD_VALUE:
-//
-//                break;
-//            case FUEL_AIR_COMMANDED_EQUIVALENCE_RATIO:
-//
-//                break;
-//            case RELATIVE_THROTTLE_POSITION:
-//
-//                break;
-//            case AMBIENT_AIR_TEMPERATURE:
-//
-//                break;
-//            case ABSOLUTE_THROTTLE_POSITION_B:
-//
-//                break;
-//            case ABSOLUTE_THROTTLE_POSITION_C:
-//
-//                break;
-//            case ACCELERATOR_PEDAL_POSITION_D:
-//
-//                break;
-//            case ACCELERATOR_PEDAL_POSITION_E:
-//
-//                break;
-//            case ACCELERATOR_PEDAL_POSITION_F:
-//
-//                break;
-//            case COMMANDED_THROTTLE_ACTUATOR:
-//
-//                break;
-//            case TIME_RUN_WITH_MIL_ON:
-//
-//                break;
-//            case TIME_SINCE_TROUBLE_CODE_CLEARED:
-//
-//                break;
-//            case MAX_VAL_FOR_FUEL_AIR_EQUIVALENCE_RATIO_OXY_SENS_VOLT_OXY_SENS_CURRENT_INTAKE_MANIFOLD_PRESSURE:
-//
-//                break;
-//            case MAX_VAL_FOR_AIR_FLOW_RATE_FROM_MASS_AIR_FLOW_SENS:
-//
-//                break;
-//            case FUEL_TYPE:
-//
-//                break;
-//            case ETHANOL_FUEL:
-//
-//                break;
-//            case ABSOLUTE_EVAP_SYSTEM_VAPOR_PRESSURE:
-//
-//                break;
-//            case EVAP_SYSTEM_VAPOR_PRESSURE:
-//
-//                break;
-//            case SHORT_TERM_SECONDARY_OXY_SENS_TRIM_A1_B3:
-//
-//                break;
-//            case LONG_TERM_SECONDARY_OXY_SENS_TRIM_A1_B3:
-//
-//                break;
-//            case SHORT_TERM_SECONDARY_OXY_SENS_TRIM_A2_B4:
-//
-//                break;
-//            case LONG_TERM_SECONDARY_OXY_SENS_TRIM_A2_B4:
-//
-//                break;
-//            case FUEL_RAIL_ABSOLUTE_PRESSURE:
-//
-//                break;
-//            case RELATIVE_ACCELERATOR_PEDAL_POSITION:
-//
-//                break;
-//            case HYBRID_BATTERY_PACK_REMAINING_LIFE:
-//
-//                break;
-//            case ENGINE_OIL_TEMP:
-//
-//                break;
-//            case FUEL_INJECTION_TIMING:
-//
-//                break;
-//            case ENGINE_FUEL_RATE:
-//
-//                break;
-//            case EMISSION_REQUIREMENTS_TO_WHICH_VEHICLE_IS_DESIGNED:
-//
-//                break;
-//            case PIDS_SUP_61_80:
-//
-//                break;
-//            case DRIVERS_DEMAND_ENGINE_PERCENT_TORQUE:
-//
-//                break;
-//            case ACTUAL_ENGINE_PERCENT_TORQUE:
-//
-//                break;
-//            case ENGINE_REFERENCE_TORQUE:
-//
-//                break;
-//            case ENGINE_PERCENT_TORQUE_DATA:
-//
-//                break;
-//            case AUXILIARY_IN_OUT_SUPPORTED:
-//
-//                break;
         }
 
-//        switch (type) {
-//
-//            case SPEED:
-//                speedometer.moveTo(Integer.parseInt(value));
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, SPEED));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, SPEED.value, value, time));
-//                break;
-//            case RPM:
-//                tachometer.moveTo(Integer.parseInt(value));
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, RPM));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, RPM.value, value, time));
-//                break;
-//            case INTAKE_AIR_TEMP:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, INTAKE_AIR_TEMP));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, INTAKE_AIR_TEMP.value, value, time));
-//                break;
-//            case ENGINE_LOAD:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, ENGINE_LOAD));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, ENGINE_LOAD.value, value, time));
-//                break;
-//            case INTAKE_MAN_PRESSURE:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, INTAKE_MAN_PRESSURE));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, INTAKE_MAN_PRESSURE.value, value, time));
-//                break;
-//            case MAF_AIR_FLOW:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, MAF_AIR_FLOW));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, MAF_AIR_FLOW.value, value, time));
-//                break;
-//            case THROTTLE_POS:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, THROTTLE_POSITION));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, THROTTLE_POSITION.value, value, time));
-//                break;
-//            case FUEL_RAIL_PRESSURE:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, FUEL_RAIL_PRESSURE));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, FUEL_RAIL_PRESSURE.value, value, time));
-//                break;
-//            case ENGINE_OIL_TEMP:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, ENGINE_OIL_TEMP));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, ENGINE_OIL_TEMP.value, value, time));
-//                break;
-//            case VOLTAGE:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, VOLTAGE));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, VOLTAGE.value, value, time));
-//                break;
-//            case ENGINE_COOLANT_TEMP:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, ENGINE_COOLANT_TEMP));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, ENGINE_COOLANT_TEMP.value, value, time));
-//                break;
-//            case SH_TERM_FUEL_TRIM_1:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, SH_TERM_FUEL_TRIM_1));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, SH_TERM_FUEL_TRIM_1.value, value, time));
-//                break;
-//            case LN_TERM_FUEL_PERCENT_TRIM_1:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, LN_TERM_FUEL_PERCENT_TRIM_1));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, LN_TERM_FUEL_PERCENT_TRIM_1.value, value, time));
-//                break;
-//            case SH_TERM_FUEL_TRIM_2:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, SH_TERM_FUEL_TRIM_2));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, SH_TERM_FUEL_TRIM_2.value, value, time));
-//                break;
-//            case LN_TERM_FUEL_PERCENT_TRIM_2:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, LN_TERM_FUEL_PERCENT_TRIM_2));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, LN_TERM_FUEL_PERCENT_TRIM_2.value, value, time));
-//                break;
-//            case FUEL_PRESSURE:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, FUEL_PRESSURE));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, FUEL_PRESSURE.value, value, time));
-//                break;
-//            case TIMING_ADVANCE:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, TIMING_ADVANCE));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, TIMING_ADVANCE.value, value, time));
-//                break;
-//            case THROTTLE_POSITION:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, THROTTLE_POSITION));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, THROTTLE_POSITION.value, value, time));
-//                break;
-//            case OXY_SENS_VOLT_B_1_SENS_1:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, OXY_SENS_VOLT_B_1_SENS_1));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, OXY_SENS_VOLT_B_1_SENS_1.value, value, time));
-//                break;
-//            case OXY_SENS_VOLT_B_1_SENS_2:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, OXY_SENS_VOLT_B_1_SENS_2));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, OXY_SENS_VOLT_B_1_SENS_2.value, value, time));
-//                break;
-//            case OXY_SENS_VOLT_B_1_SENS_3:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, OXY_SENS_VOLT_B_1_SENS_3));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, OXY_SENS_VOLT_B_1_SENS_3.value, value, time));
-//                break;
-//            case OXY_SENS_VOLT_B_1_SENS_4:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, OXY_SENS_VOLT_B_1_SENS_4));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, OXY_SENS_VOLT_B_1_SENS_4.value, value, time));
-//                break;
-//            case OXY_SENS_VOLT_B_2_SENS_1:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, OXY_SENS_VOLT_B_2_SENS_1));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, OXY_SENS_VOLT_B_2_SENS_1.value, value, time));
-//                break;
-//            case OXY_SENS_VOLT_B_2_SENS_2:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, OXY_SENS_VOLT_B_2_SENS_2));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, OXY_SENS_VOLT_B_2_SENS_2.value, value, time));
-//                break;
-//            case OXY_SENS_VOLT_B_2_SENS_3:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, OXY_SENS_VOLT_B_2_SENS_3));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, OXY_SENS_VOLT_B_2_SENS_3.value, value, time));
-//                break;
-//            case OXY_SENS_VOLT_B_2_SENS_4:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, OXY_SENS_VOLT_B_2_SENS_4));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, OXY_SENS_VOLT_B_2_SENS_4.value, value, time));
-//                break;
-//            case FUEL_RAIL_PRESSURE_DIESEL:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, FUEL_RAIL_PRESSURE_DIESEL));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, FUEL_RAIL_PRESSURE_DIESEL.value, value, time));
-//                break;
-//            case COMMANDED_EGR:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, COMMANDED_EGR));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, COMMANDED_EGR.value, value, time));
-//                break;
-//            case FUEL_AMOUNT:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, FUEL_AMOUNT));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, FUEL_AMOUNT.value, value, time));
-//                break;
-//            case BAROMETRIC_PRESSURE:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, BAROMETRIC_PRESSURE));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, BAROMETRIC_PRESSURE.value, value, time));
-//                break;
-//            case CATALYST_TEMP_B1S1:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, CATALYST_TEMP_B1S1));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, CATALYST_TEMP_B1S1.value, value, time));
-//                break;
-//            case CATALYST_TEMP_B2S1:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, CATALYST_TEMP_B2S1));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, CATALYST_TEMP_B2S1.value, value, time));
-//                break;
-//            case CATALYST_TEMP_B1S2:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, CATALYST_TEMP_B1S2));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, CATALYST_TEMP_B1S2.value, value, time));
-//                break;
-//            case CATALYST_TEMP_B2S2:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, CATALYST_TEMP_B2S2));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, CATALYST_TEMP_B2S2.value, value, time));
-//                break;
-//            case THROTTLE_POS_2:
-//                dashboardItemsAdapter.updateItem(new DashboardItem(value, THROTTLE_POS_2));
-//
-////                localRepository.addHistoryItem(new HistoryItem(carName, THROTTLE_POS_2.value, value, time));
-//                break;
-//        }
     }
 
     @Override
@@ -656,14 +176,21 @@ public class DashboardFragment extends BaseFragment implements ActivityToDashboa
     }
 
     private void setSpeed(float speed) {
+        if (!Locale.getDefault().getLanguage().equals("ru"))
+            speed = speed / 1.609344f;
         speedometer.moveTo(speed);
     }
+
     private void setSpeed(float speed, long duration) {
+        if (!Locale.getDefault().getLanguage().equals("ru"))
+            speed = speed / 1.609344f;
         speedometer.moveTo(speed, duration);
     }
+
     private void setTurnovers(float turnovers) {
         tachometer.moveTo(turnovers);
     }
+
     private void setTurnovers(float turnovers, long duration) {
         tachometer.moveTo(turnovers, duration);
     }

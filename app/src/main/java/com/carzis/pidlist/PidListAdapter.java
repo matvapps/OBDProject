@@ -48,15 +48,10 @@ public class PidListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         PidItem pidItem = items.get(position);
 
         int imageID = Utility.getDeviceIconIdBy(pidItem.getPid());
-        String name = Utility.getDeviceNameBy(pidItem.getPid());
+        String name = Utility.getDeviceNameBy(holder.itemView.getContext(), pidItem.getPid());
 
         if (pidItemClickListener != null)
-            pidViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    pidItemClickListener.onClick(pidItem.getPid().getCommand());
-                }
-            });
+            pidViewHolder.itemView.setOnClickListener(view -> pidItemClickListener.onClick(pidItem.getPid().getCommand()));
 
         pidViewHolder.pidImage.setImageResource(imageID);
         pidViewHolder.pidName.setText(name);

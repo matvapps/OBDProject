@@ -3,6 +3,7 @@ package com.carzis.entry;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,6 +22,7 @@ import com.carzis.entry.register.RegisterCallbackListener;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Alexandr.
@@ -39,6 +41,8 @@ public class SmsFragment extends BaseFragment implements ActivityToSmsFragmentCa
     private EditText smsCodePart2;
     private EditText smsCodePart3;
     private EditText smsCodePart4;
+    private TextView resendSmsTxt;
+
 
     private ArrayList<String> savedSmsParts;
 
@@ -58,14 +62,25 @@ public class SmsFragment extends BaseFragment implements ActivityToSmsFragmentCa
         nextBtn = rootView.findViewById(R.id.next_btn);
         smsTextTitle = rootView.findViewById(R.id.sms_text);
         smsTextSubTitle = rootView.findViewById(R.id.sms_code_text);
+        resendSmsTxt = rootView.findViewById(R.id.resend_sms_txt);
+
+        CountDownTimer countDownTimer = new CountDownTimer(60000, 1000) {
+            @Override
+            public void onTick(long l) {
+                resendSmsTxt.setText(
+                        String.format(
+                                getString(R.string.resend_sms_after), TimeUnit.MILLISECONDS.toSeconds(l)));
+            }
+
+            @Override
+            public void onFinish() {
+                resendSmsTxt.setText(getString(R.string.resend_sms));
+            }
+        };
+        countDownTimer.start();
 
         savedSmsParts = new ArrayList<>();
         keyValueStorage = new KeyValueStorage(getContext());
-
-//        if (!isRegistration) {
-//            smsTextTitle.setText("Введите пароль");
-//            smsTextSubTitle.setText("Этот номер уже авторизован, введите пароль");
-//        }
 
         smsCodePart1 = rootView.findViewById(R.id.sms_code_1);
         smsCodePart2 = rootView.findViewById(R.id.sms_code_2);
@@ -76,6 +91,12 @@ public class SmsFragment extends BaseFragment implements ActivityToSmsFragmentCa
         smsCodePart2.addTextChangedListener(new GenericTextWatcher(smsCodePart2));
         smsCodePart3.addTextChangedListener(new GenericTextWatcher(smsCodePart3));
         smsCodePart4.addTextChangedListener(new GenericTextWatcher(smsCodePart4));
+
+        resendSmsTxt.setOnClickListener(view -> {
+            if (resendSmsTxt.getText().toString().equals(getString(R.string.resend_sms))) {
+                // TODO: resend sms
+            }
+        });
 
         return rootView;
     }

@@ -25,8 +25,8 @@ android {
         targetSdkVersion 27
         renderscriptTargetApi 19
         renderscriptSupportModeEnabled true    // Enable RS support
-        versionCode 8
-        versionName "0.0.8"
+        versionCode 9
+        versionName "0.0.9"
         multiDexEnabled true
         project.ext.set("archivesBaseName", "Carzis-" + defaultConfig.versionName);
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

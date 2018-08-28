@@ -37,26 +37,26 @@ public class Utility {
             case CALCULATED_ENGINE_LOAD:
                 return "%";
             case ENGINE_COOLANT_TEMP:
-                return "°C";
+                return context.getString(R.string.grad);
             case SH_TERM_FUEL_TRIM_1:
             case LN_TERM_FUEL_PERCENT_TRIM_1:
             case SH_TERM_FUEL_TRIM_2:
             case LN_TERM_FUEL_PERCENT_TRIM_2:
                 return "%";
             case FUEL_PRESSURE:
-                return "кПа";
+                return context.getString(R.string.kPa);
             case INTAKE_MANIFOLD_PRESSURE:
-                return "кПа";
+                return context.getString(R.string.kPa);
             case ENGINE_RPM:
                 return "rpm";
             case VEHICLE_SPEED:
-                return "км/ч";
+                return context.getString(R.string.kmh);
             case TIMING_ADVANCE:
                 return "°";
             case INTAKE_AIR_TEMP:
-                return "°C";
+                return context.getString(R.string.grad);
             case MAF_AIR_FLOW:
-                return "г/сек";
+                return context.getString(R.string.gramsec);
             case THROTTLE_POSITION:
                 return "%";
             case COMMANDED_SECONDARY_AIR_STATUS:
@@ -79,15 +79,15 @@ public class Utility {
             case AUXILIARY_INPUT_STATUS:
                 return "";
             case RUN_TIME_SINCE_ENGINE_START:
-                return "сек";
+                return context.getString(R.string.sec);
             case PIDS_SUP_21_40:
                 return "";
             case DISTANCE_TRAVELED_WITH_MALFUNCTION_ON:
-                return "км";
+                return context.getString(R.string.mil);
             case FUEL_RAIL_PRESSURE_MANIFOLD_VACUUM:
-                return "кПа";
+                return context.getString(R.string.kPa);
             case FUEL_RAIL_GAUGE_PRESSURE_DIESEL_GAS_DIRECT_INJECT:
-                return "кПа";
+                return context.getString(R.string.kPa);
             case OXY_SENS_1_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
             case OXY_SENS_2_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
             case OXY_SENS_3_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
@@ -106,13 +106,13 @@ public class Utility {
             case FUEL_TANK_LEVEL_INPUT:
                 return "%";
             case WARM_UPS_SINCE_CODES_CLEARED:
-                return "кол-во";
+                return context.getString(R.string.quant);
             case DISTANCE_TRAVELED_SINCE_CODES_CLEARED:
-                return "км";
+                return context.getString(R.string.mil);
             case SYSTEM_VAPOR_PRESSURE:
-                return "Па";
+                return context.getString(R.string.Pa);
             case ABSOLUTE_BAROMETRIC_PRESSURE:
-                return "кПа";
+                return context.getString(R.string.kPa);
             case OXY_SENS_1_FUEL_AIR_EQUIVALENCE_RATIO_CURRENT:
             case OXY_SENS_2_FUEL_AIR_EQUIVALENCE_RATIO_CURRENT:
             case OXY_SENS_3_FUEL_AIR_EQUIVALENCE_RATIO_CURRENT:
@@ -126,7 +126,7 @@ public class Utility {
             case CATALYST_TEMP_BANK_2_SENS_1:
             case CATALYST_TEMP_BANK_1_SENS_2:
             case CATALYST_TEMP_BANK_2_SENS_2:
-                return "°C";
+                return context.getString(R.string.grad);
             case PIDS_SUP_41_60:
                 return "";
             case MONITOR_STATUS_THIS_DRIVE_CYCLE:
@@ -140,7 +140,7 @@ public class Utility {
             case RELATIVE_THROTTLE_POSITION:
                 return "%";
             case AMBIENT_AIR_TEMPERATURE:
-                return "°C";
+                return context.getString(R.string.grad);
             case ABSOLUTE_THROTTLE_POSITION_B:
             case ABSOLUTE_THROTTLE_POSITION_C:
             case ACCELERATOR_PEDAL_POSITION_D:
@@ -149,38 +149,38 @@ public class Utility {
             case COMMANDED_THROTTLE_ACTUATOR:
                 return "%";
             case TIME_RUN_WITH_MIL_ON:
-                return "мин";
+                return context.getString(R.string.min);
             case TIME_SINCE_TROUBLE_CODE_CLEARED:
-                return "мин";
+                return context.getString(R.string.min);
             case MAX_VAL_FOR_FUEL_AIR_EQUIVALENCE_RATIO_OXY_SENS_VOLT_OXY_SENS_CURRENT_INTAKE_MANIFOLD_PRESSURE:
                 return "";
             case MAX_VAL_FOR_AIR_FLOW_RATE_FROM_MASS_AIR_FLOW_SENS:
-                return "г/с";
+                return context.getString(R.string.gramsec);
             case FUEL_TYPE:
                 return "";
             case ETHANOL_FUEL:
                 return "%";
             case ABSOLUTE_EVAP_SYSTEM_VAPOR_PRESSURE:
-                return "кПа";
+                return context.getString(R.string.kPa);
             case EVAP_SYSTEM_VAPOR_PRESSURE:
-                return "Па";
+                return context.getString(R.string.Pa);
             case SHORT_TERM_SECONDARY_OXY_SENS_TRIM_A1_B3:
             case LONG_TERM_SECONDARY_OXY_SENS_TRIM_A1_B3:
             case SHORT_TERM_SECONDARY_OXY_SENS_TRIM_A2_B4:
             case LONG_TERM_SECONDARY_OXY_SENS_TRIM_A2_B4:
                 return "%";
             case FUEL_RAIL_ABSOLUTE_PRESSURE:
-                return "кПа";
+                return context.getString(R.string.kPa);
             case RELATIVE_ACCELERATOR_PEDAL_POSITION:
                 return "%";
             case HYBRID_BATTERY_PACK_REMAINING_LIFE:
                 return "%";
             case ENGINE_OIL_TEMP:
-                return "°C";
+                return context.getString(R.string.grad);
             case FUEL_INJECTION_TIMING:
                 return "°";
             case ENGINE_FUEL_RATE:
-                return "л/ч";
+                return context.getString(R.string.lh);
             case EMISSION_REQUIREMENTS_TO_WHICH_VEHICLE_IS_DESIGNED:
                 return "";
             case PIDS_SUP_61_80:
@@ -190,7 +190,7 @@ public class Utility {
             case ACTUAL_ENGINE_PERCENT_TORQUE:
                 return "%";
             case ENGINE_REFERENCE_TORQUE:
-                return "нМ";
+                return context.getString(R.string.nm);
             case ENGINE_PERCENT_TORQUE_DATA:
                 return "%";
             case AUXILIARY_IN_OUT_SUPPORTED:
@@ -286,215 +286,215 @@ public class Utility {
     }
 
 
-    public static String getDeviceNameBy(PID pid) {
+    public static String getDeviceNameBy(Context context, PID pid) {
 
         switch (pid) {
             case VOLTAGE:
-                return "Напряжение";
+                return context.getString(R.string.voltage);
             case PIDS_SUP_0_20:
-                return "Список поддерживаемых PID[0-20]";
+                return context.getString(R.string.pids_0_20);
             case DTCS_CLEARED_MIL_DTCS:
-                return "Состояние монитора после очистки DTC.";
+                return context.getString(R.string.dtc_cleared_mil_dtc);
             case FREEZE_DTCS:
-                return "Обнаруженные диагностические коды ошибок";
+                return context.getString(R.string.freeze_dtc);
             case FUEL_SYSTEM_STATUS:
-                return "Состояние топливной системы";
+                return context.getString(R.string.fuel_system_status);
             case CALCULATED_ENGINE_LOAD:
-                return "Расчетное значение нагрузки на двигатель";
+                return context.getString(R.string.calc_engine_load);
             case ENGINE_COOLANT_TEMP:
-                return "Температура охлаждающей жидкости ";
+                return context.getString(R.string.engine_coolant_temp);
             case SH_TERM_FUEL_TRIM_1:
-                return "";
+                return context.getString(R.string.sh_term_fuel_trim_1);
             case LN_TERM_FUEL_PERCENT_TRIM_1:
-                return "";
+                return context.getString(R.string.ln_term_fuel_percent_trim_1);
             case SH_TERM_FUEL_TRIM_2:
-                return "";
+                return context.getString(R.string.sh_term_fuel_trim_2);
             case LN_TERM_FUEL_PERCENT_TRIM_2:
-                return "";
+                return context.getString(R.string.ln_term_fuel_percent_trim_2);
             case FUEL_PRESSURE:
-                return "Давление топлива";
+                return context.getString(R.string.fuel_pressure);
             case INTAKE_MANIFOLD_PRESSURE:
-                return "Давление во впускном коллекторе (абсолютное)";
+                return context.getString(R.string.intake_manifold_pressure);
             case ENGINE_RPM:
-                return "Обороты двигателя ";
+                return context.getString(R.string.engine_rpm);
             case VEHICLE_SPEED:
-                return "Скорость автомобиля";
+                return context.getString(R.string.vehicle_speed);
             case TIMING_ADVANCE:
-                return "Угол опережения зажигания";
+                return context.getString(R.string.timing_advance);
             case INTAKE_AIR_TEMP:
-                return "Температура всасываемого воздуха";
+                return context.getString(R.string.intake_air_temp);
             case MAF_AIR_FLOW:
-                return "Массовый расход воздуха";
+                return context.getString(R.string.maf_air_flow);
             case THROTTLE_POSITION:
-                return "Положение дроссельной заслонки";
+                return context.getString(R.string.throttle_pos);
             case COMMANDED_SECONDARY_AIR_STATUS:
-                return "Назначенный статус вторичного воздуха";
+                return context.getString(R.string.commanded_secondary_air_status);
             case OXY_SENS_PRESENT_2_BANKS:
-                return "Наличие датчиков кислорода";
+                return context.getString(R.string.oxy_sens_pres_2_banks);
             case OXY_SENS_VOLT_1:
-                return "";
+                return context.getString(R.string.oxy_sens_1);
             case OXY_SENS_VOLT_2:
-                return "";
+                return context.getString(R.string.oxy_sens_2);
             case OXY_SENS_VOLT_3:
-                return "";
+                return context.getString(R.string.oxy_sens_3);
             case OXY_SENS_VOLT_4:
-                return "";
+                return context.getString(R.string.oxy_sens_4);
             case OXY_SENS_VOLT_5:
-                return "";
+                return context.getString(R.string.oxy_sens_5);
             case OXY_SENS_VOLT_6:
-                return "";
+                return context.getString(R.string.oxy_sens_6);
             case OXY_SENS_VOLT_7:
-                return "";
+                return context.getString(R.string.oxy_sens_7);
             case OXY_SENS_VOLT_8:
-                return "";
+                return context.getString(R.string.oxy_sens_8);
             case OBD_STANDARDS_VEHICLE_CONFORMS_TO:
-                return "Стандарты OBD которым это ТС соответствует";
+                return context.getString(R.string.obd_standards);
             case OXY_SENS_PRESENT_4_BANKS:
-                return "Присутствие датчиков кислорода";
+                return context.getString(R.string.oxy_sens_pres_4_banks);
             case AUXILIARY_INPUT_STATUS:
-                return "Состояние вспомогательного входа";
+                return context.getString(R.string.auxiliary_input_status);
             case RUN_TIME_SINCE_ENGINE_START:
-                return "Время, прошедшее с запуска двигателя ";
+                return context.getString(R.string.run_time_since_engine_start);
             case PIDS_SUP_21_40:
-                return "Список поддерживаемых PID[21-40]";
+                return context.getString(R.string.pids_21_40);
             case DISTANCE_TRAVELED_WITH_MALFUNCTION_ON:
-                return "Дистанция, пройденная с зажженной лампой «проверь двигатель»";
+                return context.getString(R.string.distance_travel_with_mal_on);
             case FUEL_RAIL_PRESSURE_MANIFOLD_VACUUM:
-                return "Давление в топливной рампе (относительно вакуума коллектора)";
+                return context.getString(R.string.fuel_rail_pressure_man_vacuum);
             case FUEL_RAIL_GAUGE_PRESSURE_DIESEL_GAS_DIRECT_INJECT:
-                return "Давление в топливной рампе (дизельное топливо или прямой впрыск бензина)";
+                return context.getString(R.string.furl_rail_gauge_pressure_diesel_gas_direct_inject);
             case OXY_SENS_1_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
-                return "";
+                return context.getString(R.string.oxy_sens_1_fuel_air);
             case OXY_SENS_2_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
-                return "";
+                return context.getString(R.string.oxy_sens_2_fuel_air);
             case OXY_SENS_3_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
-                return "";
+                return context.getString(R.string.oxy_sens_3_fuel_air);
             case OXY_SENS_4_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
-                return "";
+                return context.getString(R.string.oxy_sens_4_fuel_air);
             case OXY_SENS_5_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
-                return "";
+                return context.getString(R.string.oxy_sens_5_fuel_air);
             case OXY_SENS_6_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
-                return "";
+                return context.getString(R.string.oxy_sens_6_fuel_air);
             case OXY_SENS_7_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
-                return "";
+                return context.getString(R.string.oxy_sens_7_fuel_air);
             case OXY_SENS_8_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
-                return "";
+                return context.getString(R.string.oxy_sens_8_fuel_air);
             case COMMANDED_EGR:
-                return "Управляемый EGR";
+                return context.getString(R.string.commanded_egr);
             case EGR_ERROR:
-                return "EGR ошибка";
+                return context.getString(R.string.egr_error);
             case COMMANDED_EVAPORATIVE_PURGE:
-                return "Принудительная испарительная очистка";
+                return context.getString(R.string.commanded_evaporative_purge);
             case FUEL_TANK_LEVEL_INPUT:
-                return "Уровень топлива ";
+                return context.getString(R.string.fuel_tank_level_input);
             case WARM_UPS_SINCE_CODES_CLEARED:
-                return "Количество прогревов со времени очистки кодов нейсправности";
+                return context.getString(R.string.warm_ups_since_codes_cleared);
             case DISTANCE_TRAVELED_SINCE_CODES_CLEARED:
-                return "Дистанция, пройденная со времени очистки кодов нейсправностей";
+                return context.getString(R.string.distance_traveled_since_codes_cleared);
             case SYSTEM_VAPOR_PRESSURE:
-                return "Evap. Давление пара в системе";
+                return context.getString(R.string.system_vapor_pressure);
             case ABSOLUTE_BAROMETRIC_PRESSURE:
-                return "Атмосферное давление (абсолютное) ";
+                return context.getString(R.string.absolute_barometric_pressure);
             case OXY_SENS_1_FUEL_AIR_EQUIVALENCE_RATIO_CURRENT:
-                return "";
+                return context.getString(R.string.oxy_sens_1_fuel_air_equivalence);
             case OXY_SENS_2_FUEL_AIR_EQUIVALENCE_RATIO_CURRENT:
-                return "";
+                return context.getString(R.string.oxy_sens_2_fuel_air_equivalence);
             case OXY_SENS_3_FUEL_AIR_EQUIVALENCE_RATIO_CURRENT:
-                return "";
+                return context.getString(R.string.oxy_sens_3_fuel_air_equivalence);
             case OXY_SENS_4_FUEL_AIR_EQUIVALENCE_RATIO_CURRENT:
-                return "";
+                return context.getString(R.string.oxy_sens_4_fuel_air_equivalence);
             case OXY_SENS_5_FUEL_AIR_EQUIVALENCE_RATIO_CURRENT:
-                return "";
+                return context.getString(R.string.oxy_sens_5_fuel_air_equivalence);
             case OXY_SENS_6_FUEL_AIR_EQUIVALENCE_RATIO_CURRENT:
-                return "";
+                return context.getString(R.string.oxy_sens_6_fuel_air_equivalence);
             case OXY_SENS_7_FUEL_AIR_EQUIVALENCE_RATIO_CURRENT:
-                return "";
+                return context.getString(R.string.oxy_sens_7_fuel_air_equivalence);
             case OXY_SENS_8_FUEL_AIR_EQUIVALENCE_RATIO_CURRENT:
-                return "";
+                return context.getString(R.string.oxy_sens_8_fuel_air_equivalence);
             case CATALYST_TEMP_BANK_1_SENS_1:
-                return "";
+                return context.getString(R.string.catalyst_temp_bank_1_sens_1);
             case CATALYST_TEMP_BANK_2_SENS_1:
-                return "";
+                return context.getString(R.string.catalyst_temp_bank_2_sens_1);
             case CATALYST_TEMP_BANK_1_SENS_2:
-                return "";
+                return context.getString(R.string.catalyst_temp_bank_1_sens_2);
             case CATALYST_TEMP_BANK_2_SENS_2:
-                return "";
+                return context.getString(R.string.catalyst_temp_bank_2_sens_2);
             case PIDS_SUP_41_60:
-                return "Список поддерживаемых PID[41-60]";
+                return context.getString(R.string.pids_41_60);
             case MONITOR_STATUS_THIS_DRIVE_CYCLE:
-                return "Мониторинг состояния цикла привода";
+                return context.getString(R.string.monitor_status_this_drive_cycle);
             case CONTROL_MODULE_VOLTAGE:
-                return "Напряжение контрольного модуля";
+                return context.getString(R.string.control_module_voltage);
             case ABSOLUTE_LOAD_VALUE:
-                return "Абсолютное значение нагрузки";
+                return context.getString(R.string.absolute_load_value);
             case FUEL_AIR_COMMANDED_EQUIVALENCE_RATIO:
-                return "Коэффициент эквивалентности команд";
+                return context.getString(R.string.fuel_air_commanded_equivalence_ratio);
             case RELATIVE_THROTTLE_POSITION:
-                return "Относительное положение дроссельной заслонки";
+                return context.getString(R.string.relative_throttle_pos);
             case AMBIENT_AIR_TEMPERATURE:
-                return "Температура окружающего воздуха";
+                return context.getString(R.string.ambient_air_temp);
             case ABSOLUTE_THROTTLE_POSITION_B:
-                return "Абсолютное положение дроссельной заслонки B";
+                return context.getString(R.string.absolute_throttle_pos_b);
             case ABSOLUTE_THROTTLE_POSITION_C:
-                return "Абсолютное положение дроссельной заслонки C";
+                return context.getString(R.string.absolute_throttle_pos_c);
             case ACCELERATOR_PEDAL_POSITION_D:
-                return "Положение педали акселератора D";
+                return context.getString(R.string.absolute_throttle_pos_d);
             case ACCELERATOR_PEDAL_POSITION_E:
-                return "Положение педали акселератора E";
+                return context.getString(R.string.absolute_throttle_pos_e);
             case ACCELERATOR_PEDAL_POSITION_F:
-                return "Положение педали акселератора F";
+                return context.getString(R.string.absolute_throttle_pos_f);
             case COMMANDED_THROTTLE_ACTUATOR:
-                return "Управляемый привод дроссельной заслонки";
+                return context.getString(R.string.commanded_throttle_actuator);
             case TIME_RUN_WITH_MIL_ON:
-                return "Время со включенной лампой «проверь двигатель»";
+                return context.getString(R.string.time_run_with_mil_on);
             case TIME_SINCE_TROUBLE_CODE_CLEARED:
-                return "Время, прошедшее с момента очистки кодов неисправностей";
+                return context.getString(R.string.time_since_trouble_code_cleared);
             case MAX_VAL_FOR_FUEL_AIR_EQUIVALENCE_RATIO_OXY_SENS_VOLT_OXY_SENS_CURRENT_INTAKE_MANIFOLD_PRESSURE:
-                return "Максимальное значение для коэффициента эквивалентности";
+                return context.getString(R.string.max_val_for_fuel_air_equivalence_ratio);
             case MAX_VAL_FOR_AIR_FLOW_RATE_FROM_MASS_AIR_FLOW_SENS:
-                return "Максимальное значение расхода воздуха от датчика массового расхода воздуха";
+                return context.getString(R.string.max_val_for_air_flow_rate_from_mass_air_flow_sens);
             case FUEL_TYPE:
-                return "Тип топлива";
+                return context.getString(R.string.fuel_type);
             case ETHANOL_FUEL:
-                return "Этаноловое топливо";
+                return context.getString(R.string.ethanol_fuel);
             case ABSOLUTE_EVAP_SYSTEM_VAPOR_PRESSURE:
-                return "Абсолютная система испарения Давление пара";
+                return context.getString(R.string.absolute_evap_system_vapor_pressure);
             case EVAP_SYSTEM_VAPOR_PRESSURE:
-                return "Давление паров системы испарения";
+                return context.getString(R.string.evap_system_vapor_pressure);
             case SHORT_TERM_SECONDARY_OXY_SENS_TRIM_A1_B3:
-                return "";
+                return context.getString(R.string.sh_term_seconday_oxy_sens_trim_a1_b3);
             case LONG_TERM_SECONDARY_OXY_SENS_TRIM_A1_B3:
-                return "";
+                return context.getString(R.string.ln_term_seconday_oxy_sens_trim_a1_b3);
             case SHORT_TERM_SECONDARY_OXY_SENS_TRIM_A2_B4:
-                return "";
+                return context.getString(R.string.sh_term_seconday_oxy_sens_trim_a2_b4);
             case LONG_TERM_SECONDARY_OXY_SENS_TRIM_A2_B4:
-                return "";
+                return context.getString(R.string.ln_term_seconday_oxy_sens_trim_a2_b4);
             case FUEL_RAIL_ABSOLUTE_PRESSURE:
-                return "Абсолютное давление на топливной рампе";
+                return context.getString(R.string.fuel_rail_pressure);
             case RELATIVE_ACCELERATOR_PEDAL_POSITION:
-                return "Относительное положение педали акселератора";
+                return context.getString(R.string.relative_accelerator_pedal_position);
             case HYBRID_BATTERY_PACK_REMAINING_LIFE:
-                return "Заряд силовой батареи гибрида";
+                return context.getString(R.string.hybrid_battery_pack_remaining_life);
             case ENGINE_OIL_TEMP:
-                return "Температура масла двигателя";
+                return context.getString(R.string.engine_oil_temp);
             case FUEL_INJECTION_TIMING:
-                return "Регулирование момента впрыска";
+                return context.getString(R.string.fuel_injection_timing);
             case ENGINE_FUEL_RATE:
-                return "Расход топлива";
+                return context.getString(R.string.engine_fuel_rate);
             case EMISSION_REQUIREMENTS_TO_WHICH_VEHICLE_IS_DESIGNED:
-                return "Требования к выбросам, для которых предназначено транспортное средство";
+                return context.getString(R.string.emission_requirements_to_which_vehicle_is_designed);
             case PIDS_SUP_61_80:
-                return "Список поддерживаемых PID[61-80]";
+                return context.getString(R.string.pids_sup_61_80);
             case DRIVERS_DEMAND_ENGINE_PERCENT_TORQUE:
-                return "Запрашиваемый момент двигателя";
+                return context.getString(R.string.drivers_demand_engine_percent_torque);
             case ACTUAL_ENGINE_PERCENT_TORQUE:
-                return "Реальный момент двигателя";
+                return context.getString(R.string.actual_engine_percent_torque);
             case ENGINE_REFERENCE_TORQUE:
-                return "Исходный момент двигателя";
+                return context.getString(R.string.engine_reference_torque);
             case ENGINE_PERCENT_TORQUE_DATA:
-                return "Данные о крутящем моменте двигателя";
+                return context.getString(R.string.engine_percent_torque_data);
             case AUXILIARY_IN_OUT_SUPPORTED:
-                return "Поддерживание дополнительный вход/выход";
+                return context.getString(R.string.auxiliary_in_out_supported);
         }
 
         return "Нет описания";

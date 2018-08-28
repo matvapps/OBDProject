@@ -42,6 +42,7 @@
                 app:dd_markTextSize="12sp"
                 app:dd_indicator="DashboardIndicator"
                 app:dd_indicatorColor="#36ffffff"
+                app:dd_unit="@string/dimen_title_speed"
                 app:dd_deviceColor="@color/colorDeviceBlue"
                 app:dd_tickNumber="13" />
 

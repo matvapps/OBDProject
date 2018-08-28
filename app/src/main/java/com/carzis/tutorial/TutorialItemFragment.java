@@ -1,5 +1,6 @@
 package com.carzis.tutorial;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -39,19 +40,53 @@ public class TutorialItemFragment extends Fragment {
         subTitleView = rootView.findViewById(R.id.sub_title_text);
         backgroundImage = rootView.findViewById(R.id.background);
 
-        backgroundImage.setImageResource(imageID);
         titleView.setText(title);
         subTitleView.setText(subTitle);
 
 
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             imageID = savedInstanceState.getInt(CURRENT_IMAGEID);
             title = savedInstanceState.getString(CURRENT_TITLE);
             subTitle = savedInstanceState.getString(CURRENT_SUBTITLE);
 
+            switch (imageID) {
+                case R.drawable.tut_land_1:
+                    if (getResources().getConfiguration().orientation
+                            != Configuration.ORIENTATION_LANDSCAPE)
+                        imageID = R.drawable.tut_vert_1;
+                    break;
+                case R.drawable.tut_land_2:
+                    if (getResources().getConfiguration().orientation
+                            != Configuration.ORIENTATION_LANDSCAPE)
+                        imageID = R.drawable.tut_vert_2;
+                    break;
+                case R.drawable.tut_land_3:
+                    if (getResources().getConfiguration().orientation
+                            != Configuration.ORIENTATION_LANDSCAPE)
+                        imageID = R.drawable.tut_vert_3;
+                    break;
+                case R.drawable.tut_vert_1:
+                    if (getResources().getConfiguration().orientation
+                            == Configuration.ORIENTATION_LANDSCAPE)
+                        imageID = R.drawable.tut_land_1;
+                    break;
+                case R.drawable.tut_vert_2:
+                    if (getResources().getConfiguration().orientation
+                            == Configuration.ORIENTATION_LANDSCAPE)
+                        imageID = R.drawable.tut_land_2;
+                    break;
+                case R.drawable.tut_vert_3:
+                    if (getResources().getConfiguration().orientation
+                            == Configuration.ORIENTATION_LANDSCAPE)
+                        imageID = R.drawable.tut_land_3;
+                    break;
+            }
+
             backgroundImage.setImageResource(imageID);
             titleView.setText(title);
             subTitleView.setText(subTitle);
+        } else {
+            backgroundImage.setImageResource(imageID);
         }
 
         return rootView;

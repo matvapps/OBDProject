@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.carzis.R;
 import com.carzis.base.BaseFragment;
@@ -224,21 +225,25 @@ public class ProfileSettingsFragment extends BaseFragment implements ProfileView
 //            Toast.makeText(getContext(), "Введен неверный код страны", Toast.LENGTH_SHORT).show();
 
 
-        if (body == null) {
-            profilePresenter.updateProfile(
-                    keyValueStorage.getUserToken(),
-                    email,
-                    name,
-                    surname,
-                    unixTime);
+        if (policyChbx.getVisibility() == View.VISIBLE) {
+            if (body == null) {
+                profilePresenter.updateProfile(
+                        keyValueStorage.getUserToken(),
+                        email,
+                        name,
+                        surname,
+                        unixTime);
+            } else {
+                profilePresenter.updateProfile(
+                        keyValueStorage.getUserToken(),
+                        email,
+                        name,
+                        surname,
+                        unixTime,
+                        body);
+            }
         } else {
-            profilePresenter.updateProfile(
-                    keyValueStorage.getUserToken(),
-                    email,
-                    name,
-                    surname,
-                    unixTime,
-                    body);
+            Toast.makeText(getContext(), R.string.agree_with_policy, Toast.LENGTH_SHORT).show();
         }
 
 

@@ -106,7 +106,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         deviceViewHolder.deviceName.setText(
-                Utility.getDeviceNameBy(device.getPid()));
+                Utility.getDeviceNameBy(deviceViewHolder.itemView.getContext(), device.getPid()));
 
         deviceViewHolder.deviceIcon.setImageResource(
                 Utility.getDeviceIconIdBy(

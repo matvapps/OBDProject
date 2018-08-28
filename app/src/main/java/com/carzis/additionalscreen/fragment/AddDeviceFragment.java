@@ -109,43 +109,10 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
         });
 
         deviceListView.setAdapter(deviceListAdapter);
+
+
         deviceListAdapter.setItems(getPidDevicesFrom(supportedPids));
         setupUserDashboardDevices();
-
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.VOLTAGE));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.ENGINE_LOAD));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.ENGINE_COOLANT_TEMP));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.SH_TERM_FUEL_TRIM_1));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.LN_TERM_FUEL_PERCENT_TRIM_1));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.SH_TERM_FUEL_TRIM_2));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.LN_TERM_FUEL_PERCENT_TRIM_2));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.FUEL_PRESSURE));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.INTAKE_MAN_PRESSURE));
-////        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.RPM));
-////        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.SPEED));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.TIMING_ADVANCE));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.INTAKE_AIR_TEMP));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.MAF_AIR_FLOW));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.THROTTLE_POSITION));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.OXY_SENS_VOLT_B_1_SENS_1));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.OXY_SENS_VOLT_B_1_SENS_2));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.OXY_SENS_VOLT_B_1_SENS_3));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.OXY_SENS_VOLT_B_1_SENS_4));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.OXY_SENS_VOLT_B_2_SENS_1));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.OXY_SENS_VOLT_B_2_SENS_2));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.OXY_SENS_VOLT_B_2_SENS_3));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.OXY_SENS_VOLT_B_2_SENS_4));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.FUEL_RAIL_PRESSURE));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.FUEL_RAIL_PRESSURE_DIESEL));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.COMMANDED_EGR));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.FUEL_AMOUNT));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.BAROMETRIC_PRESSURE));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.CATALYST_TEMP_B1S1));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.CATALYST_TEMP_B2S1));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.CATALYST_TEMP_B1S2));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.CATALYST_TEMP_B2S2));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.THROTTLE_POS_2));
-//        deviceListAdapter.addItem(new DashboardItem("0", DashboardDevice.ENGINE_OIL_TEMP));
 
         return rootView;
     }
@@ -168,10 +135,22 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
 
         for (String item : supportedPids) {
             PID pid = PID.getEnumByString(item);
-//            PidItem pidItem = new PidItem(pid);
-            DashboardItem dashboardItem = new DashboardItem("-", pid);
+            String pidCommand = pid.getCommand();
 
-            items.add(dashboardItem);
+            if (!pidCommand.equals(PID.PIDS_SUP_0_20.getCommand()) &&
+                    !pidCommand.equals(PID.FREEZE_DTCS.getCommand()) &&
+                    !pidCommand.equals(PID.ENGINE_RPM.getCommand()) &&
+                    !pidCommand.equals(PID.VEHICLE_SPEED.getCommand()) &&
+                    !pidCommand.equals(PID.OBD_STANDARDS_VEHICLE_CONFORMS_TO.getCommand()) &&
+                    !pidCommand.equals(PID.PIDS_SUP_21_40.getCommand()) &&
+                    !pidCommand.equals(PID.PIDS_SUP_41_60.getCommand()) &&
+                    !pidCommand.equals(PID.EMISSION_REQUIREMENTS_TO_WHICH_VEHICLE_IS_DESIGNED.getCommand()) &&
+                    !pidCommand.equals(PID.PIDS_SUP_61_80.getCommand()) &&
+                    !pidCommand.equals(PID.AUXILIARY_IN_OUT_SUPPORTED.getCommand())) {
+
+                DashboardItem dashboardItem = new DashboardItem("-", pid);
+                items.add(dashboardItem);
+            }
         }
 
         return items;

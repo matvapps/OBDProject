@@ -30,6 +30,7 @@ public class RegisterPresenter implements Presenter<RegisterView> {
         api.registerUser(phone, deviceId, deviceName).enqueue(new Callback<RegisterResponse>() {
             @Override
             public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+                view.showLoading(false);
                 if (response.code() == 200) {
                     view.onRegister();
                 } else if (response.code() == 400) {

@@ -24,7 +24,7 @@ public class TutorialActivity extends BaseActivity {
 
         KeyValueStorage keyValueStorage = new KeyValueStorage(this);
         keyValueStorage.resetDashboardDevices();
-        if (!keyValueStorage.isFirstTimeLaunch()) {
+        if (!keyValueStorage.isFirstTimeLaunch() && savedInstanceState == null) {
             LogRegActivity.start(this);
             finish();
         }

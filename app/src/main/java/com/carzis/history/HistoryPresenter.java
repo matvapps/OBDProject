@@ -42,12 +42,12 @@ public class HistoryPresenter implements Presenter<HistoryView> {
     }
 
     public void addMetric(String carId, String code, String value) {
-        view.showLoading(true);
+//        view.showLoading(true);
 
         api.addCarMetric(token, new CarMetric(carId, code, value), new CarMetric(carId, code, value)).enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(@NonNull Call<BaseResponse> call, @NonNull Response<BaseResponse> response) {
-                view.showLoading(false);
+//                view.showLoading(false);
                 Log.d(TAG, "onResponse: " + response.message() + "\n" + response.toString());
                 if (response.code() == 200) {
                     view.onCarMetricAdded(new CarMetric(carId, code, value));
@@ -56,7 +56,7 @@ public class HistoryPresenter implements Presenter<HistoryView> {
 
             @Override
             public void onFailure(@NonNull Call<BaseResponse> call, @NonNull Throwable t) {
-                view.showLoading(false);
+//                view.showLoading(false);
                 Log.d(TAG, "onFailure: " + t.getMessage());
                 view.showError(AppError.ADD_CAR_METRIC);
             }

@@ -71,22 +71,19 @@
 
         <FrameLayout
             android:id="@+id/phone_country_code_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="75dp"
+            android:layout_height="match_parent"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:background="@drawable/gray_field_background"
-            android:paddingBottom="15dp"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:paddingTop="15dp">
+            android:background="@drawable/gray_field_background">
 
             <br.com.sapereaude.maskedEditText.MaskedEditText
                 android:id="@+id/phone_country_code"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:hint="@string/country_code_hint"
+                android:hint="__"
+                android:textAlignment="center"
                 android:maxLength="4"
                 android:textColor="#85858a"
                 android:textSize="16sp"
@@ -100,26 +97,24 @@
         <FrameLayout
             android:id="@+id/phone_number_container"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/gray_field_background"
-            android:paddingBottom="15dp"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:paddingTop="15dp">
+            android:layout_height="match_parent"
+            android:background="@drawable/gray_field_background">
 
             <br.com.sapereaude.maskedEditText.MaskedEditText
                 android:id="@+id/phone_number"
                 android:layout_width="240dp"
                 android:background="@null"
                 android:layout_height="match_parent"
-                android:hint="@string/phone_num_hint"
+                android:hint="__________"
                 android:inputType="phone"
+                android:paddingLeft="25dp"
                 android:textColor="#85858a"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:allowed_chars="1234567890"
                 app:keep_hint="true"
-                app:mask="(###) ###-##-##" />
+                app:mask="(###) ###-##-##"
+                android:paddingRight="25dp" />
 
         </FrameLayout>
 

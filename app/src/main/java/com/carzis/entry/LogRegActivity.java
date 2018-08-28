@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.carzis.R;
 import com.carzis.base.BaseActivity;
@@ -18,7 +17,6 @@ import com.carzis.entry.register.RegisterCallbackListener;
 import com.carzis.entry.register.RegisterPresenter;
 import com.carzis.entry.register.RegisterView;
 import com.carzis.main.MainActivity;
-import com.carzis.model.AppError;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 import com.carzis.util.AndroidUtility;
 import com.stfalcon.smsverifycatcher.SmsVerifyCatcher;
@@ -187,6 +185,11 @@ public class LogRegActivity extends BaseActivity implements RegisterCallbackList
         }
     }
 
+    @Override
+    public void onResendSms() {
+        registerPresenter.resendCode(phone);
+    }
+
 
     @Override
     public void onRegister() {
@@ -223,24 +226,20 @@ public class LogRegActivity extends BaseActivity implements RegisterCallbackList
         showFragment(smsFragment);
     }
 
-    @Override
-    public void showLoading(boolean load) {
-
-    }
-
-    @Override
-    public void showError(AppError appError) {
-        super.showError(appError);
-        switch (appError) {
-            case AUTH_USER_ERROR:
-                Toast.makeText(this, R.string.auth_error, Toast.LENGTH_SHORT).show();
-                break;
-            case REGISTER_USER_ERROR:
-                break;
-            case REGISTER_USER_DEVICE_ID_EXIST_ERROR:
-//                Toast.makeText(this, "Устройство с таким id уже зарегистрировано", Toast.LENGTH_SHORT).show();
-                break;
-        }
+//    @Override
+//    public void showError(AppError appError) {
+//        super.showError(appError);
+//        switch (appError) {
+//            case AUTH_USER_ERROR:
+//                Toast.makeText(this, R.string.auth_error, Toast.LENGTH_SHORT).show();
+//                break;
+//            case REGISTER_USER_ERROR:
+//                Toast.makeText(this, "No Internet connection", Toast.LENGTH_SHORT).show();
+//                break;
+//            case REGISTER_USER_DEVICE_ID_EXIST_ERROR:
+////                Toast.makeText(this, "Устройство с таким id уже зарегистрировано", Toast.LENGTH_SHORT).show();
+//                break;
+//        }
 //        Toast.makeText(this, appError.value + "", Toast.LENGTH_SHORT).show();
-    }
+//    }
 }

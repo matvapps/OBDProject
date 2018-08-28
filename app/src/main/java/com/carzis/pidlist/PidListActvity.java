@@ -27,7 +27,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class PidListActvity extends BaseActivity implements HistoryView, PidItemClickListener{
+public class PidListActvity extends BaseActivity implements HistoryView, PidItemClickListener {
 
     private final String TAG = PidListActvity.class.getSimpleName();
     private static final String CAR_NAME = "car_name";
@@ -89,10 +89,23 @@ public class PidListActvity extends BaseActivity implements HistoryView, PidItem
     @Override
     public void onGetHistoryItems(List<HistoryItem> items, String carName) {
         List<PidItem> pidItems = new ArrayList<>();
-        if(items != null) {
+        if (items != null) {
             for (HistoryItem item : items) {
                 if (!existInList(pidItems, item.getPidId())) {
-                    pidItems.add(new PidItem(PID.getEnumByString(item.getPidId())));
+                    String pidCommand = item.getPidId();
+
+                    if (!pidCommand.equals(PID.PIDS_SUP_0_20.getCommand()) &&
+                            !pidCommand.equals(PID.FREEZE_DTCS.getCommand()) &&
+                            !pidCommand.equals(PID.OBD_STANDARDS_VEHICLE_CONFORMS_TO.getCommand()) &&
+                            !pidCommand.equals(PID.PIDS_SUP_21_40.getCommand()) &&
+                            !pidCommand.equals(PID.PIDS_SUP_41_60.getCommand()) &&
+                            !pidCommand.equals(PID.EMISSION_REQUIREMENTS_TO_WHICH_VEHICLE_IS_DESIGNED.getCommand()) &&
+                            !pidCommand.equals(PID.PIDS_SUP_61_80.getCommand()) &&
+                            !pidCommand.equals(PID.AUXILIARY_IN_OUT_SUPPORTED.getCommand())) {
+
+                        pidItems.add(new PidItem(PID.getEnumByString(item.getPidId())));
+
+                    }
                 }
             }
         }
@@ -111,7 +124,7 @@ public class PidListActvity extends BaseActivity implements HistoryView, PidItem
     }
 
     private boolean existInList(List<PidItem> items, String pidCode) {
-        for (PidItem item: items) {
+        for (PidItem item : items) {
             if (item.getPid().getCommand().equals(pidCode))
                 return true;
         }

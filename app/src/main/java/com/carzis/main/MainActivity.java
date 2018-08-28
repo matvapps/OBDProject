@@ -458,6 +458,8 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
         useAddingToHistorySwitch = findViewById(R.id.save_to_history_chbx);
         feedbackBtn = findViewById(R.id.message_to_developers);
 
+        if (!Locale.getDefault().getLanguage().equals("ru"))
+            checkCarMenuBtn.setVisibility(View.GONE);
 
         connectToBtMenuBtn.setOnClickListener(onMenuItemClickListener);
         dashboardMenuBtn.setOnClickListener(onMenuItemClickListener);
