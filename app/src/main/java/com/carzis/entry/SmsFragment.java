@@ -43,12 +43,12 @@ public class SmsFragment extends BaseFragment implements ActivityToSmsFragmentCa
     private EditText smsCodePart4;
     private TextView resendSmsTxt;
 
-
     private ArrayList<String> savedSmsParts;
 
     private TextView smsTextTitle;
     private TextView smsTextSubTitle;
 
+    private CountDownTimer countDownTimer;
     private KeyValueStorage keyValueStorage;
 
     public SmsFragment() {
@@ -64,17 +64,16 @@ public class SmsFragment extends BaseFragment implements ActivityToSmsFragmentCa
         smsTextSubTitle = rootView.findViewById(R.id.sms_code_text);
         resendSmsTxt = rootView.findViewById(R.id.resend_sms_txt);
 
-        CountDownTimer countDownTimer = new CountDownTimer(60000, 1000) {
+        countDownTimer = new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long l) {
                 resendSmsTxt.setText(
-                        String.format(
-                                getString(R.string.resend_sms_after), TimeUnit.MILLISECONDS.toSeconds(l)));
+                        String.format(getContext().getString(R.string.resend_sms_after), TimeUnit.MILLISECONDS.toSeconds(l)));
             }
 
             @Override
             public void onFinish() {
-                resendSmsTxt.setText(getString(R.string.resend_sms));
+                resendSmsTxt.setText(getContext().getString(R.string.resend_sms));
             }
         };
         countDownTimer.start();
@@ -93,8 +92,8 @@ public class SmsFragment extends BaseFragment implements ActivityToSmsFragmentCa
         smsCodePart4.addTextChangedListener(new GenericTextWatcher(smsCodePart4));
 
         resendSmsTxt.setOnClickListener(view -> {
-            if (resendSmsTxt.getText().toString().equals(getString(R.string.resend_sms))) {
-                // TODO: resend sms
+            if (resendSmsTxt.getText().toString().equals(getContext().getString(R.string.resend_sms))) {
+                callbackListener.onResendSms();
             }
         });
 
@@ -122,6 +121,7 @@ public class SmsFragment extends BaseFragment implements ActivityToSmsFragmentCa
                 if (sms.length() < 4) {
                     Toast.makeText(getContext(), R.string.code_must, Toast.LENGTH_SHORT).show();
                 } else {
+                    countDownTimer.cancel();
                     callbackListener.onLogRegFinish(isRegistration, Integer.parseInt(sms));
                 }
             }

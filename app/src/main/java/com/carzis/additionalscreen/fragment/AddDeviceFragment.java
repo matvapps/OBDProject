@@ -96,8 +96,8 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
             public void onBillingSetupFinished(@BillingClient.BillingResponse int billingResponseCode) {
                 if (billingResponseCode == BillingClient.BillingResponse.OK) {
                     BillingFlowParams flowParams = BillingFlowParams.newBuilder()
-                            .setSku("com.carzis.product.diagnostics")
-                            .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
+                            .setSku("app_subscription_test")
+                            .setType(BillingClient.SkuType.SUBS) // SkuType.SUB for subscription
                             .build();
                     mBillingClient.launchBillingFlow(getActivity(), flowParams);
                 }
