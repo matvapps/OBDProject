@@ -25,7 +25,7 @@ public class Utility {
     public static String getDeviceDimenBy(Context context, PID pid) {
         switch (pid) {
             case VOLTAGE:
-                return "V";
+                return context.getString(R.string.dimen_title_voltage);
             case PIDS_SUP_0_20:
                 return "";
             case DTCS_CLEARED_MIL_DTCS:
@@ -71,7 +71,7 @@ public class Utility {
             case OXY_SENS_VOLT_6:
             case OXY_SENS_VOLT_7:
             case OXY_SENS_VOLT_8:
-                return "%";
+                return context.getString(R.string.dimen_title_voltage);
             case OBD_STANDARDS_VEHICLE_CONFORMS_TO:
                 return "";
             case OXY_SENS_PRESENT_4_BANKS:
@@ -96,7 +96,7 @@ public class Utility {
             case OXY_SENS_6_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
             case OXY_SENS_7_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
             case OXY_SENS_8_FUEL_AIR_EQUIVALENCE_RATIO_VOLTAGE:
-                return "ratio";
+                return context.getString(R.string.dimen_title_voltage);
             case COMMANDED_EGR:
                 return "%";
             case EGR_ERROR:
@@ -132,7 +132,7 @@ public class Utility {
             case MONITOR_STATUS_THIS_DRIVE_CYCLE:
                 return "";
             case CONTROL_MODULE_VOLTAGE:
-                return "V";
+                return context.getString(R.string.dimen_title_voltage);
             case ABSOLUTE_LOAD_VALUE:
                 return "%";
             case FUEL_AIR_COMMANDED_EQUIVALENCE_RATIO:

@@ -29,9 +29,9 @@
     <string name="cut_off_value">Cutoff Value = 0.01</string>
     <string name="weights_value">Weights = 4</string>
     <string name="odometer_reading">Odometer Reading</string>
-    <string name="ok">Ok</string>
-    <string name="cancel">Cancel</string>
-    <string name="exit">Exit</string>
+    <string name="ok">Ок</string>
+    <string name="cancel">Отменить</string>
+    <string name="exit">Выход</string>
     <string name="set_odometer">Set Odometer</string>
     <string name="reset_trip">Reset Trip</string>
 
@@ -314,4 +314,7 @@
     <string name="kmh">км/ч</string>
     <string name="check_auto">Проверка авто</string>
     <string name="check_auto_subtitle">Полная проверка авто в реальном времени</string>
+    <string name="resend_sms_after">ПЕРЕОТПРАВИТЬ СМС ЧЕРЕЗ: %d сек</string>
+    <string name="resend_sms">ПЕРЕОТПРАВИТЬ СМС</string>
+    <string name="server_error">Ошибка сервера</string>
 </resources>

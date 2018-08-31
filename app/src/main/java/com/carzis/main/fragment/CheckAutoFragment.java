@@ -16,6 +16,7 @@ import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.carzis.CarzisApplication;
 import com.carzis.R;
 import com.carzis.base.BaseFragment;
 import com.carzis.main.presenter.CheckAutoPresenter;
@@ -89,8 +90,6 @@ public class CheckAutoFragment extends BaseFragment implements View.OnClickListe
             @Override
             public void onBillingSetupFinished(@BillingClient.BillingResponse int billingResponseCode) {
                 if (billingResponseCode == BillingClient.BillingResponse.OK) {
-
-
                     // The billing client is ready. You can query purchases here.
                 }
             }
@@ -187,11 +186,27 @@ public class CheckAutoFragment extends BaseFragment implements View.OnClickListe
         if (infoResponse.getHistory() == null) {
             Toast.makeText(getContext(), R.string.no_info_about_car, Toast.LENGTH_SHORT).show();
         } else {
-            BillingFlowParams flowParams = BillingFlowParams.newBuilder()
-                    .setSku("com.carzis.product.autocheck")
-                    .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
-                    .build();
-            mBillingClient.launchBillingFlow(getActivity(), flowParams);
+
+            Purchase.PurchasesResult purchasesResult = mBillingClient.queryPurchases(BillingClient.SkuType.SUBS);
+            boolean isSubscript = false;
+            for (Purchase purchase : purchasesResult.getPurchasesList()) {
+                if (purchase.getSku().equals(CarzisApplication.SUBSCRIPTION_BILLING_ID)) {
+                    isSubscript = true;
+                }
+            }
+
+            if (isSubscript && keyValueStorage.isUserHas1Check()) {
+                keyValueStorage.setUserHas1Check(false); // remove 1 user free check
+                blurView.setVisibility(View.GONE);
+            } else {
+                BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                        .setSku("com.carzis.product.autocheck")
+                        .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
+                        .build();
+                mBillingClient.launchBillingFlow(getActivity(), flowParams);
+            }
+
+
         }
     }
 
@@ -207,11 +222,26 @@ public class CheckAutoFragment extends BaseFragment implements View.OnClickListe
         if (infoResponse.getHistory() == null) {
             Toast.makeText(getContext(), R.string.no_info_about_car, Toast.LENGTH_SHORT).show();
         } else {
-            BillingFlowParams flowParams = BillingFlowParams.newBuilder()
-                    .setSku("com.carzis.product.autocheck")
-                    .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
-                    .build();
-            mBillingClient.launchBillingFlow(getActivity(), flowParams);
+
+            Purchase.PurchasesResult purchasesResult = mBillingClient.queryPurchases(BillingClient.SkuType.SUBS);
+            boolean isSubscript = false;
+            for (Purchase purchase : purchasesResult.getPurchasesList()) {
+                if (purchase.getSku().equals(CarzisApplication.SUBSCRIPTION_BILLING_ID)) {
+                    isSubscript = true;
+                }
+            }
+
+            if (isSubscript && keyValueStorage.isUserHas1Check()) {
+                keyValueStorage.setUserHas1Check(false); // remove 1 user free check
+                blurView.setVisibility(View.GONE);
+            } else {
+                BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                        .setSku("com.carzis.product.autocheck")
+                        .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
+                        .build();
+                mBillingClient.launchBillingFlow(getActivity(), flowParams);
+            }
+
         }
     }
 

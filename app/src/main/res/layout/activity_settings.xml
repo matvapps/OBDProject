@@ -32,6 +32,7 @@
                 android:text="@string/lang"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="12sp"
+                android:visibility="gone"
                 app:fontFamily="@font/gte_esti_pto_text_regular"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -41,6 +42,8 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
                 android:includeFontPadding="false"
                 android:text="@string/device_name"
@@ -91,14 +94,15 @@
 
             <TextView
                 android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="12dp"
+                android:layout_height="8dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginRight="24dp"
                 android:includeFontPadding="false"
                 android:text="@string/km_mils"
                 android:textColor="@android:color/white"
                 android:textSize="13sp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/textView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView" />
@@ -124,6 +128,7 @@
                 android:background="@android:color/transparent"
                 android:popupBackground="@android:color/transparent"
                 android:popupElevation="@null"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@+id/textView"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -145,8 +150,8 @@
                 android:id="@+id/connect_type_spinner"
                 android:layout_width="0dp"
                 android:layout_height="24dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
                 android:background="@android:color/transparent"
                 android:popupBackground="@android:color/transparent"

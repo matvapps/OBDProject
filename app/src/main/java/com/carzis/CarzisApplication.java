@@ -13,6 +13,9 @@ import io.fabric.sdk.android.Fabric;
  */
 public class CarzisApplication extends Application {
 
+    public static String SUBSCRIPTION_BILLING_ID = "com.carzis.subscription";
+    public static String DIAGNOSTICS_BILLING_ID = "com.carzis.product.diagnostics";
+
     @Override
     public void attachBaseContext(Context base) {
         super.attachBaseContext(base);

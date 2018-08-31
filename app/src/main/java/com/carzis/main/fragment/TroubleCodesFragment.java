@@ -20,6 +20,7 @@ import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.carzis.CarzisApplication;
 import com.carzis.R;
 import com.carzis.base.BaseFragment;
 import com.carzis.main.MainActivity;
@@ -167,16 +168,39 @@ public class TroubleCodesFragment extends BaseFragment implements ActivityToTrou
                 @Override
                 public void onBillingSetupFinished(@BillingClient.BillingResponse int billingResponseCode) {
                     if (billingResponseCode == BillingClient.BillingResponse.OK) {
-                        BillingFlowParams flowParams = BillingFlowParams.newBuilder()
-                                .setSku("com.carzis.product.diagnostics")
-                                .setType(BillingClient.SkuType.INAPP) // SkuType.SUB for subscription
-                                .build();
-                        mBillingClient.launchBillingFlow(getActivity(), flowParams);
+
+                        Purchase.PurchasesResult subsPurchaseResult = mBillingClient.queryPurchases(BillingClient.SkuType.SUBS);
+                        boolean isSubscript = false;
+                        for (Purchase purchase : subsPurchaseResult.getPurchasesList()) {
+
+                            if (purchase.getSku().equals(CarzisApplication.SUBSCRIPTION_BILLING_ID)) {
+                                isSubscript = true;
+                            }
+                        }
+                        Purchase.PurchasesResult prodPurchaseResult = mBillingClient.queryPurchases(BillingClient.SkuType.INAPP);
+                        boolean isBuyFull = false;
+                        for (Purchase purchase : prodPurchaseResult.getPurchasesList()) {
+                            if (purchase.getSku().equals(CarzisApplication.DIAGNOSTICS_BILLING_ID)) {
+                                isBuyFull = true;
+                            }
+                        }
+
+
+                        if (!isSubscript && !isBuyFull) {
+                            BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                                    .setSku(CarzisApplication.SUBSCRIPTION_BILLING_ID)
+                                    .setType(BillingClient.SkuType.SUBS) // SkuType.SUB for subscription
+                                    .build();
+                            mBillingClient.launchBillingFlow(getActivity(), flowParams);
+                        } else {
+                            blurView.setVisibility(View.GONE);
+                        }
                     }
                 }
 
                 @Override
                 public void onBillingServiceDisconnected() {
+
                 }
             });
         }

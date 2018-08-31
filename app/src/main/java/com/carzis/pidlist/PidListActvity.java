@@ -3,11 +3,18 @@ package com.carzis.pidlist;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.carzis.CarzisApplication;
 import com.carzis.R;
 import com.carzis.base.BaseActivity;
 import com.carzis.history.HistoryActivity;
@@ -27,7 +34,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class PidListActvity extends BaseActivity implements HistoryView, PidItemClickListener {
+public class PidListActvity extends BaseActivity implements HistoryView, PidItemClickListener,
+        PurchasesUpdatedListener{
 
     private final String TAG = PidListActvity.class.getSimpleName();
     private static final String CAR_NAME = "car_name";
@@ -42,6 +50,7 @@ public class PidListActvity extends BaseActivity implements HistoryView, PidItem
     private PidListAdapter pidListAdapter;
     private HistoryPresenter historyPresenter;
     private KeyValueStorage keyValueStorage;
+    private BillingClient mBillingClient;
 
     private String carName;
     private String carId;
@@ -165,6 +174,56 @@ public class PidListActvity extends BaseActivity implements HistoryView, PidItem
 
     @Override
     public void onClick(String pidId) {
-        HistoryActivity.start(this, carName, carId, pidId);
+        mBillingClient = BillingClient.newBuilder(this).setListener(this).build();
+        mBillingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(@BillingClient.BillingResponse int billingResponseCode) {
+                if (billingResponseCode == BillingClient.BillingResponse.OK) {
+
+                    Purchase.PurchasesResult subsPurchaseResult = mBillingClient.queryPurchases(BillingClient.SkuType.SUBS);
+                    boolean isSubscript = false;
+                    for (Purchase purchase : subsPurchaseResult.getPurchasesList()) {
+
+                        if (purchase.getSku().equals(CarzisApplication.SUBSCRIPTION_BILLING_ID)) {
+                            isSubscript = true;
+                        }
+                    }
+                    Purchase.PurchasesResult prodPurchaseResult = mBillingClient.queryPurchases(BillingClient.SkuType.INAPP);
+                    boolean isBuyFull = false;
+                    for (Purchase purchase : prodPurchaseResult.getPurchasesList()) {
+                        if (purchase.getSku().equals(CarzisApplication.DIAGNOSTICS_BILLING_ID)) {
+                            isBuyFull = true;
+                        }
+                    }
+
+
+                    if (!isSubscript && !isBuyFull) {
+                        BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                                .setSku(CarzisApplication.SUBSCRIPTION_BILLING_ID)
+                                .setType(BillingClient.SkuType.SUBS) // SkuType.SUB for subscription
+                                .build();
+                        mBillingClient.launchBillingFlow(PidListActvity.this, flowParams);
+                    } else {
+                        HistoryActivity.start(PidListActvity.this, carName, carId, pidId);
+                    }
+                }
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+
+            }
+        });
+    }
+
+    @Override
+    public void onPurchasesUpdated(int responseCode, @Nullable List<Purchase> purchases) {
+        if (responseCode == BillingClient.BillingResponse.OK
+                && purchases != null) {
+
+        } else if (responseCode == BillingClient.BillingResponse.ITEM_ALREADY_OWNED) {
+
+        } else if (responseCode == BillingClient.BillingResponse.USER_CANCELED) {
+        }
     }
 }

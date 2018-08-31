@@ -30,6 +30,7 @@ public class KeyValueStorage {
     private final String CONNECT_TYPE = "connect_type";
     private final String USER_TOKEN = "user_token";
     private final String USER_PASSWORD = "user_password";
+    private final String USER_HAS_1_CHECK = "user_has_1_check";
 
 
     private Context context;
@@ -180,6 +181,16 @@ public class KeyValueStorage {
 
     public boolean isFirstTimeLaunch() {
         return preferences.getBoolean(FIRST_TIME_LAUNCH, true);
+    }
+
+
+    public void setUserHas1Check(boolean isUsed) {
+        editor.putBoolean(USER_HAS_1_CHECK, isUsed);
+        editor.commit();
+    }
+
+    public boolean isUserHas1Check() {
+        return preferences.getBoolean(USER_HAS_1_CHECK, true);
     }
 
 }

@@ -30,7 +30,6 @@ public class TutorialItemFragment extends Fragment {
     private TextView subTitleView;
     private ImageView backgroundImage;
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -79,6 +78,28 @@ public class TutorialItemFragment extends Fragment {
                     if (getResources().getConfiguration().orientation
                             == Configuration.ORIENTATION_LANDSCAPE)
                         imageID = R.drawable.tut_land_3;
+                    break;
+                case R.drawable.tut_vert_1_en: {
+                    if (getResources().getConfiguration().orientation
+                            == Configuration.ORIENTATION_LANDSCAPE)
+                        imageID = R.drawable.tut_land_1_en;
+                    break;
+                }
+                case R.drawable.tut_vert_2_en: {
+                    if (getResources().getConfiguration().orientation
+                            == Configuration.ORIENTATION_LANDSCAPE)
+                        imageID = R.drawable.tut_land_2_en;
+                    break;
+                }
+                case R.drawable.tut_land_1_en:
+                    if (getResources().getConfiguration().orientation
+                            != Configuration.ORIENTATION_LANDSCAPE)
+                        imageID = R.drawable.tut_vert_1_en;
+                    break;
+                case R.drawable.tut_land_2_en:
+                    if (getResources().getConfiguration().orientation
+                            != Configuration.ORIENTATION_LANDSCAPE)
+                        imageID = R.drawable.tut_vert_2_en;
                     break;
             }
 

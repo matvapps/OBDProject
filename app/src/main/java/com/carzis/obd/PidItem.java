@@ -100,7 +100,7 @@ public class PidItem {
             case OXY_SENS_VOLT_6:
             case OXY_SENS_VOLT_7:
             case OXY_SENS_VOLT_8:
-                return "a / 200";
+                return "(100 * b) / 128 - 100";
 //            case OBD_STANDARDS_VEHICLE_CONFORMS_TO :
 //                return "";
 //            case OXY_SENS_PRESENT_4_BANKS:

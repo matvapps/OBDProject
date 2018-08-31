@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -18,6 +19,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.carzis.CarzisApplication;
 import com.carzis.R;
 import com.carzis.additionalscreen.AdditionalActivity;
 import com.carzis.base.BaseActivity;
@@ -40,10 +47,10 @@ import com.carzis.main.view.MyCarsView;
 import com.carzis.model.Car;
 import com.carzis.model.CarMetric;
 import com.carzis.model.HistoryItem;
-import com.carzis.obd.PID;
 import com.carzis.obd.OBDReader;
 import com.carzis.obd.OnReceiveDataListener;
 import com.carzis.obd.OnReceiveFaultCodeListener;
+import com.carzis.obd.PID;
 import com.carzis.prefs.SettingsActivity;
 import com.carzis.repository.local.database.LocalRepository;
 import com.carzis.repository.local.prefs.KeyValueStorage;
@@ -61,7 +68,8 @@ import static com.carzis.dialoglist.DialogListActivity.DIALOG_LIST_ACTIVITY_CODE
 import static com.carzis.dialoglist.DialogListActivity.STRING_EXTRA;
 
 public class MainActivity extends BaseActivity implements DashboardToActivityCallbackListener,
-        TroublesToActivityCallbackListener, OnReceiveDataListener, OnReceiveFaultCodeListener, MyCarsView, HistoryView {
+        TroublesToActivityCallbackListener, OnReceiveDataListener, OnReceiveFaultCodeListener,
+        MyCarsView, HistoryView, PurchasesUpdatedListener {
 
     private final String TAG = MainActivity.class.getSimpleName();
 
@@ -91,6 +99,7 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
     private Button feedbackBtn;
     private SwitchCompat useAddingToHistorySwitch;
 
+    private BillingClient mBillingClient;
     private HistoryPresenter historyPresenter;
     private LocalRepository localRepository;
     private KeyValueStorage keyValueStorage;
@@ -189,6 +198,7 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
         obdReader = new OBDReader(this);
         carPresenter = new CarPresenter(keyValueStorage.getUserToken());
         historyPresenter = new HistoryPresenter(keyValueStorage.getUserToken());
+        mBillingClient = BillingClient.newBuilder(MainActivity.this).setListener(this).build();
         historyPresenter.attachView(this);
         carPresenter.attachView(this);
 
@@ -367,8 +377,49 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
     private View.OnClickListener onMenuItemClickListener = view -> {
         switch (view.getId()) {
             case R.id.connect_to_bt_btn: {
-                Intent intent = new Intent(MainActivity.this, ConnectActivity.class);
-                startActivityForResult(intent, REQUEST_CONNECT_TO_DEVICE);
+
+                mBillingClient.startConnection(new BillingClientStateListener() {
+                    @Override
+                    public void onBillingSetupFinished(@BillingClient.BillingResponse int billingResponseCode) {
+                        if (billingResponseCode == BillingClient.BillingResponse.OK) {
+
+                            Purchase.PurchasesResult subsPurchaseResult = mBillingClient.queryPurchases(BillingClient.SkuType.SUBS);
+                            boolean isSubscript = false;
+                            for (Purchase purchase : subsPurchaseResult.getPurchasesList()) {
+
+                                if (purchase.getSku().equals(CarzisApplication.SUBSCRIPTION_BILLING_ID)) {
+                                    isSubscript = true;
+                                }
+                            }
+                            Purchase.PurchasesResult prodPurchaseResult = mBillingClient.queryPurchases(BillingClient.SkuType.INAPP);
+                            boolean isBuyFull = false;
+                            for (Purchase purchase : prodPurchaseResult.getPurchasesList()) {
+                                if (purchase.getSku().equals(CarzisApplication.DIAGNOSTICS_BILLING_ID)) {
+                                    isBuyFull = true;
+                                }
+                            }
+
+
+                            if (!isSubscript && !isBuyFull) {
+                                BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                                        .setSku(CarzisApplication.SUBSCRIPTION_BILLING_ID)
+                                        .setType(BillingClient.SkuType.SUBS) // SkuType.SUB for subscription
+                                        .build();
+                                mBillingClient.launchBillingFlow(MainActivity.this, flowParams);
+                            } else {
+                                Intent intent = new Intent(MainActivity.this, ConnectActivity.class);
+                                startActivityForResult(intent, REQUEST_CONNECT_TO_DEVICE);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onBillingServiceDisconnected() {
+
+                    }
+                });
+
+
 //                ConnectActivity.start(MainActivity.this);
                 break;
             }
@@ -428,12 +479,8 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
                         obdReader.getBluetoothService().getState() == BluetoothService.STATE_CONNECTED);
 //                troubleCodeInt++;
 //                String troubleCode = "P000" + troubleCodeInt;
-
+//
 //                activityToTroublesCallbackListener.onPassTroubleCode(troubleCode);
-////                showFragment(new ProfileSettingsFragment());
-//                addView.setVisibility(View.INVISIBLE);
-////                content.setImageResource();(R.drawable.bg_main);
-//                hideMenu();
                 break;
             }
             case R.id.message_to_developers: {
@@ -688,6 +735,11 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
 
     @Override
     public void onDeleteCar() {
+
+    }
+
+    @Override
+    public void onPurchasesUpdated(int responseCode, @Nullable List<Purchase> purchases) {
 
     }
 
