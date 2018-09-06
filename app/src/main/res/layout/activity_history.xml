@@ -7,101 +7,125 @@
     android:background="@drawable/gradient_background">
 
 
-    <ImageView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/plots"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/bg_main"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_look_plots"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar_additonal"
+    <Button
+        android:id="@+id/btn_look_plots"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-
-    <EditText
-        android:id="@+id/first_date"
-        android:layout_width="115dp"
-        android:layout_height="33dp"
-        android:layout_marginLeft="45dp"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="16dp"
-        android:textColor="@android:color/white"
-        android:hint="@string/frokm"
-        app:fontFamily="@font/gte_esti_pto_text_medium"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:textSize="13sp"
-        android:textAlignment="center"
-        android:background="@drawable/gray_field_background"
-        android:gravity="center_vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
-
-
-    </EditText>
-
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:text="—"
+        android:layout_height="60dp"
+        android:background="@drawable/button_blue_rect_selector"
+        android:text="Watch graph's"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         app:fontFamily="@font/gte_esti_pto_text_bold"
-        app:layout_constraintBottom_toBottomOf="@+id/first_date"
-        app:layout_constraintStart_toEndOf="@+id/first_date"
-        app:layout_constraintTop_toTopOf="@+id/first_date" />
-
-
-    <EditText
-        android:id="@+id/second_date"
-        android:layout_width="115dp"
-        android:layout_height="33dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:background="@drawable/gray_field_background"
-        android:gravity="center_vertical"
-        android:textColor="@android:color/white"
-        android:hint="@string/to"
-        app:fontFamily="@font/gte_esti_pto_text_medium"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:textSize="13sp"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="@+id/first_date"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="@+id/first_date"
-        app:layout_constraintVertical_bias="0.0">
-
-
-    </EditText>
-
-
-    <lecho.lib.hellocharts.view.LineChartView
-        android:id="@+id/chart"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="45dp"
-        android:layout_marginLeft="45dp"
-        android:layout_marginRight="45dp"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/second_date" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:scaleType="centerCrop"-->
+        <!--android:src="@drawable/bg_main"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/toolbar" />-->
+
+    <!--<include-->
+        <!--android:id="@+id/toolbar"-->
+        <!--layout="@layout/toolbar_additonal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"/>-->
+
+
+    <!--<EditText-->
+        <!--android:id="@+id/first_date"-->
+        <!--android:layout_width="115dp"-->
+        <!--android:layout_height="33dp"-->
+        <!--android:layout_marginLeft="45dp"-->
+        <!--android:layout_marginStart="45dp"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:hint="@string/frokm"-->
+        <!--app:fontFamily="@font/gte_esti_pto_text_medium"-->
+        <!--android:paddingLeft="4dp"-->
+        <!--android:paddingRight="4dp"-->
+        <!--android:textSize="13sp"-->
+        <!--android:textAlignment="center"-->
+        <!--android:background="@drawable/gray_field_background"-->
+        <!--android:gravity="center_vertical"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/toolbar">-->
+
+
+    <!--</EditText>-->
+
+
+    <!--<TextView-->
+        <!--android:id="@+id/textView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:text="—"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:textSize="16sp"-->
+        <!--app:fontFamily="@font/gte_esti_pto_text_bold"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/first_date"-->
+        <!--app:layout_constraintStart_toEndOf="@+id/first_date"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/first_date" />-->
+
+
+    <!--<EditText-->
+        <!--android:id="@+id/second_date"-->
+        <!--android:layout_width="115dp"-->
+        <!--android:layout_height="33dp"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:background="@drawable/gray_field_background"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:hint="@string/to"-->
+        <!--app:fontFamily="@font/gte_esti_pto_text_medium"-->
+        <!--android:paddingLeft="4dp"-->
+        <!--android:paddingRight="4dp"-->
+        <!--android:textSize="13sp"-->
+        <!--android:textAlignment="center"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/first_date"-->
+        <!--app:layout_constraintStart_toEndOf="@+id/textView"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/first_date"-->
+        <!--app:layout_constraintVertical_bias="0.0">-->
+
+
+    <!--</EditText>-->
+
+
+    <!--<lecho.lib.hellocharts.view.LineChartView-->
+        <!--android:id="@+id/chart"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_marginBottom="16dp"-->
+        <!--android:layout_marginEnd="45dp"-->
+        <!--android:layout_marginLeft="45dp"-->
+        <!--android:layout_marginRight="45dp"-->
+        <!--android:layout_marginStart="45dp"-->
+        <!--android:layout_marginTop="24dp"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/second_date" />-->
 
 </android.support.constraint.ConstraintLayout>

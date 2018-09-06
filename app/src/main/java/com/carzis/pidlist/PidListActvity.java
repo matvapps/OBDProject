@@ -17,7 +17,6 @@ import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.carzis.CarzisApplication;
 import com.carzis.R;
 import com.carzis.base.BaseActivity;
-import com.carzis.history.HistoryActivity;
 import com.carzis.history.HistoryPresenter;
 import com.carzis.history.HistoryView;
 import com.carzis.model.AppError;
@@ -204,7 +203,7 @@ public class PidListActvity extends BaseActivity implements HistoryView, PidItem
                                 .build();
                         mBillingClient.launchBillingFlow(PidListActvity.this, flowParams);
                     } else {
-                        HistoryActivity.start(PidListActvity.this, carName, carId, pidId);
+//                        HistoryActivity.start(PidListActvity.this, carName, carId, pidId);
                     }
                 }
             }

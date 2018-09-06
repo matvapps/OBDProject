@@ -1,5 +1,7 @@
 package com.carzis.entry.register;
 
+import android.util.Log;
+
 import com.carzis.base.Presenter;
 import com.carzis.model.AppError;
 import com.carzis.model.response.BaseResponse;
@@ -31,6 +33,7 @@ public class RegisterPresenter implements Presenter<RegisterView> {
             @Override
             public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
                 view.showLoading(false);
+                Log.d("RegisterPresenter", "onResponse: " + response.code() + response.toString());
                 if (response.code() == 200) {
                     view.onRegister();
                 } else if (response.code() == 400) {
@@ -54,6 +57,7 @@ public class RegisterPresenter implements Presenter<RegisterView> {
             public void onFailure(Call<RegisterResponse> call, Throwable t) {
                 view.showLoading(false);
                 view.showError(AppError.REGISTER_USER_ERROR);
+                Log.d("RegisterPresenter", "onFailure: " + t.getMessage());
             }
         });
     }

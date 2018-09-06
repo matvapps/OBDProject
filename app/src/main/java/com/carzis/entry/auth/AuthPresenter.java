@@ -39,10 +39,10 @@ public class AuthPresenter implements Presenter<AuthView>{
             @Override
             public void onFailure(Call<ConfirmRegisterResponse> call, Throwable t) {
                 view.showLoading(false);
-                Log.d("LogRegActivity", "onFailure: " + Arrays.toString(t.getStackTrace()));
-                Log.d("LogRegActivity", "onFailure: " + t.toString());
-                Log.d("LogRegActivity", "onFailure: " + t.getLocalizedMessage());
-                Log.d("LogRegActivity", "onFailure: " + t.getMessage());
+                Log.d("AuthPresenter", "onFailure: " + Arrays.toString(t.getStackTrace()));
+                Log.d("AuthPresenter", "onFailure: " + t.toString());
+                Log.d("AuthPresenter", "onFailure: " + t.getLocalizedMessage());
+                Log.d("AuthPresenter", "onFailure: " + t.getMessage());
 
                 view.showError(AppError.AUTH_USER_ERROR);
             }
