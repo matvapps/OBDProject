@@ -51,21 +51,23 @@ public class HistoryActivity extends BaseActivity implements HistoryView, View.O
     private EditText secondDate;
 
     private static final String CAR_NAME = "car_name";
-    private static final String PID_CODE = "pid_code";
+    private static final String PID_CODES = "pid_codes";
     private static final String CAR_ID = "car_id";
 
     private String carName;
-    private String pidCode;
+    private ArrayList<String> pidCode;
     private String carId;
 
     private Calendar firstTime = null;
     private Calendar secondTime = null;
 
-    public static void start(Context context, String carName, String carId, String pidCode) {
+    public static void start(Context context, String carName, String carId, ArrayList<String> pidCodes) {
         Intent intent = new Intent(context, HistoryActivity.class);
         intent.putExtra(CAR_NAME, carName);
         intent.putExtra(CAR_ID, carId);
-        intent.putExtra(PID_CODE, pidCode);
+//        intent.putExtra(PID_CODES, pidCode);
+        intent.putStringArrayListExtra(PID_CODES, pidCodes);
+
         context.startActivity(intent);
     }
 
@@ -75,7 +77,7 @@ public class HistoryActivity extends BaseActivity implements HistoryView, View.O
         setContentView(R.layout.activity_history);
 
         this.carName = getIntent().getStringExtra(CAR_NAME);
-        this.pidCode = getIntent().getStringExtra(PID_CODE);
+        this.pidCode = getIntent().getStringArrayListExtra(PID_CODES);
         this.carId = getIntent().getStringExtra(CAR_ID);
 
         chart = findViewById(R.id.chart);
@@ -397,7 +399,7 @@ public class HistoryActivity extends BaseActivity implements HistoryView, View.O
             secondMillis = secondTime.getTimeInMillis() / 1000L;
 
 
-        historyPresenter.getCarMetric(carName, carId, pidCode, String.valueOf(firstMillis), String.valueOf(secondMillis));
+//        historyPresenter.getCarMetric(carName, carId, pidCode, String.valueOf(firstMillis), String.valueOf(secondMillis));
 
     }
 
