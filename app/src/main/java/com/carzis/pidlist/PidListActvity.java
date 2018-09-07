@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,6 +18,7 @@ import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.carzis.CarzisApplication;
 import com.carzis.R;
 import com.carzis.base.BaseActivity;
+import com.carzis.history.HistoryActivity;
 import com.carzis.history.HistoryPresenter;
 import com.carzis.history.HistoryView;
 import com.carzis.model.AppError;
@@ -34,7 +36,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class PidListActvity extends BaseActivity implements HistoryView, PidItemClickListener,
-        PurchasesUpdatedListener{
+        PurchasesUpdatedListener {
 
     private final String TAG = PidListActvity.class.getSimpleName();
     private static final String CAR_NAME = "car_name";
@@ -44,6 +46,7 @@ public class PidListActvity extends BaseActivity implements HistoryView, PidItem
     private RecyclerView pidListView;
     private TextView timeTextView;
     private View backBtn;
+    private View watchGraphsBtn;
 
     private LocalRepository localRepository;
     private PidListAdapter pidListAdapter;
@@ -71,16 +74,15 @@ public class PidListActvity extends BaseActivity implements HistoryView, PidItem
 
         timeTextView = findViewById(R.id.time_text_view);
         backBtn = findViewById(R.id.back_btn);
-
-        backBtn.setOnClickListener(view -> finish());
-
+        watchGraphsBtn = findViewById(R.id.btn_look_plots);
         pidListView = findViewById(R.id.pidlist);
+
         pidListView.setLayoutManager(new LinearLayoutManager(this));
 
         keyValueStorage = new KeyValueStorage(this);
-
         localRepository = new LocalRepository(this);
         localRepository.attachView(this);
+
         historyPresenter = new HistoryPresenter(keyValueStorage.getUserToken());
         historyPresenter.attachView(this);
 
@@ -89,7 +91,28 @@ public class PidListActvity extends BaseActivity implements HistoryView, PidItem
 
         pidListView.setAdapter(pidListAdapter);
 
-        historyPresenter.getAllCarMetric(carId, carName);
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(200);
+                runOnUiThread(() -> historyPresenter.getAllCarMetric(carId, carName));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
+
+
+        backBtn.setOnClickListener(view -> finish());
+        watchGraphsBtn.setOnClickListener(view -> {
+            ArrayList<String> pids = new ArrayList<>();
+            for (PidItem item : pidListAdapter.getSelected()) {
+                pids.add(item.getPid().getCommand());
+            }
+
+            HistoryActivity.start(PidListActvity.this, carName, carId, pids);
+        });
+
+
         startTimeThread();
 
     }
@@ -111,8 +134,8 @@ public class PidListActvity extends BaseActivity implements HistoryView, PidItem
                             !pidCommand.equals(PID.PIDS_SUP_61_80.getCommand()) &&
                             !pidCommand.equals(PID.AUXILIARY_IN_OUT_SUPPORTED.getCommand())) {
 
-                        pidItems.add(new PidItem(PID.getEnumByString(item.getPidId())));
-
+                        pidItems.add(new PidItem(PID.getEnumByString(pidCommand)));
+                        Log.d(TAG, "onGetHistoryItems: " + item.getPidId());
                     }
                 }
             }
@@ -161,15 +184,6 @@ public class PidListActvity extends BaseActivity implements HistoryView, PidItem
         thread.start();
     }
 
-    @Override
-    public void showLoading(boolean load) {
-
-    }
-
-    @Override
-    public void showError(AppError appError) {
-
-    }
 
     @Override
     public void onClick(String pidId) {

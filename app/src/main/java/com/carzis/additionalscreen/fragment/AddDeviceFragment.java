@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
     private RecyclerView deviceListView;
     private NestedScrollView scrollViewContainer;
     private TextView textView;
+    private Button btnWatchGraphsOnline;
 
     private BillingClient mBillingClient;
     private DeviceListAdapter deviceListAdapter;
@@ -65,6 +67,7 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
         scrollViewContainer = rootView.findViewById(R.id.scroll_view_container);
         deviceListView = rootView.findViewById(R.id.devices_list);
         textView = rootView.findViewById(R.id.add_device_txt);
+        btnWatchGraphsOnline = rootView.findViewById(R.id.btn_watch_graphs);
 
 
         keyValueStorage = new KeyValueStorage(Objects.requireNonNull(getContext()));

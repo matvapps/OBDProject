@@ -80,7 +80,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".pidlist.PidListActvity" />
+        <activity android:name=".pidlist.PidListActvity"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".dialoglist.DialogListActivity"

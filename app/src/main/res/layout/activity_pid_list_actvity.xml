@@ -20,9 +20,22 @@
         android:id="@+id/pidlist"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_look_plots"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <Button
+        android:id="@+id/btn_look_plots"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/button_blue_rect_selector"
+        android:text="Watch graph's"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:fontFamily="@font/gte_esti_pto_text_bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
