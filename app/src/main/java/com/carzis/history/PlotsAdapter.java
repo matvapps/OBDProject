@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.carzis.R;
+import com.carzis.model.AppError;
+import com.carzis.model.CarMetric;
 import com.carzis.model.HistoryItem;
 import com.carzis.util.custom.view.MyDatePickerFragment;
 import com.carzis.util.custom.view.MyTimePickerFragment;
@@ -24,7 +26,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
-import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Line;
@@ -37,13 +38,14 @@ import lecho.lib.hellocharts.view.LineChartView;
  * Created by Alexandr
  */
 
-public class PlotsAdapter extends RecyclerView.Adapter<PlotsAdapter.PlotViewHolder> implements View.OnClickListener {
+public class PlotsAdapter extends RecyclerView.Adapter<PlotsAdapter.PlotViewHolder> implements View.OnClickListener, HistoryView {
 
     private final String TAG = PlotsAdapter.class.getSimpleName();
 
     private Context context;
 
     private List<String> pids;
+    private List<HistoryItem> historyItems;
     private String carName;
     private String carId;
     private String token;
@@ -51,8 +53,13 @@ public class PlotsAdapter extends RecyclerView.Adapter<PlotsAdapter.PlotViewHold
     private Calendar firstTime = null;
     private Calendar secondTime = null;
 
+    private HistoryPresenter historyPresenter;
 
     public PlotsAdapter(String token, String carName, String carId) {
+        historyPresenter = new HistoryPresenter(token);
+        historyPresenter.attachView(this);
+        pids = new ArrayList<>();
+        historyItems = new ArrayList<>();
         this.carName = carName;
         this.carId = carId;
         this.token = token;
@@ -81,12 +88,70 @@ public class PlotsAdapter extends RecyclerView.Adapter<PlotsAdapter.PlotViewHold
 
     @Override
     public void onBindViewHolder(@NonNull PlotViewHolder holder, int position) {
+        FragmentActivity activity = (FragmentActivity) context;
+
         holder.firstDateEdtxt.setFocusable(false);
         holder.secondDateEdtxt.setFocusable(false);
-        holder.firstDateEdtxt.setOnClickListener(this);
-        holder.secondDateEdtxt.setOnClickListener(this);
 
-//        holder.lineChartView.post(() -> onTimeUpdate(position));
+
+        holder.firstDateEdtxt.setOnClickListener(view -> {
+            MyTimePickerFragment myTimePickerFragment = new MyTimePickerFragment();
+            myTimePickerFragment.setTimeChangeListener(timePicker -> {
+                ((EditText) view)
+                        .setText(String.format("%d:%d", timePicker.getCurrentHour(), timePicker.getCurrentMinute()));
+
+                firstTime =  Calendar.getInstance();
+                firstTime.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
+                firstTime.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+
+                MyDatePickerFragment myDatePickerFragment = new MyDatePickerFragment();
+                myDatePickerFragment.setDateChangeListener(datePicker -> {
+                    String str = ((EditText) view).getText().toString();
+                    ((EditText) view)
+                            .setText(String.format("%s  %d/%d/%d", str, datePicker.getDayOfMonth(), datePicker.getMonth() + 1, datePicker.getYear()));
+
+                    firstTime.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+                    firstTime.set(Calendar.MONTH, datePicker.getMonth());
+                    firstTime.set(Calendar.YEAR, datePicker.getYear());
+
+                        onTimeUpdate(position);
+
+                });
+                myDatePickerFragment.show(activity.getSupportFragmentManager(), "date picker");
+            });
+
+            myTimePickerFragment.show(activity.getSupportFragmentManager(), "time picker");
+        });
+        holder.secondDateEdtxt.setOnClickListener(view -> {
+            MyTimePickerFragment myTimePickerFragment = new MyTimePickerFragment();
+            myTimePickerFragment.setTimeChangeListener(timePicker -> {
+                ((EditText) view)
+                        .setText(String.format("%d:%d", timePicker.getCurrentHour(), timePicker.getCurrentMinute()));
+
+                secondTime =  Calendar.getInstance();
+                secondTime.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
+                secondTime.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+
+                MyDatePickerFragment myDatePickerFragment = new MyDatePickerFragment();
+                myDatePickerFragment.setDateChangeListener(datePicker -> {
+                    String str = ((EditText) view).getText().toString();
+                    ((EditText) view)
+                            .setText(String.format("%s  %d/%d/%d", str, datePicker.getDayOfMonth(), datePicker.getMonth() + 1, datePicker.getYear()));
+
+                    secondTime.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+                    secondTime.set(Calendar.MONTH, datePicker.getMonth());
+                    secondTime.set(Calendar.YEAR, datePicker.getYear());
+
+                        onTimeUpdate(position);
+
+                });
+                myDatePickerFragment.show(activity.getSupportFragmentManager(), "date picker");
+            });
+
+            myTimePickerFragment.show(activity.getSupportFragmentManager(), "time picker");
+        });
+
+        holder.lineChartView.post(() -> onTimeUpdate(position));
     }
 
 
@@ -158,25 +223,25 @@ public class PlotsAdapter extends RecyclerView.Adapter<PlotsAdapter.PlotViewHold
     }
 
 
-//    private void onTimeUpdate(int position) {
-//        long firstMillis;
-//        long secondMillis;
-//
-//        if (firstTime == null)
-//            firstMillis = 0;
-//        else
-//            firstMillis = firstTime.getTimeInMillis() / 1000L;
-//
-//
-//        if (secondTime == null)
-//            secondMillis = 999999999999999999L;
-//        else
-//            secondMillis = secondTime.getTimeInMillis() / 1000L;
-//
-//
-//        historyPresenter.getCarMetric(carName, carId, getItem(position), String.valueOf(firstMillis), String.valueOf(secondMillis));
-//
-//    }
+    private void onTimeUpdate(int position) {
+        long firstMillis;
+        long secondMillis;
+
+        if (firstTime == null)
+            firstMillis = 0;
+        else
+            firstMillis = firstTime.getTimeInMillis() / 1000L;
+
+
+        if (secondTime == null)
+            secondMillis = 999999999999999999L;
+        else
+            secondMillis = secondTime.getTimeInMillis() / 1000L;
+
+
+        historyPresenter.getCarMetric(carName, carId, getItem(position), String.valueOf(firstMillis), String.valueOf(secondMillis));
+
+    }
 
     public void generateData(List<HistoryItem> items, LineChartView chart) {
         Line line;
@@ -350,6 +415,44 @@ public class PlotsAdapter extends RecyclerView.Adapter<PlotsAdapter.PlotViewHold
     @Override
     public int getItemCount() {
         return pids.size();
+    }
+
+    @Override
+    public void onGetHistoryItems(List<HistoryItem> items, String carName) {
+//        for (int i = 0; i < items.size(); i++) {
+//            HistoryItem item = items.get(i);
+//            if (!item.getPidId().equals()) {
+//                items.remove(i);
+////                Log.d("TAG", "onGetHistoryItems: " + item.getPidId() + " " + item.getValue());
+//            }
+//        }
+//        for (int i = 0; i < pids.size(); i++) {
+//            if (items.get(0).getPidId().equals(pids.get(i))) {
+//
+//            }
+//        }
+
+//        generateData(items);
+    }
+
+    @Override
+    public void onCarMetricAdded(CarMetric carMetric) {
+
+    }
+
+    @Override
+    public void onRemoteRepoError() {
+
+    }
+
+    @Override
+    public void showLoading(boolean load) {
+
+    }
+
+    @Override
+    public void showError(AppError appError) {
+
     }
 
     public class PlotViewHolder extends RecyclerView.ViewHolder {
