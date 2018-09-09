@@ -11,7 +11,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.carzis.R;
-import com.carzis.connect.BluetoothService;
 import com.carzis.util.Utility;
 
 import java.util.ArrayList;
@@ -59,12 +58,15 @@ public class OBDReader {
     public static final int MESSAGE_DEVICE_NAME = 4;
     public static final int MESSAGE_TOAST = 5;
 
+
     private static final String DEVICE_NAME = "device_name";
     private static final String TOAST = "toast";
 
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothDevice currentdevice;
     private BluetoothService bluetoothService;
+
+    private WifiService wifiService;
 
     private OnReceiveFaultCodeListener onReceiveFaultCodeListener;
     private OnReceiveDataListener onReceiveDataListener;
@@ -183,7 +185,7 @@ public class OBDReader {
 //        defaultCommandsList.addAll(Arrays.asList(PidItem.PIDS));
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        bluetoothService = new BluetoothService(context, mBtHandler);
+        bluetoothService = new BluetoothService(context, btHandler);
 
         if (bluetoothAdapter == null) {
             Toast.makeText(context, R.string.no_bt_connection, Toast.LENGTH_SHORT).show();
@@ -196,7 +198,7 @@ public class OBDReader {
         }
     }
 
-    public void connectDevice(String address, String name) {
+    public void connectToBtDevice(String address, String name) {
         tryconnect = true;
         // Get the BluetoothDevice object
         BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
@@ -210,9 +212,31 @@ public class OBDReader {
         }
     }
 
+    public void connectToWifiDevice() {
+        tryconnect = true;
+
+        if (wifiService == null) {
+            wifiService = new WifiService(context, wifiHandler);
+        }
+
+        // Attempt to connect to the device by WIFI
+        if (wifiService.getState() == WifiService.STATE_NONE) {
+            Log.d(TAG, "connectToWifiDevice: connection start");
+            wifiService.connect();
+        }
+
+
+
+    }
+
+
     public void disconnect() {
         if (bluetoothService != null) {
             bluetoothService.stop();
+            onReceiveDataListener.onDisconnected();
+        }
+        if (wifiService != null) {
+            wifiService.disconnect();
             onReceiveDataListener.onDisconnected();
         }
     }
@@ -245,35 +269,36 @@ public class OBDReader {
     }
 
     public void sendEcuMessage(String message) {
-//        if (mWifiService != null) {
-//            if (mWifiService.isConnected()) {
-//                try {
-//                    if (phone.length() > 0) {
-//                        phone = phone + "\r";
-//                        byte[] send = phone.getBytes();
-//                        mWifiService.write(send);
-//                    }
-//                } catch (Exception e) {
-//                }
-//            }
-//        } else if (mBtService != null) {
-        // Check that we're actually connected before trying anything
-        if (bluetoothService.getState() != BluetoothService.STATE_CONNECTED) {
-            Log.d(TAG, "INFO: " + context.getString(R.string.not_connected));
-            return;
-        }
-        try {
-            if (message.length() > 0) {
-
-                message = message + "\r";
-                // Get the phone bytes and tell the BluetoothChatService to write
-                byte[] send = message.getBytes();
-                bluetoothService.write(send);
+        if (wifiService != null) {
+            if (wifiService.isConnected()) {
+                try {
+                    if (message.length() > 0) {
+                        message = message + "\r";
+                        byte[] send = message.getBytes();
+                        wifiService.write(send);
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(context, R.string.error_send_message_ecu, Toast.LENGTH_SHORT).show();
+                }
             }
-        } catch (Exception e) {
-            Toast.makeText(context, R.string.error_send_message_ecu, Toast.LENGTH_SHORT).show();
+        } else if (bluetoothService != null) {
+            // Check that we're actually connected before trying anything
+            if (bluetoothService.getState() != BluetoothService.STATE_CONNECTED) {
+                Log.d(TAG, "INFO: " + context.getString(R.string.not_connected));
+                return;
+            }
+            try {
+                if (message.length() > 0) {
+
+                    message = message + "\r";
+                    // Get the phone bytes and tell the BluetoothChatService to write
+                    byte[] send = message.getBytes();
+                    bluetoothService.write(send);
+                }
+            } catch (Exception e) {
+                Toast.makeText(context, R.string.error_send_message_ecu, Toast.LENGTH_SHORT).show();
+            }
         }
-//        }
     }
 
     private void analysMsg(Message msg) {
@@ -389,7 +414,7 @@ public class OBDReader {
     private void sendDefaultCommands() {
 
         // Add supported pids to default command list
-        for (String item: supportedPids) {
+        for (String item : supportedPids) {
             if (!defaultCommandsList.contains(item))
                 defaultCommandsList.add(item);
         }
@@ -539,49 +564,49 @@ public class OBDReader {
     }
 
     private void setSupportedPids(String buffer) {
-            String buf = buffer.toString();
-            buf = buf.trim();
-            buf = buf.replace("\t", "");
-            buf = buf.replace(" ", "");
-            buf = buf.replace(">", "");
+        String buf = buffer.toString();
+        buf = buf.trim();
+        buf = buf.replace("\t", "");
+        buf = buf.replace(" ", "");
+        buf = buf.replace(">", "");
 
-            int index;
+        int index;
 
-            Log.d(TAG, "setSupportedPids: " + buf);
-            if ((index = buf.indexOf("4100")) == 0) {
-                buf = buf.substring(index + 4, index + 12);
-                int decNum = hex2decimal(buf);
-                String binary = Integer.toBinaryString(decNum);
+        Log.d(TAG, "setSupportedPids: " + buf);
+        if ((index = buf.indexOf("4100")) == 0) {
+            buf = buf.substring(index + 4, index + 12);
+            int decNum = hex2decimal(buf);
+            String binary = Integer.toBinaryString(decNum);
 
-                for (int i = 1; i < binary.length() + 1; i++) {
-                    if (binary.charAt(i - 1) == '1')
-                        if (!supportedPids.contains(PidItem.PIDS[i]))
-                            supportedPids.add(PidItem.PIDS[i]);
-                }
-
-            } else if ((index = buf.indexOf("4120")) == 0) {
-                buf = buf.substring(index + 4, index + 12);
-                int decNum = hex2decimal(buf);
-                String binary = Integer.toBinaryString(decNum);
-
-                for (int i = 1; i < binary.length() + 1; i++) {
-                    if (binary.charAt(i - 1) == '1')
-                        if (!supportedPids.contains(PidItem.PIDS[i + 32]))
-                            supportedPids.add(PidItem.PIDS[i + 32]);
-                }
-            } else if ((index = buf.indexOf("4140")) == 0) {
-                buf = buf.substring(index + 4, index + 12);
-                int decNum = hex2decimal(buf);
-                String binary = Integer.toBinaryString(decNum);
-
-                for (int i = 1; i < binary.length() + 1; i++) {
-                    if (binary.charAt(i - 1) == '1')
-                        if (!supportedPids.contains(PidItem.PIDS[i + 64]))
-                            supportedPids.add(PidItem.PIDS[i + 64]);
-                }
+            for (int i = 1; i < binary.length() + 1; i++) {
+                if (binary.charAt(i - 1) == '1')
+                    if (!supportedPids.contains(PidItem.PIDS[i]))
+                        supportedPids.add(PidItem.PIDS[i]);
             }
 
-            Log.d(TAG, "setSupportedPids: " + supportedPids.toString());
+        } else if ((index = buf.indexOf("4120")) == 0) {
+            buf = buf.substring(index + 4, index + 12);
+            int decNum = hex2decimal(buf);
+            String binary = Integer.toBinaryString(decNum);
+
+            for (int i = 1; i < binary.length() + 1; i++) {
+                if (binary.charAt(i - 1) == '1')
+                    if (!supportedPids.contains(PidItem.PIDS[i + 32]))
+                        supportedPids.add(PidItem.PIDS[i + 32]);
+            }
+        } else if ((index = buf.indexOf("4140")) == 0) {
+            buf = buf.substring(index + 4, index + 12);
+            int decNum = hex2decimal(buf);
+            String binary = Integer.toBinaryString(decNum);
+
+            for (int i = 1; i < binary.length() + 1; i++) {
+                if (binary.charAt(i - 1) == '1')
+                    if (!supportedPids.contains(PidItem.PIDS[i + 64]))
+                        supportedPids.add(PidItem.PIDS[i + 64]);
+            }
+        }
+
+        Log.d(TAG, "setSupportedPids: " + supportedPids.toString());
     }
 
     private boolean hasPidInSupportedSuchAs(String pid) {
@@ -644,7 +669,95 @@ public class OBDReader {
     }
 
     @SuppressLint("HandlerLeak")
-    private final Handler mBtHandler = new Handler() {
+    private final Handler wifiHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+
+            switch (msg.what) {
+                case MESSAGE_STATE_CHANGE:
+
+                    switch (msg.arg1) {
+                        case WifiService.STATE_CONNECTED:
+                            Log.d(TAG, "Status: " + context.getString(R.string.title_connected_to, mConnectedDeviceName));
+                            Log.d(TAG, "INFO: " + context.getString(R.string.title_connected));
+
+                            Toast.makeText(context,
+                                    context.getString(R.string.title_connected_to, mConnectedDeviceName), Toast.LENGTH_SHORT).show();
+
+                            onReceiveDataListener.onConnected(mConnectedDeviceName);
+
+                            connected = true;
+                            tryconnect = false;
+                            reset();
+                            sendEcuMessage(RESET);
+                            break;
+                        case WifiService.STATE_CONNECTING:
+
+                            break;
+                        case WifiService.STATE_NONE:
+
+//                            if (wifiService != null)wifiService.disconnect();
+//                            wifiService = null;
+//
+//                            resetvalues();
+
+                            connected = true;
+                            if (tryconnect) {
+                                wifiService.connect();
+//                                bluetoothService.connect(currentdevice);
+                                connectcount++;
+                                if (connectcount >= 2) {
+                                    tryconnect = false;
+                                }
+                            }
+                            reset();
+                            break;
+                    }
+                    break;
+                case MESSAGE_WRITE:
+                    byte[] writeBuf = (byte[]) msg.obj;
+                    String writeMessage = new String(writeBuf);
+                    Log.d(TAG, "Handle phone/ your-> " + writeMessage);
+                    break;
+
+                case MESSAGE_READ:
+                    String tmpmsg = clearMsg(msg);
+//                    Info.setText(tmpmsg);
+//                    if (tmpmsg.contains(RSP_ID.NODATA.response) || tmpmsg.contains(RSP_ID.ERROR.response)) {
+//
+//                        try{
+//                            String command = tmpmsg.substring(0,4);
+//
+//                            if(isHexadecimal(command))
+//                            {
+//                                removePID(command);
+//                            }
+//
+//                        }catch(Exception e)
+//                        {
+//                            Toast.makeTextgetActivity(), e.getPhone(),
+//                                Toast.LENGTH_LONG).show();
+//                        }
+//                    }
+                    Log.d(TAG, "Handle phone/ Adapter say-> " + tmpmsg);
+                    analysMsg(msg);
+                    break;
+
+                case MESSAGE_DEVICE_NAME:
+                    mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
+                    break;
+
+                case MESSAGE_TOAST:
+                    Toast.makeText(context, msg.getData().getString(TOAST),
+                            Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
+
+
+    @SuppressLint("HandlerLeak")
+    private final Handler btHandler = new Handler() {
         @SuppressLint("StringFormatInvalid")
         @Override
         public void handleMessage(Message msg) {

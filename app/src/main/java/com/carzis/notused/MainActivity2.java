@@ -39,9 +39,9 @@
 //
 //import com.carzis.R;
 //import com.carzis.TroubleCodes;
-//import com.carzis.connect.BluetoothService;
+//import com.carzis.obd.BluetoothService;
 //import com.carzis.connect.DeviceListActivity;
-//import com.carzis.connect.ObdWifiManager;
+//import com.carzis.obd.WifiService;
 //import com.carzis.main.MainActivity;
 //import com.carzis.prefs.SettingsActivity;
 //
@@ -155,7 +155,7 @@
 //    private BluetoothAdapter mBluetoothAdapter = null;
 //    // Member object for the chat services
 //    private BluetoothService mBtService = null;
-//    private ObdWifiManager mWifiService = null;
+//    private WifiService mWifiService = null;
 //
 //    StringBuilder inStream = new StringBuilder();
 //
@@ -172,7 +172,7 @@
 //                case MESSAGE_STATE_CHANGE:
 //
 //                    switch (msg.arg1) {
-//                        case ObdWifiManager.STATE_CONNECTED:
+//                        case WifiService.STATE_CONNECTED:
 //                            Status.setText(getString(R.string.title_connected_to, "ELM327 WIFI"));
 //                            try {
 //                                itemtemp = menu.findItem(R.id.menu_connect_wifi);
@@ -184,11 +184,11 @@
 //                            sendEcuMessage(RESET);
 //
 //                            break;
-//                        case ObdWifiManager.STATE_CONNECTING:
+//                        case WifiService.STATE_CONNECTING:
 //                            Status.setText(R.string.title_connecting);
 //                            Info.setText(R.string.tryconnectwifi);
 //                            break;
-//                        case ObdWifiManager.STATE_NONE:
+//                        case WifiService.STATE_NONE:
 //                            Status.setText(R.string.title_not_connected);
 //                            itemtemp = menu.findItem(R.id.menu_connect_wifi);
 //                            itemtemp.setTitle(R.string.connectwifi);
@@ -616,11 +616,11 @@
 //                if (item.getTitle().equals("ConnectWIFI")) {
 //
 //                    if (mWifiService == null) {
-//                        mWifiService = new ObdWifiManager(this, mWifiHandler);
+//                        mWifiService = new WifiService(this, mWifiHandler);
 //                    }
 //
 //                    if (mWifiService != null) {
-//                        if (mWifiService.getState() == ObdWifiManager.STATE_NONE) {
+//                        if (mWifiService.getState() == WifiService.STATE_NONE) {
 //                            mWifiService.connect();
 //                        }
 //                    }
@@ -671,7 +671,7 @@
 //            case REQUEST_CONNECT_DEVICE:
 //                // When DeviceListActivity returns with a device to connect
 //                if (resultCode == MainActivity.RESULT_OK) {
-//                    connectDevice(data);
+//                    connectToBtDevice(data);
 //                }
 //                break;
 //
@@ -1015,7 +1015,7 @@
 //        sendEcuMessage(RESET);
 //    }
 //
-//    private void connectDevice(Intent data) {
+//    private void connectToBtDevice(Intent data) {
 //        tryconnect = true;
 //        // Get the device MAC address
 //        String address = data.getExtras().getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);

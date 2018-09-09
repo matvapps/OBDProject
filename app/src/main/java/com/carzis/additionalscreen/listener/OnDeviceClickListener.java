@@ -7,4 +7,5 @@ import com.carzis.obd.PID;
  */
 public interface OnDeviceClickListener {
     void onClick(PID pid, boolean enabled);
+    void onLongClick(String name);
 }

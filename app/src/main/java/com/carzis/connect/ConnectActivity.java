@@ -33,6 +33,8 @@ import java.util.regex.Pattern;
 
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
+import static com.carzis.connect.ConnectionTypeActivity.REQUEST_GET_DEVICE_DATA;
+
 /**
  * Created by Alexandr.
  */
@@ -60,11 +62,16 @@ public class ConnectActivity extends BaseActivity {
     private KeyValueStorage keyValueStorage;
 
     private static final int REQUEST_ENABLE_BT = 3;
-    private static final int REQUEST_GET_CONNECT_DEVICE_DATA = 24;
+    private static final int REQUEST_GET_BT_PARAMETERS = 24;
+
+    public static final String CONNECTION_WIFI = "connection_wifi";
+    public static final String CONNECTION_BT = "connection_bt";
+
+    private static final String CONNECTION_TYPE_EXTRA = "connection_type";
 
     private BluetoothAdapter mBluetoothAdapter = null;
     private Intent serverIntent;
-
+    private String currentConnectionType;
 
 //    private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
 //        public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
@@ -85,10 +92,10 @@ public class ConnectActivity extends BaseActivity {
 //        }
 //    };
 
-
-    public static void start(Activity activity) {
+    public static void start(Activity activity, String connectionType) {
         Intent intent = new Intent(activity, ConnectActivity.class);
-        activity.startActivity(intent);
+        intent.putExtra(CONNECTION_TYPE_EXTRA, connectionType);
+        activity.startActivityForResult(intent, REQUEST_GET_DEVICE_DATA);
     }
 
     @Override
@@ -96,6 +103,7 @@ public class ConnectActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect);
 
+        currentConnectionType = getIntent().getStringExtra(CONNECTION_TYPE_EXTRA);
 
         this.setFinishOnTouchOutside(false);
         iconBth = findViewById(R.id.bth_icon);
@@ -116,21 +124,39 @@ public class ConnectActivity extends BaseActivity {
 //            }
 //        });
 
-        connectBt();
-        newBTDevices = new ArrayList<>();
+        if (currentConnectionType.equals(CONNECTION_BT)) {
+            connectBt();
+            newBTDevices = new ArrayList<>();
 
-        // Register for broadcasts when a device is discovered
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        this.registerReceiver(mReceiver, filter);
+            // Register for broadcasts when a device is discovered
+            IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+            this.registerReceiver(mReceiver, filter);
 
-        // Register for broadcasts when discovery has finished
-        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        this.registerReceiver(mReceiver, filter);
+            // Register for broadcasts when discovery has finished
+            filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+            this.registerReceiver(mReceiver, filter);
 
 
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter == null) {
-            Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
+            mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            if (mBluetoothAdapter == null) {
+                Toast.makeText(this, R.string.bt_not_available, Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Thread thread = new Thread(() -> {
+                try {
+                    Thread.sleep(1500);
+                    Intent intent = new Intent();
+                    intent.putExtra(EXTRA_DEVICE_ADDRESS, "WIFI");
+                    intent.putExtra(EXTRA_DEVICE_NAME, "WIFI");
+
+                    // Set result and finish this Activity
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+            thread.start();
         }
 
 
@@ -154,7 +180,7 @@ public class ConnectActivity extends BaseActivity {
 //        doDiscovery();
 //        // Launch the DeviceListActivity to see devices and do scan
 //        serverIntent = new Intent(this, DeviceListActivity.class);
-//        startActivityForResult(serverIntent, REQUEST_GET_CONNECT_DEVICE_DATA);
+//        startActivityForResult(serverIntent, REQUEST_GET_BT_PARAMETERS);
     }
 
 
@@ -186,12 +212,12 @@ public class ConnectActivity extends BaseActivity {
         // Make sure we're not doing discovery anymore
         if (mBluetoothAdapter != null) {
             mBluetoothAdapter.cancelDiscovery();
+            this.unregisterReceiver(mReceiver);
         }
 
 //        if (bluetoothService != null) bluetoothService.stop();
 
         // Unregister broadcast listeners
-        this.unregisterReceiver(mReceiver);
 
     }
 
@@ -280,7 +306,7 @@ public class ConnectActivity extends BaseActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         switch (requestCode) {
-            case REQUEST_GET_CONNECT_DEVICE_DATA:
+            case REQUEST_GET_BT_PARAMETERS:
                 // When DeviceListActivity returns with a device to connect
                 if (resultCode == RESULT_OK) {
 
@@ -304,7 +330,7 @@ public class ConnectActivity extends BaseActivity {
 
                 if (resultCode == RESULT_OK) {
                     serverIntent = new Intent(this, DeviceListActivity.class);
-                    startActivityForResult(serverIntent, REQUEST_GET_CONNECT_DEVICE_DATA);
+                    startActivityForResult(serverIntent, REQUEST_GET_BT_PARAMETERS);
                 } else {
                     Toast.makeText(this, R.string.bt_not_enabled, Toast.LENGTH_SHORT).show();
                 }

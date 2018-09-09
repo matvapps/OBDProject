@@ -210,8 +210,11 @@ public class TroubleCodesFragment extends BaseFragment implements ActivityToTrou
     public void updateFullDescription(Trouble trouble) {
         String fullDescription = trouble.getFull_desc();
 
-        if (fullDescription.isEmpty())
-            fullDescription = getString(R.string.no_description);
+        if (fullDescription != null)
+            if (fullDescription.isEmpty())
+                fullDescription = getString(R.string.no_description);
+        else
+                fullDescription = getString(R.string.no_description);
 
         troubleFullDescText.setText(fullDescription);
         fullTroubleCodesDescContainer.smoothScrollTo(0, 0);

@@ -1,6 +1,8 @@
 package com.carzis.main;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -8,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
@@ -28,7 +31,8 @@ import com.carzis.CarzisApplication;
 import com.carzis.R;
 import com.carzis.additionalscreen.AdditionalActivity;
 import com.carzis.base.BaseActivity;
-import com.carzis.connect.BluetoothService;
+import com.carzis.connect.ConnectionTypeActivity;
+import com.carzis.obd.BluetoothService;
 import com.carzis.connect.ConnectActivity;
 import com.carzis.dialoglist.DialogListActivity;
 import com.carzis.history.HistoryPresenter;
@@ -75,7 +79,13 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
 
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
-    public static final int REQUEST_CONNECT_TO_DEVICE = 8;
+
+    public static final int REQUEST_CHOOSE_CONNECTION_TYPE = 8;
+
+    public static final String RECEIVED_DATA_FROM_CAR = "received_data_from_car";
+    public static final String BROADCAST_PID_EXTRA = "pid_extra";
+    public static final String BROADCAST_VALUE_EXTRA = "value_extra";
+
     private static final String FRAGMENT = "fragment";
 
     private String currentFragment = "";
@@ -202,7 +212,7 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
         historyPresenter.attachView(this);
         carPresenter.attachView(this);
 
-//        obdReader.connectDevice(deviceadress, devicename);
+//        obdReader.connectToBtDevice(deviceadress, devicename);
         obdReader.setOnReceiveFaultCodeListener(this);
         obdReader.setOnReceiveDataListener(this);
 
@@ -276,7 +286,7 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
 //        }
 //
 //
-//        connectDevice(deviceadress, devicename);
+//        connectToBtDevice(deviceadress, devicename);
     }
 
     private void startTimeThread() {
@@ -407,8 +417,8 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
                                         .build();
                                 mBillingClient.launchBillingFlow(MainActivity.this, flowParams);
                             } else {
-                                Intent intent = new Intent(MainActivity.this, ConnectActivity.class);
-                                startActivityForResult(intent, REQUEST_CONNECT_TO_DEVICE);
+                                Intent intent = new Intent(MainActivity.this, ConnectionTypeActivity.class);
+                                startActivityForResult(intent, REQUEST_CHOOSE_CONNECTION_TYPE);
                             }
                         }
                     }
@@ -585,8 +595,13 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
     @Override
     public void onReceiveData(PID pid, String value) {
         Log.d(TAG, "onReceiveData: PID: " + pid + ", " + value);
-        if (activityToDashboardCallbackListener != null)
+        if (activityToDashboardCallbackListener != null) {
             activityToDashboardCallbackListener.onPassRealDataToFragment(pid, value);
+            Intent intent = new Intent(RECEIVED_DATA_FROM_CAR);
+            intent.putExtra(BROADCAST_PID_EXTRA, pid.getCommand());
+            intent.putExtra(BROADCAST_VALUE_EXTRA, value);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        }
 
         if (useAddingToHistorySwitch.isChecked() && carName != null) {
             historyPresenter.addMetric(getCarIdByName(carName), pid.getCommand(), value);
@@ -624,7 +639,7 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         switch (requestCode) {
-            case REQUEST_CONNECT_TO_DEVICE: {
+            case REQUEST_CHOOSE_CONNECTION_TYPE: {
                 if (resultCode == RESULT_OK) {
                     String deviceName = data.getStringExtra(ConnectActivity.EXTRA_DEVICE_NAME);
                     String deviceAddress = data.getStringExtra(ConnectActivity.EXTRA_DEVICE_ADDRESS);
@@ -635,7 +650,14 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
                     obdReader.setProtocolNum(keyValueStorage.getProtocol());
                     obdReader.setInitializeCommands(
                             Arrays.asList(keyValueStorage.getInitString().split(";")));
-                    obdReader.connectDevice(deviceAddress, deviceName);
+
+                    if (deviceName.equals("WIFI") && deviceAddress.equals("WIFI")) {
+                        obdReader.connectToWifiDevice();
+                        return;
+                    }
+
+
+                    obdReader.connectToBtDevice(deviceAddress, deviceName);
 
                 } else {
                     Toast.makeText(this, R.string.canceled_by_use, Toast.LENGTH_SHORT).show();
@@ -732,7 +754,6 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
         return "";
     }
 
-
     @Override
     public void onDeleteCar() {
 
@@ -742,6 +763,7 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
     public void onPurchasesUpdated(int responseCode, @Nullable List<Purchase> purchases) {
 
     }
+
 
 //    @Override
 //    public void onBackPressed() {

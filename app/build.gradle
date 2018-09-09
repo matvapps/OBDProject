@@ -100,7 +100,6 @@ dependencies {
     //BlurView
     implementation 'com.github.mmin18:realtimeblurview:1.1.2'
 
-
     // Plots
 //    implementation 'com.jjoe64:graphview:4.2.2'
 //    implementation 'com.github.lecho:hellocharts-android:v1.5.8'

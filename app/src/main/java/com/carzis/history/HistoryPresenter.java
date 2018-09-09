@@ -162,7 +162,6 @@ public class HistoryPresenter implements Presenter<HistoryView> {
         api.getCarMetrics(token, carId, "0", "999999999999999999").enqueue(new Callback<List<CarMetricResponse>>() {
             @Override
             public void onResponse(@NonNull Call<List<CarMetricResponse>> call, @NonNull Response<List<CarMetricResponse>> response) {
-                view.showLoading(false);
                 List<HistoryItem> items = new ArrayList<>();
                 Log.d(TAG, "onResponse: " + response.message());
                 if (response.code() == 200) {
@@ -193,8 +192,10 @@ public class HistoryPresenter implements Presenter<HistoryView> {
 
                         Log.d("TAG", "onGetHistoryItems presenter: " + items);
                     }
+                    view.showLoading(false);
                     view.onGetHistoryItems(items, carName);
                 } else {
+                    view.showLoading(false);
                     view.onRemoteRepoError();
                 }
             }

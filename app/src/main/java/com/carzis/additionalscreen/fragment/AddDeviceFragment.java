@@ -1,9 +1,14 @@
 package com.carzis.additionalscreen.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +29,9 @@ import com.carzis.CarzisApplication;
 import com.carzis.R;
 import com.carzis.additionalscreen.AdditionalActivity;
 import com.carzis.additionalscreen.adapter.DeviceListAdapter;
+import com.carzis.additionalscreen.listener.OnDeviceClickListener;
 import com.carzis.base.BaseFragment;
+import com.carzis.history.HistoryActivity;
 import com.carzis.model.DashboardItem;
 import com.carzis.obd.PID;
 import com.carzis.repository.local.prefs.KeyValueStorage;
@@ -33,6 +40,11 @@ import com.carzis.util.custom.view.GridSpacingItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static android.view.View.GONE;
+import static com.carzis.main.MainActivity.BROADCAST_PID_EXTRA;
+import static com.carzis.main.MainActivity.BROADCAST_VALUE_EXTRA;
+import static com.carzis.main.MainActivity.RECEIVED_DATA_FROM_CAR;
 
 /**
  * Created by Alexandr.
@@ -59,6 +71,8 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_add_device, container, false);
 
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver, new IntentFilter(RECEIVED_DATA_FROM_CAR));
+
         Bundle args = getArguments();
 
         assert args != null;
@@ -69,14 +83,19 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
         textView = rootView.findViewById(R.id.add_device_txt);
         btnWatchGraphsOnline = rootView.findViewById(R.id.btn_watch_graphs);
 
+        btnWatchGraphsOnline.setOnClickListener(view -> {
+            ArrayList<String> pidCodes = new ArrayList<>();
+            for (DashboardItem item : deviceListAdapter.getSelectedItems()) {
+                pidCodes.add(item.getPid().getCommand());
+            }
+            HistoryActivity.start(getContext(), true, pidCodes);
+        });
 
         keyValueStorage = new KeyValueStorage(Objects.requireNonNull(getContext()));
         userDashboardDevices = "";
 
-
         deviceListView.setFocusable(false);
         textView.requestFocus();
-
         deviceListView.setNestedScrollingEnabled(false);
 
         int spanCount = 4;
@@ -86,13 +105,8 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
 
         deviceListView.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
         deviceListView.addItemDecoration(new GridSpacingItemDecoration(spanCount, 20, false));
-
         deviceListAdapter = new DeviceListAdapter();
-
-        deviceListAdapter.setOnItemClickListener((pid, enabled) -> {
-            Toast.makeText(getActivity(), R.string.pay_for_diagonostics, Toast.LENGTH_SHORT).show();
-//            setupUserDashboardDevices();
-        });
+        deviceListView.setAdapter(deviceListAdapter);
 
         mBillingClient = BillingClient.newBuilder(getContext()).setListener(this).build();
         mBillingClient.startConnection(new BillingClientStateListener() {
@@ -123,11 +137,25 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
                                 .build();
                         mBillingClient.launchBillingFlow(getActivity(), flowParams);
                     } else {
-                        deviceListAdapter.setOnItemClickListener((pid, enabled) -> {
-                            if (enabled) {
-                                keyValueStorage.addDeviceToDashboard(pid);
-                            } else {
-                                keyValueStorage.removeDeviceFromDashboard(pid);
+                        deviceListAdapter.setOnItemClickListener(new OnDeviceClickListener() {
+                            @Override
+                            public void onClick(PID pid, boolean enabled) {
+
+                                if (enabled) {
+                                    keyValueStorage.addDeviceToDashboard(pid);
+                                } else {
+                                    keyValueStorage.removeDeviceFromDashboard(pid);
+                                }
+
+                                if (deviceListAdapter.getSelectedItems().size() > 0)
+                                    btnWatchGraphsOnline.setVisibility(View.VISIBLE);
+                                else
+                                    btnWatchGraphsOnline.setVisibility(GONE);
+                            }
+
+                            @Override
+                            public void onLongClick(String name) {
+                                Toast.makeText(getContext(), name, Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -139,12 +167,7 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
             }
         });
 
-        deviceListView.setAdapter(deviceListAdapter);
-
-
-        deviceListAdapter.setItems(getPidDevicesFrom(supportedPids));
         setupUserDashboardDevices();
-
         return rootView;
     }
 
@@ -157,7 +180,6 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
         deviceListAdapter.setUserDashboardDevices(userDashboardDevices);
 
     }
-
 
     private List<DashboardItem> getPidDevicesFrom(List<String> supportedPids) {
         List<DashboardItem> items = new ArrayList<>();
@@ -187,35 +209,81 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
         return items;
     }
 
-
     @Override
     public void onPurchasesUpdated(int responseCode, @Nullable List<Purchase> purchases) {
         if (responseCode == BillingClient.BillingResponse.OK
                 && purchases != null) {
-            deviceListAdapter.setOnItemClickListener((pid, enabled) -> {
-                if (enabled) {
-                    keyValueStorage.addDeviceToDashboard(pid);
-                    Log.d(TAG, "onCreateView: " + keyValueStorage.getUserDashboardDevices());
-                } else {
-                    keyValueStorage.removeDeviceFromDashboard(pid);
-                    Log.d(TAG, "onCreateView: " + keyValueStorage.getUserDashboardDevices()
-                    );
+            deviceListAdapter.setOnItemClickListener(new OnDeviceClickListener() {
+                @Override
+                public void onLongClick(String name) {
+                    Toast.makeText(getContext(), name, Toast.LENGTH_SHORT).show();
                 }
-//            setupUserDashboardDevices();
+
+                @Override
+                public void onClick(PID pid, boolean enabled) {
+
+                    if (enabled) {
+                        keyValueStorage.addDeviceToDashboard(pid);
+                        Log.d(TAG, "onCreateView: " + keyValueStorage.getUserDashboardDevices());
+                    } else {
+                        keyValueStorage.removeDeviceFromDashboard(pid);
+                        Log.d(TAG, "onCreateView: " + keyValueStorage.getUserDashboardDevices()
+                        );
+                    }
+
+                    if (deviceListAdapter.getSelectedItems().size() > 0)
+                        btnWatchGraphsOnline.setVisibility(View.VISIBLE);
+                    else
+                        btnWatchGraphsOnline.setVisibility(GONE);
+                }
             });
+
         } else if (responseCode == BillingClient.BillingResponse.ITEM_ALREADY_OWNED) {
-            deviceListAdapter.setOnItemClickListener((pid, enabled) -> {
-                if (enabled) {
-                    keyValueStorage.addDeviceToDashboard(pid);
-                    Log.d(TAG, "onCreateView: " + keyValueStorage.getUserDashboardDevices());
-                } else {
-                    keyValueStorage.removeDeviceFromDashboard(pid);
-                    Log.d(TAG, "onCreateView: " + keyValueStorage.getUserDashboardDevices()
-                    );
+            deviceListAdapter.setOnItemClickListener(new OnDeviceClickListener() {
+                @Override
+                public void onLongClick(String name) {
+                    Toast.makeText(getContext(), name, Toast.LENGTH_SHORT).show();
                 }
-//            setupUserDashboardDevices();
+
+                @Override
+                public void onClick(PID pid, boolean enabled) {
+
+                    if (enabled) {
+                        keyValueStorage.addDeviceToDashboard(pid);
+                        Log.d(TAG, "onCreateView: " + keyValueStorage.getUserDashboardDevices());
+                    } else {
+                        keyValueStorage.removeDeviceFromDashboard(pid);
+                        Log.d(TAG, "onCreateView: " + keyValueStorage.getUserDashboardDevices()
+                        );
+                    }
+
+                    if (deviceListAdapter.getSelectedItems().size() > 0)
+                        btnWatchGraphsOnline.setVisibility(View.VISIBLE);
+                    else
+                        btnWatchGraphsOnline.setVisibility(GONE);
+                }
             });
         } else if (responseCode == BillingClient.BillingResponse.USER_CANCELED) {
         }
+    }
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "onReceive: PID = " + intent.getStringExtra(BROADCAST_PID_EXTRA) + ", value = " + intent.getStringExtra(BROADCAST_VALUE_EXTRA));
+
+            deviceListAdapter.addItem(new DashboardItem(intent.getStringExtra(BROADCAST_VALUE_EXTRA),
+                    PID.getEnumByString(intent.getStringExtra(BROADCAST_PID_EXTRA))));
+            if (deviceListAdapter.getSelectedItems().size() > 0)
+                btnWatchGraphsOnline.setVisibility(View.VISIBLE);
+            else
+                btnWatchGraphsOnline.setVisibility(GONE);
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(broadcastReceiver);
+        super.onDestroy();
     }
 }

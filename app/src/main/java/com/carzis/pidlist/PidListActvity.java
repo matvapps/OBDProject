@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
@@ -119,6 +120,7 @@ public class PidListActvity extends BaseActivity implements HistoryView, PidItem
 
     @Override
     public void onGetHistoryItems(List<HistoryItem> items, String carName) {
+
         List<PidItem> pidItems = new ArrayList<>();
         if (items != null) {
             for (HistoryItem item : items) {
@@ -132,15 +134,16 @@ public class PidListActvity extends BaseActivity implements HistoryView, PidItem
                             !pidCommand.equals(PID.PIDS_SUP_41_60.getCommand()) &&
                             !pidCommand.equals(PID.EMISSION_REQUIREMENTS_TO_WHICH_VEHICLE_IS_DESIGNED.getCommand()) &&
                             !pidCommand.equals(PID.PIDS_SUP_61_80.getCommand()) &&
+                            !pidCommand.equals(PID.DTCS_CLEARED_MIL_DTCS.getCommand()) &&
                             !pidCommand.equals(PID.AUXILIARY_IN_OUT_SUPPORTED.getCommand())) {
 
                         pidItems.add(new PidItem(PID.getEnumByString(pidCommand)));
+
                         Log.d(TAG, "onGetHistoryItems: " + item.getPidId());
                     }
                 }
             }
         }
-
         pidListAdapter.setItems(pidItems);
     }
 

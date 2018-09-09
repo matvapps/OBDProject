@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.carzis.R;
-import com.carzis.connect.BluetoothService;
+import com.carzis.obd.BluetoothService;
 import com.carzis.connect.DeviceListActivity;
 import com.carzis.util.Utility;
 

@@ -24,6 +24,8 @@ public class ConnectionUtility {
      * @return
      */
     public static boolean isConnected(Context context){
+        if (context == null)
+            return false;
         NetworkInfo info = ConnectionUtility.getNetworkInfo(context);
         return (info != null && info.isConnected());
     }

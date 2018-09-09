@@ -317,6 +317,9 @@
     <string name="resend_sms_after">RESEND SMS AFTER:  %d sec</string>
     <string name="resend_sms">RESEND SMS</string>
     <string name="server_error">Server error</string>
+    <string name="wifi">Wifi</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="bt_not_available">Bluetooth is not available</string>
 
 
 </resources>

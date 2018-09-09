@@ -166,11 +166,22 @@ public class PlotsAdapter extends RecyclerView.Adapter<PlotsAdapter.PlotViewHold
         });
 
         if (plotItems.get(position).getTitle() != null) {
-            holder.plotTitleTextView.setText(plotItems.get(position).getTitle());
+            String pid = plotItems.get(position).getHistoryItems().get(0).getPidId();
+            PID pidItem = PID.getEnumByString(pid);
+
+            String dimen = Utility.getDeviceDimenBy(
+                    holder.itemView.getContext(), pidItem);
+
+            String name = Utility.getDeviceNameBy(
+                    holder.itemView.getContext(), pidItem);
+
+            holder.plotTitleTextView
+                    .setText(String.format("%s (%s)", name, dimen));
+
+//            holder.plotTitleTextView.setText(plotItems.get(position).getTitle());
             generateData(plotItems.get(position).getHistoryItems(), holder.lineChartView);
         }
 
-//        holder.lineChartView.post(() -> onTimeUpdate(position));
     }
 
 
@@ -353,12 +364,13 @@ public class PlotsAdapter extends RecyclerView.Adapter<PlotsAdapter.PlotViewHold
 
 
         int length = 8;
-        if (itemLabels.size() < 8) {
+        if (itemLabels.size() > 8) {
             length = itemLabels.size();
         }
 
         Viewport v = new Viewport(0, getMax(itemValues) + 10, length, 0);
-        chart.setMaximumViewport(v);
+        Viewport maxV = new Viewport(0, getMax(itemValues) + 10, items.size(), 0);
+        chart.setMaximumViewport(maxV);
         chart.setCurrentViewport(v);
 
         chart.setLineChartData(lineChartData);

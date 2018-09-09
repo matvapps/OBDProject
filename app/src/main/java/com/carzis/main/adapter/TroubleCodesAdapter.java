@@ -95,16 +95,21 @@ public class TroubleCodesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             troubleCodeViewHolder.image.setAlpha(1.0f);
         } else {
             troubleCodeViewHolder.text.setTextColor(
-                        ContextCompat.getColor(troubleCodeViewHolder.itemView.getContext(), R.color.darkerGray));
-                troubleCodeViewHolder.image.setAlpha(0.4f);
+                    ContextCompat.getColor(troubleCodeViewHolder.itemView.getContext(), R.color.darkerGray));
+            troubleCodeViewHolder.image.setAlpha(0.4f);
         }
 
         String shortDescription = item.getRu_desc();
-        if (shortDescription.isEmpty())
-            shortDescription = item.getEn_desc();
 
-        if (shortDescription.indexOf("P00") == 0)
-            shortDescription = shortDescription.substring(5);
+        if (shortDescription != null) {
+            if (shortDescription.isEmpty())
+                shortDescription = item.getEn_desc();
+
+            if (shortDescription.indexOf("P00") == 0)
+                shortDescription = shortDescription.substring(5);
+        } else {
+            shortDescription = "";
+        }
 
         troubleCodeViewHolder.text.setText(String.format("%s %s", item.getCode(), shortDescription));
 

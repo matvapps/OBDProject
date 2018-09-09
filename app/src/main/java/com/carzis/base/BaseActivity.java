@@ -37,10 +37,12 @@ public class BaseActivity extends AppCompatActivity implements BaseView{
 
     @Override
     public void showError(AppError appError) {
-        if (loadingDialog.isShowing())
-            loadingDialog.dismiss();
-        if (!noInternetDialog.isShowing() && !ConnectionUtility.isConnected(BaseActivity.this))
-            noInternetDialog.show(viewGroup);
+        if (loadingDialog != null)
+            if (loadingDialog.isShowing())
+                loadingDialog.dismiss();
+        if (noInternetDialog != null)
+            if (!noInternetDialog.isShowing() && !ConnectionUtility.isConnected(BaseActivity.this))
+                noInternetDialog.show(viewGroup);
 
     }
 }

@@ -36,18 +36,21 @@ public class BaseFragment extends Fragment implements BaseView {
     @Override
     public void showLoading(boolean load) {
         if (!loadingDialog.isShowing() && load) {
-            getView().post(() -> loadingDialog.show(getView()));
-        }
-        else if (loadingDialog.isShowing() && !load) {
-            getView().post(() -> loadingDialog.dismiss());
+            if (getView() != null)
+                getView().post(() -> loadingDialog.show(getView()));
+        } else if (loadingDialog.isShowing() && !load) {
+            if (getView() != null)
+                getView().post(() -> loadingDialog.dismiss());
         }
     }
 
     @Override
     public void showError(AppError appError) {
-        if (loadingDialog.isShowing())
-            loadingDialog.dismiss();
-        if (!noInternetDialog.isShowing() && !ConnectionUtility.isConnected(getContext()))
-            noInternetDialog.show(getView());
+        if (loadingDialog != null)
+            if (loadingDialog.isShowing())
+                loadingDialog.dismiss();
+        if (noInternetDialog != null)
+            if (!noInternetDialog.isShowing() && !ConnectionUtility.isConnected(getContext()))
+                noInternetDialog.show(getView());
     }
 }

@@ -8,7 +8,7 @@ import com.carzis.obd.PID;
 public class DashboardItem {
     private String value;
     private PID pid;
-
+    private boolean checked;
 //    public enum DashboardDevice {
 //        VOLTAGE(108),
 //        ENGINE_LOAD(110),
@@ -58,6 +58,13 @@ public class DashboardItem {
         this.pid = pid;
     }
 
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
 
     public PID getPid() {
         return pid;

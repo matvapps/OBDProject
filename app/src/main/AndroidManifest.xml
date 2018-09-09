@@ -3,19 +3,15 @@
     package="com.carzis">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
-
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -72,7 +68,7 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".history.HistoryActivity"
-            android:screenOrientation="sensorLandscape"/>
+            android:screenOrientation="sensorLandscape" />
 
         <receiver android:name=".entry.register.IncomingSms">
             <intent-filter>
@@ -80,15 +76,16 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".pidlist.PidListActvity"
-            android:screenOrientation="portrait"/>
-
+        <activity
+            android:name=".pidlist.PidListActvity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".dialoglist.DialogListActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/DialogTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".base.BaseActivity" />
+        <activity android:name=".connect.ConnectionTypeActivity"></activity>
     </application>
 
 </manifest>
