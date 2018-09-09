@@ -82,15 +82,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:hint="__"
+                android:hint="___"
+                android:imeOptions="actionDone"
+                android:inputType="phone"
+                android:maxLength="6"
                 android:textAlignment="center"
-                android:maxLength="4"
                 android:textColor="#85858a"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:inputType="phone"
                 app:allowed_chars="1234567890"
-                app:mask="+##" />
+                app:mask="+###" />
 
         </FrameLayout>
 
@@ -103,18 +104,19 @@
             <br.com.sapereaude.maskedEditText.MaskedEditText
                 android:id="@+id/phone_number"
                 android:layout_width="240dp"
-                android:background="@null"
                 android:layout_height="match_parent"
+                android:background="@null"
                 android:hint="__________"
+                android:imeOptions="actionDone"
                 android:inputType="phone"
                 android:paddingLeft="25dp"
+                android:paddingRight="25dp"
                 android:textColor="#85858a"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:allowed_chars="1234567890"
                 app:keep_hint="true"
-                app:mask="(###) ###-##-##"
-                android:paddingRight="25dp" />
+                app:mask="(###) ###-##-##" />
 
         </FrameLayout>
 

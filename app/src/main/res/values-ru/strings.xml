@@ -44,7 +44,7 @@
     <string name="title_other_devices">Другие доступные устройства</string>
     <string name="button_scan">Поиск устройств</string>
     <!--  DashboardDevices dimen titles -->
-    <string name="dimen_title_voltage">V</string>
+    <string name="dimen_title_voltage">В</string>
     <string name="dimen_title_speed">км/\nч</string>
     <string name="dimen_title_gas">%</string>
     <string name="dimen_title_engine_temp">°C</string>
@@ -55,7 +55,7 @@
     <string name="all_errors">Смотрите все ошибки в вашем автомобиле</string>
     <string name="add_devices">Добавление датчиков</string>
     <string name="devices_on_the_dashboard">Выберите датчики которые нужно добавить на панель приборов</string>
-    <string name="bt_connect">Выполняется подключение по Bluetooth...</string>
+    <string name="bt_connect">Выполняется подключение по Bluetooth…</string>
     <string name="please_wait">Пожалуйста подождите</string>
     <string name="start">Начать</string>
     <string name="phone">Телефон:</string>
@@ -69,7 +69,7 @@
     <string name="email_profile">Email</string>
     <string name="policy_txt">Даю согласие на обработку персональных данных Соглашаюсь на Политику конфиденциальности</string>
     <string name="save">Сохранить</string>
-    <string name="search">Поиск...</string>
+    <string name="search">Поиск…</string>
     <string name="search_big">НАЙТИ</string>
     <string name="frokm">от</string>
     <string name="to">до</string>
@@ -93,7 +93,7 @@
     <string name="record_history">Запись истории</string>
     <string name="feedback">Обратная связь</string>
     <string name="connecting_by_bt">Выполняется подключение по Bluetooth...</string>
-    <string name="input_vin">Введите VIN device_id в формате 4f2yu08102km26251</string>
+    <string name="input_vin">Введите VIN код в формате 4f2yu08102km26251</string>
     <string name="input_num_hint">Введите ваш код…</string>
     <string name="search_str">Поиск</string>
     <string name="error_list_tut">Список ошибок</string>
@@ -208,7 +208,7 @@
     <string name="sh_term_fuel_trim_1">Кратковременный топливный баланс (Bank 1)</string>
     <string name="ln_term_fuel_percent_trim_1">Долговременный топливный баланс (Bank 1)</string>
     <string name="sh_term_fuel_trim_2">Кратковременный топливный баланс (Bank 2)</string>
-    <string name="ln_term_fuel_percent_trim_2">LN_TERM_FUEL_PERCENT_TRIM_2</string>
+    <string name="ln_term_fuel_percent_trim_2">Долговременный топливный баланс (Bank 2)</string>
     <string name="fuel_pressure">Давление топлива</string>
     <string name="intake_manifold_pressure">Давление во впускном коллекторе</string>
     <string name="engine_rpm">Обороты двигателя</string>
@@ -317,4 +317,12 @@
     <string name="resend_sms_after">ПЕРЕОТПРАВИТЬ СМС ЧЕРЕЗ: %d сек</string>
     <string name="resend_sms">ПЕРЕОТПРАВИТЬ СМС</string>
     <string name="server_error">Ошибка сервера</string>
+    <string name="wifi">WIFI</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="bt_not_available">Bluetooth не доступен</string>
+    <string name="error_occured">Ошибка</string>
+    <string name="wifi_connected">wifi подключен</string>
+    <string name="unable_to_connect_wifi">Не получилось подключиться к wifi ус-ву</string>
+    <string name="wifi_connection_lost">WIFI соединение было потеряно</string>
+    <string name="wifi_connect">Выполняется подключение по WIFI…</string>
 </resources>

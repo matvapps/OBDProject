@@ -1,8 +1,6 @@
 package com.carzis.main;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -31,9 +29,8 @@ import com.carzis.CarzisApplication;
 import com.carzis.R;
 import com.carzis.additionalscreen.AdditionalActivity;
 import com.carzis.base.BaseActivity;
-import com.carzis.connect.ConnectionTypeActivity;
-import com.carzis.obd.BluetoothService;
 import com.carzis.connect.ConnectActivity;
+import com.carzis.connect.ConnectionTypeActivity;
 import com.carzis.dialoglist.DialogListActivity;
 import com.carzis.history.HistoryPresenter;
 import com.carzis.history.HistoryView;
@@ -51,6 +48,7 @@ import com.carzis.main.view.MyCarsView;
 import com.carzis.model.Car;
 import com.carzis.model.CarMetric;
 import com.carzis.model.HistoryItem;
+import com.carzis.obd.BluetoothService;
 import com.carzis.obd.OBDReader;
 import com.carzis.obd.OnReceiveDataListener;
 import com.carzis.obd.OnReceiveFaultCodeListener;
@@ -612,11 +610,17 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
     @Override
     public void onReceiveVoltage(String voltage) {
         Log.d(TAG, "onReceiveVoltage: " + voltage);
-        if (activityToDashboardCallbackListener != null)
+        voltage = voltage.replace("V", "");
+        if (activityToDashboardCallbackListener != null) {
             activityToDashboardCallbackListener.onPassRealDataToFragment(PID.VOLTAGE, voltage);
+            Intent intent = new Intent(RECEIVED_DATA_FROM_CAR);
+            intent.putExtra(BROADCAST_PID_EXTRA, PID.VOLTAGE.getCommand());
+            intent.putExtra(BROADCAST_VALUE_EXTRA, voltage);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        }
 
         if (useAddingToHistorySwitch.isChecked() && carName != null) {
-            historyPresenter.addMetric(getCarIdByName(carName), PID.VOLTAGE.getCommand(), voltage.replace("V", ""));
+            historyPresenter.addMetric(getCarIdByName(carName), PID.VOLTAGE.getCommand(), voltage);
         }
     }
 

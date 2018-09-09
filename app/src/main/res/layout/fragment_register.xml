@@ -10,8 +10,8 @@
         android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/bg_main"
         android:scaleType="centerCrop"
+        android:src="@drawable/bg_main"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -89,16 +89,17 @@
                     android:id="@+id/phone_country_code"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textAlignment="center"
                     android:background="@null"
-                    android:hint="__"
+                    android:hint="___"
+                    android:imeOptions="actionDone"
                     android:inputType="phone"
-                    android:maxLength="4"
+                    android:maxLength="6"
+                    android:textAlignment="center"
                     android:textColor="#85858a"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:allowed_chars="1234567890"
-                    app:mask="+##" />
+                    app:mask="+###" />
 
             </FrameLayout>
 
@@ -114,6 +115,7 @@
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:hint="__________"
+                    android:imeOptions="actionDone"
                     android:inputType="phone"
                     android:paddingLeft="25dp"
                     android:paddingRight="25dp"
@@ -148,8 +150,6 @@
 
 
     </android.support.constraint.ConstraintLayout>
-
-
 
 
 </android.support.constraint.ConstraintLayout>

@@ -88,12 +88,12 @@
     <string name="connect_to_device">Connect device</string>
     <string name="error_list_title">FAULTS list</string>
     <string name="my_cars">My cars</string>
-    <string name="check_car">Проверка авто</string>
+    <string name="check_car">Checking the car</string>
     <string name="profile">Profile</string>
     <string name="record_history">History record</string>
     <string name="feedback">Feedback</string>
     <string name="connecting_by_bt">Bluetooth connecting...</string>
-    <string name="input_vin">Введите VIN device_id в формате 4f2yu08102km26251</string>
+    <string name="input_vin">Enter the VIN in the format 4f2yu08102km26251</string>
     <string name="input_num_hint">Enter your code...</string>
     <string name="search_str">Search</string>
     <string name="error_list_tut">FAULTS list</string>
@@ -132,7 +132,7 @@
     <string name="body_num_hint">Number</string>
     <string name="add_car">ADD</string>
     <string name="error_list">FAULTS list</string>
-    <string name="category_dtc">Выберите категорию чтоб посмотреть список ошибок</string>
+    <string name="category_dtc">Select a category to see the list of errors</string>
     <string name="code_error">FAULT CODE</string>
     <string name="description">DESCRIPTION</string>
     <string name="lang">Language</string>
@@ -146,10 +146,10 @@
     <string name="code_from_sms">SMS Code</string>
     <string name="input_code_from_sms">Add SMS Code</string>
     <string name="next">Next</string>
-    <string name="check_by_vin">ПРОВЕРКА ПО VIN КОДУ</string>
-    <string name="check_by_num">ПРОВЕРКА ПО НОМЕРУ</string>
-    <string name="check_car_by_vin">Проверка авто по VIN коду</string>
-    <string name="input_vin_format">Введите VIN код в формате 4f2yu08102km26251</string>
+    <string name="check_by_vin">INSPECTION BY VIN CODE</string>
+    <string name="check_by_num">INSPECTION BY THE NUMBER</string>
+    <string name="check_car_by_vin">Car check by VIN code</string>
+    <string name="input_vin_format">Enter the VIN code in the format 4f2yu08102km26251</string>
     <string name="input_code_hint">Add your code...</string>
     <string name="search_btn">Search</string>
     <string name="your_cars">Your cars:</string>
@@ -200,8 +200,8 @@
     <string name="agree_with_policy">Please agree with the Privacy Policy</string>
     <string name="voltage">Напряжение</string>
     <string name="pids_0_20">PID\'s 0-20</string>
-    <string name="dtc_cleared_mil_dtc">Состояние монитора после очистки DTC.</string>
-    <string name="freeze_dtc">Обнаруженные диагностические коды ошибок</string>
+    <string name="dtc_cleared_mil_dtc">Monitor status after DTC clearing</string>
+    <string name="freeze_dtc">Detected diagnostic error codes</string>
     <string name="fuel_system_status">Fuel System Status</string>
     <string name="calc_engine_load">"Engine load "</string>
     <string name="engine_coolant_temp">Coolant temp.</string>
@@ -236,13 +236,13 @@
     <string name="fuel_rail_pressure_man_vacuum">Fuel Rail Pressure</string>
     <string name="furl_rail_gauge_pressure_diesel_gas_direct_inject">Fuel Rail Pressure (diesel, or gasoline direct inject)</string>
     <string name="oxy_sens_1_fuel_air">O2S1_WR_lambda(1): Equivalence Ratio Voltage</string>
-    <string name="oxy_sens_2_fuel_air">" O2S2_WR_lambda(1): Equivalence Ratio Voltage"</string>
-    <string name="oxy_sens_3_fuel_air">" O2S3_WR_lambda(1): Equivalence Ratio Voltage"</string>
+    <string name="oxy_sens_2_fuel_air">O2S2_WR_lambda(1): Equivalence Ratio Voltage</string>
+    <string name="oxy_sens_3_fuel_air">O2S3_WR_lambda(1): Equivalence Ratio Voltage</string>
     <string name="oxy_sens_4_fuel_air">O2S4_WR_lambda(1): Equivalence Ratio Voltage</string>
-    <string name="oxy_sens_5_fuel_air">" O2S5_WR_lambda(1): Equivalence Ratio Voltage"</string>
-    <string name="oxy_sens_6_fuel_air">" O2S6_WR_lambda(1): Equivalence Ratio Voltage"</string>
-    <string name="oxy_sens_7_fuel_air">" O2S7_WR_lambda(1): Equivalence Ratio Voltage"</string>
-    <string name="oxy_sens_8_fuel_air">" O2S8_WR_lambda(1): Equivalence Ratio Voltage"</string>
+    <string name="oxy_sens_5_fuel_air">O2S5_WR_lambda(1): Equivalence Ratio Voltage</string>
+    <string name="oxy_sens_6_fuel_air">O2S6_WR_lambda(1): Equivalence Ratio Voltage</string>
+    <string name="oxy_sens_7_fuel_air">O2S7_WR_lambda(1): Equivalence Ratio Voltage</string>
+    <string name="oxy_sens_8_fuel_air">O2S8_WR_lambda(1): Equivalence Ratio Voltage</string>
     <string name="commanded_egr">Commanded EGR</string>
     <string name="egr_error">EGR Error</string>
     <string name="commanded_evaporative_purge">Commanded evaporative purge</string>
@@ -263,11 +263,11 @@
     <string name="catalyst_temp_bank_2_sens_1">Catalyst Temperature Bank 2, Sensor 1</string>
     <string name="catalyst_temp_bank_1_sens_2">Catalyst Temperature Bank 1, Sensor 2</string>
     <string name="catalyst_temp_bank_2_sens_2">Catalyst Temperature Bank 2, Sensor 2</string>
-    <string name="pids_41_60">Список поддерживаемых PID[41-60]</string>
+    <string name="pids_41_60">Supported PID[41-60]</string>
     <string name="monitor_status_this_drive_cycle">Monitor status this drive cycle</string>
     <string name="control_module_voltage">Control module voltage</string>
     <string name="absolute_load_value">Absolute load value</string>
-    <string name="fuel_air_commanded_equivalence_ratio">" Command equivalence ratio"</string>
+    <string name="fuel_air_commanded_equivalence_ratio">Command equivalence ratio</string>
     <string name="relative_throttle_pos">Throttle position</string>
     <string name="ambient_air_temp">Ambient air temperature</string>
     <string name="absolute_throttle_pos_b">Absolute throttle position B</string>
@@ -294,12 +294,13 @@
     <string name="engine_oil_temp">Engine oil temperature</string>
     <string name="fuel_injection_timing">Fuel injection timing</string>
     <string name="engine_fuel_rate">Engine fuel rate</string>
-    <string name="emission_requirements_to_which_vehicle_is_designed">Требования к выбросам, для которых предназначено транспортное средство</string>
+    <string name="emission_requirements_to_which_vehicle_is_designed">Requirements for emissions for which the vehicle is intended</string>
     <string name="pids_sup_61_80">PID[61-80]</string>
     <string name="drivers_demand_engine_percent_torque">Engine torque requested</string>
-    <string name="actual_engine_percent_torque">Реальный момент двигателя</string>
+    <string name="actual_engine_percent_torque">Real engine torque</string>
     <string name="engine_reference_torque">Real engine torque</string>
-    <string name="engine_percent_torque_data">Данные о крутящем моменте двигателя</string>
+    <string name="engine_percent_torque_data">Data on the engine torque</string>
+    <!--<string name="engine_percent_torque_data">Данные о крутящем моменте двигателя</string>-->
     <string name="auxiliary_in_out_supported">Data on the engine torque</string>
     <string name="nm">nM</string>
     <string name="lh">l/h</string>
@@ -320,6 +321,11 @@
     <string name="wifi">Wifi</string>
     <string name="bluetooth">Bluetooth</string>
     <string name="bt_not_available">Bluetooth is not available</string>
+    <string name="error_occured">An error occurred</string>
+    <string name="wifi_connected">wifi connected…</string>
+    <string name="unable_to_connect_wifi">Unable to connect wifi device</string>
+    <string name="wifi_connection_lost">Wifi device connection was lost</string>
+    <string name="wifi_connect">WIFI connecting…</string>
 
 
 </resources>

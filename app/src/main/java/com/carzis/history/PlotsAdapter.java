@@ -280,7 +280,7 @@ public class PlotsAdapter extends RecyclerView.Adapter<PlotsAdapter.PlotViewHold
         ArrayList<Calendar> itemLabels = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
             long millis = Long.parseLong(items.get(i).getTime());
-            Log.d("HelloWorld", "TimeInMillis HistoryActivity: " + millis);
+            Log.d(TAG, "TimeInMillis HistoryActivity: " + millis);
             Calendar time = Calendar.getInstance();
 //            Toast.makeText(this, time.get(Calendar.SECOND) + " second before", Toast.LENGTH_SHORT).show();
             time.setTimeInMillis(millis);

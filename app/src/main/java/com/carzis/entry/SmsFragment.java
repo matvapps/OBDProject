@@ -143,6 +143,7 @@ public class SmsFragment extends BaseFragment implements ActivityToSmsFragmentCa
     @Override
     public void onPause() {
 //        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(receiver);
+        countDownTimer.cancel();
         super.onPause();
     }
 
