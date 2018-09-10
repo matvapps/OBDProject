@@ -101,17 +101,12 @@ public class BluetoothService {
 
         // Cancel any thread currently running a connection
         if (mConnectedThread != null) {
-            mConnectedThread.cancel();
-            mConnectedThread = null;
+            return;
+//            mConnectedThread.cancel();
+//            mConnectedThread = null;
         }
 
         setState(STATE_LISTEN);
-
-        // Start the thread to listen on a BluetoothServerSocket
-//        if (mAcceptThread == null) {
-//            mAcceptThread = new AcceptThread();
-//            mAcceptThread.start();
-//        }
     }
 
     /**

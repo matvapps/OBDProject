@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@drawable/button_blue_rect_selector"
-        android:text="Watch graph's"
+        android:text="@string/watch_graph_s"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         app:fontFamily="@font/gte_esti_pto_text_bold"

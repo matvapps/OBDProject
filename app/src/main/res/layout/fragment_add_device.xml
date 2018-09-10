@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@drawable/button_blue_rect_selector"
-        android:text="Watch graphs online"
+        android:text="@string/watch_graphs_online"
         android:textColor="@android:color/white"
         android:textSize="15sp"
         android:visibility="gone"

@@ -385,47 +385,47 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
     private View.OnClickListener onMenuItemClickListener = view -> {
         switch (view.getId()) {
             case R.id.connect_to_bt_btn: {
-
-                mBillingClient.startConnection(new BillingClientStateListener() {
-                    @Override
-                    public void onBillingSetupFinished(@BillingClient.BillingResponse int billingResponseCode) {
-                        if (billingResponseCode == BillingClient.BillingResponse.OK) {
-
-                            Purchase.PurchasesResult subsPurchaseResult = mBillingClient.queryPurchases(BillingClient.SkuType.SUBS);
-                            boolean isSubscript = false;
-                            for (Purchase purchase : subsPurchaseResult.getPurchasesList()) {
-
-                                if (purchase.getSku().equals(CarzisApplication.SUBSCRIPTION_BILLING_ID)) {
-                                    isSubscript = true;
-                                }
-                            }
-                            Purchase.PurchasesResult prodPurchaseResult = mBillingClient.queryPurchases(BillingClient.SkuType.INAPP);
-                            boolean isBuyFull = false;
-                            for (Purchase purchase : prodPurchaseResult.getPurchasesList()) {
-                                if (purchase.getSku().equals(CarzisApplication.DIAGNOSTICS_BILLING_ID)) {
-                                    isBuyFull = true;
-                                }
-                            }
-
-
-                            if (!isSubscript && !isBuyFull) {
-                                BillingFlowParams flowParams = BillingFlowParams.newBuilder()
-                                        .setSku(CarzisApplication.SUBSCRIPTION_BILLING_ID)
-                                        .setType(BillingClient.SkuType.SUBS) // SkuType.SUB for subscription
-                                        .build();
-                                mBillingClient.launchBillingFlow(MainActivity.this, flowParams);
-                            } else {
-                                Intent intent = new Intent(MainActivity.this, ConnectionTypeActivity.class);
-                                startActivityForResult(intent, REQUEST_CHOOSE_CONNECTION_TYPE);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onBillingServiceDisconnected() {
-
-                    }
-                });
+                Intent intent = new Intent(MainActivity.this, ConnectionTypeActivity.class);
+                startActivityForResult(intent, REQUEST_CHOOSE_CONNECTION_TYPE);
+//                mBillingClient.startConnection(new BillingClientStateListener() {
+//                    @Override
+//                    public void onBillingSetupFinished(@BillingClient.BillingResponse int billingResponseCode) {
+//                        if (billingResponseCode == BillingClient.BillingResponse.OK) {
+//
+//                            Purchase.PurchasesResult subsPurchaseResult = mBillingClient.queryPurchases(BillingClient.SkuType.SUBS);
+//                            boolean isSubscript = false;
+//                            for (Purchase purchase : subsPurchaseResult.getPurchasesList()) {
+//
+//                                if (purchase.getSku().equals(CarzisApplication.SUBSCRIPTION_BILLING_ID)) {
+//                                    isSubscript = true;
+//                                }
+//                            }
+//                            Purchase.PurchasesResult prodPurchaseResult = mBillingClient.queryPurchases(BillingClient.SkuType.INAPP);
+//                            boolean isBuyFull = false;
+//                            for (Purchase purchase : prodPurchaseResult.getPurchasesList()) {
+//                                if (purchase.getSku().equals(CarzisApplication.DIAGNOSTICS_BILLING_ID)) {
+//                                    isBuyFull = true;
+//                                }
+//                            }
+//
+//
+//                            if (!isSubscript && !isBuyFull) {
+//                                BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+//                                        .setSku(CarzisApplication.SUBSCRIPTION_BILLING_ID)
+//                                        .setType(BillingClient.SkuType.SUBS) // SkuType.SUB for subscription
+//                                        .build();
+//                                mBillingClient.launchBillingFlow(MainActivity.this, flowParams);
+//                            } else {
+//
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onBillingServiceDisconnected() {
+//
+//                    }
+//                });
 
 
 //                ConnectActivity.start(MainActivity.this);
@@ -487,7 +487,6 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
                         obdReader.getBluetoothService().getState() == BluetoothService.STATE_CONNECTED);
 //                troubleCodeInt++;
 //                String troubleCode = "P000" + troubleCodeInt;
-//
 //                activityToTroublesCallbackListener.onPassTroubleCode(troubleCode);
                 break;
             }

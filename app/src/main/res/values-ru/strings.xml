@@ -325,4 +325,6 @@
     <string name="unable_to_connect_wifi">Не получилось подключиться к wifi ус-ву</string>
     <string name="wifi_connection_lost">WIFI соединение было потеряно</string>
     <string name="wifi_connect">Выполняется подключение по WIFI…</string>
+    <string name="watch_graphs_online">Смотреть графики онлайн</string>
+    <string name="watch_graph_s">Смотреть графики</string>
 </resources>

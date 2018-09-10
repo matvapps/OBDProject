@@ -326,6 +326,8 @@
     <string name="unable_to_connect_wifi">Unable to connect wifi device</string>
     <string name="wifi_connection_lost">Wifi device connection was lost</string>
     <string name="wifi_connect">WIFI connecting…</string>
+    <string name="watch_graphs_online">Watch graphs online</string>
+    <string name="watch_graph_s">Watch graph\'s</string>
 
 
 </resources>

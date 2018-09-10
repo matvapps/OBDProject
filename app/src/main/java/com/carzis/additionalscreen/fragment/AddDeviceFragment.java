@@ -65,13 +65,14 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
     private String userDashboardDevices;
     private List<String> supportedPids;
 
+    private boolean isSubscript;
+    private boolean isBuyFull;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_add_device, container, false);
-
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver, new IntentFilter(RECEIVED_DATA_FROM_CAR));
 
         Bundle args = getArguments();
 
@@ -115,7 +116,7 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
                 if (billingResponseCode == BillingClient.BillingResponse.OK) {
 
                     Purchase.PurchasesResult subsPurchaseResult = mBillingClient.queryPurchases(BillingClient.SkuType.SUBS);
-                    boolean isSubscript = false;
+                    isSubscript = false;
                     for (Purchase purchase : subsPurchaseResult.getPurchasesList()) {
 
                         if (purchase.getSku().equals(CarzisApplication.SUBSCRIPTION_BILLING_ID)) {
@@ -123,7 +124,7 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
                         }
                     }
                     Purchase.PurchasesResult prodPurchaseResult = mBillingClient.queryPurchases(BillingClient.SkuType.INAPP);
-                    boolean isBuyFull = false;
+                    isBuyFull = false;
                     for (Purchase purchase : prodPurchaseResult.getPurchasesList()) {
                         if (purchase.getSku().equals(CarzisApplication.DIAGNOSTICS_BILLING_ID)) {
                             isBuyFull = true;
@@ -167,6 +168,7 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
             }
         });
 
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver, new IntentFilter(RECEIVED_DATA_FROM_CAR));
         setupUserDashboardDevices();
         return rootView;
     }
@@ -272,12 +274,15 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "onReceive: PID = " + intent.getStringExtra(BROADCAST_PID_EXTRA) + ", value = " + intent.getStringExtra(BROADCAST_VALUE_EXTRA));
 
-            deviceListAdapter.addItem(new DashboardItem(intent.getStringExtra(BROADCAST_VALUE_EXTRA),
-                    PID.getEnumByString(intent.getStringExtra(BROADCAST_PID_EXTRA))));
-            if (deviceListAdapter.getSelectedItems().size() > 0)
-                btnWatchGraphsOnline.setVisibility(View.VISIBLE);
-            else
-                btnWatchGraphsOnline.setVisibility(GONE);
+            if (isSubscript || isBuyFull) {
+
+                deviceListAdapter.addItem(new DashboardItem(intent.getStringExtra(BROADCAST_VALUE_EXTRA),
+                        PID.getEnumByString(intent.getStringExtra(BROADCAST_PID_EXTRA))));
+                if (deviceListAdapter.getSelectedItems().size() > 0)
+                    btnWatchGraphsOnline.setVisibility(View.VISIBLE);
+                else
+                    btnWatchGraphsOnline.setVisibility(GONE);
+            }
         }
     };
 
