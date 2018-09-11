@@ -497,7 +497,7 @@ public class Utility {
                 return context.getString(R.string.auxiliary_in_out_supported);
         }
 
-        return "Нет описания";
+        return context.getString(R.string.no_description_txt);
 
     }
 

@@ -5,13 +5,13 @@
     <!--  BluetoothChat -->
     <string name="send">Send</string>
     <string name="not_connected">You are not connected to a device</string>
-    <string name="title_connecting">Connecting...</string>
+    <string name="title_connecting">Connecting…</string>
     <string name="title_connected_to">Connected to <xliff:g id="device_name">%1$s</xliff:g></string>
     <string name="title_not_connected">Not connected</string>
     <string name="title_connected">Connected</string>
 
     <!--  DeviceListActivity -->
-    <string name="scanning">Search  device...</string>
+    <string name="scanning">Search  device…</string>
     <string name="select_device">Select device</string>
     <string name="none_paired">No previously used devices</string>
     <string name="none_found">No devices found</string>
@@ -55,7 +55,7 @@
     <string name="all_errors">View faults in your car</string>
     <string name="add_devices">Sensors add</string>
     <string name="devices_on_the_dashboard">Select the sensors you want to add to the dashboard</string>
-    <string name="bt_connect">Bluetooth connecting...</string>
+    <string name="bt_connect">Bluetooth connecting…</string>
     <string name="please_wait">Please wait</string>
     <string name="start">Begin</string>
     <string name="phone">Phone:</string>
@@ -69,7 +69,7 @@
     <string name="email_profile">Email</string>
     <string name="policy_txt">I agree to the processing of personal data Agree to the privacy Policy</string>
     <string name="save">Save</string>
-    <string name="search">Search...</string>
+    <string name="search">Search…</string>
     <string name="search_big">FIND</string>
     <string name="frokm">from</string>
     <string name="to">to</string>
@@ -92,9 +92,9 @@
     <string name="profile">Profile</string>
     <string name="record_history">History record</string>
     <string name="feedback">Feedback</string>
-    <string name="connecting_by_bt">Bluetooth connecting...</string>
+    <string name="connecting_by_bt">Bluetooth connecting…</string>
     <string name="input_vin">Enter the VIN in the format 4f2yu08102km26251</string>
-    <string name="input_num_hint">Enter your code...</string>
+    <string name="input_num_hint">Enter your code…</string>
     <string name="search_str">Search</string>
     <string name="error_list_tut">FAULTS list</string>
     <string name="see_all_errors_in_your_autro">View faults in your car</string>
@@ -150,7 +150,7 @@
     <string name="check_by_num">INSPECTION BY THE NUMBER</string>
     <string name="check_car_by_vin">Car check by VIN code</string>
     <string name="input_vin_format">Enter the VIN code in the format 4f2yu08102km26251</string>
-    <string name="input_code_hint">Add your code...</string>
+    <string name="input_code_hint">Add your code…</string>
     <string name="search_btn">Search</string>
     <string name="your_cars">Your cars:</string>
     <string name="no_internet_connection">No internet connection</string>
@@ -198,8 +198,8 @@
     <string name="clear_faults">Clear</string>
     <string name="shasi">Chassis</string>
     <string name="agree_with_policy">Please agree with the Privacy Policy</string>
-    <string name="voltage">Напряжение</string>
-    <string name="pids_0_20">PID\'s 0-20</string>
+    <string name="voltage">Voltage</string>
+    <string name="pids_0_20">PID\'s 0–20</string>
     <string name="dtc_cleared_mil_dtc">Monitor status after DTC clearing</string>
     <string name="freeze_dtc">Detected diagnostic error codes</string>
     <string name="fuel_system_status">Fuel System Status</string>
@@ -231,7 +231,7 @@
     <string name="oxy_sens_pres_4_banks">Oxygen sensors present</string>
     <string name="auxiliary_input_status">Auxiliary input status</string>
     <string name="run_time_since_engine_start">Run time since engine start</string>
-    <string name="pids_21_40">PID[21-40]</string>
+    <string name="pids_21_40">PID[21–40]</string>
     <string name="distance_travel_with_mal_on">Distance traveled with malfunction indicator «Check Engine»</string>
     <string name="fuel_rail_pressure_man_vacuum">Fuel Rail Pressure</string>
     <string name="furl_rail_gauge_pressure_diesel_gas_direct_inject">Fuel Rail Pressure (diesel, or gasoline direct inject)</string>
@@ -263,7 +263,7 @@
     <string name="catalyst_temp_bank_2_sens_1">Catalyst Temperature Bank 2, Sensor 1</string>
     <string name="catalyst_temp_bank_1_sens_2">Catalyst Temperature Bank 1, Sensor 2</string>
     <string name="catalyst_temp_bank_2_sens_2">Catalyst Temperature Bank 2, Sensor 2</string>
-    <string name="pids_41_60">Supported PID[41-60]</string>
+    <string name="pids_41_60">Supported PID[41–60]</string>
     <string name="monitor_status_this_drive_cycle">Monitor status this drive cycle</string>
     <string name="control_module_voltage">Control module voltage</string>
     <string name="absolute_load_value">Absolute load value</string>
@@ -284,10 +284,10 @@
     <string name="ethanol_fuel">Ethanol fuel %</string>
     <string name="absolute_evap_system_vapor_pressure">Absolute Evap system Vapor Pressure</string>
     <string name="evap_system_vapor_pressure">Fuel rail pressure (absolute)</string>
-    <string name="sh_term_seconday_oxy_sens_trim_a1_b3">SHORT_TERM_SECONDARY_OXY_SENS_TRIM_A1_B3</string>
-    <string name="sh_term_seconday_oxy_sens_trim_a2_b4">SHORT_TERM_SECONDARY_OXY_SENS_TRIM_A2_B4</string>
-    <string name="ln_term_seconday_oxy_sens_trim_a1_b3">LONG_TERM_SECONDARY_OXY_SENS_TRIM_A1_B3</string>
-    <string name="ln_term_seconday_oxy_sens_trim_a2_b4">LONG_TERM_SECONDARY_OXY_SENS_TRIM_A2_B4</string>
+    <string name="sh_term_seconday_oxy_sens_trim_a1_b3">Short term lambda A1B3</string>
+    <string name="sh_term_seconday_oxy_sens_trim_a2_b4">Short term lambda A2B4</string>
+    <string name="ln_term_seconday_oxy_sens_trim_a1_b3">Long term lambda A1B3</string>
+    <string name="ln_term_seconday_oxy_sens_trim_a2_b4">Long term lambda A2B4</string>
     <string name="fuel_rail_pressure">Fuel rail pressure (absolute)</string>
     <string name="relative_accelerator_pedal_position">Relative accelerator pedal position</string>
     <string name="hybrid_battery_pack_remaining_life">Hybrid battery pack remaining life</string>
@@ -295,7 +295,7 @@
     <string name="fuel_injection_timing">Fuel injection timing</string>
     <string name="engine_fuel_rate">Engine fuel rate</string>
     <string name="emission_requirements_to_which_vehicle_is_designed">Requirements for emissions for which the vehicle is intended</string>
-    <string name="pids_sup_61_80">PID[61-80]</string>
+    <string name="pids_sup_61_80">PID[61–80]</string>
     <string name="drivers_demand_engine_percent_torque">Engine torque requested</string>
     <string name="actual_engine_percent_torque">Real engine torque</string>
     <string name="engine_reference_torque">Real engine torque</string>
@@ -328,6 +328,7 @@
     <string name="wifi_connect">WIFI connecting…</string>
     <string name="watch_graphs_online">Watch graphs online</string>
     <string name="watch_graph_s">Watch graph\'s</string>
+    <string name="no_description_txt">no description</string>
 
 
 </resources>

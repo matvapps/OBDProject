@@ -36,7 +36,7 @@
     <string name="reset_trip">Reset Trip</string>
 
     <!--  DeviceListActivity -->
-    <string name="scanning">Поиск устройств...</string>
+    <string name="scanning">Поиск устройств…</string>
     <string name="select_device">Выберите устройство</string>
     <string name="none_paired">Нет ранее использованных ус-в</string>
     <string name="none_found">Нет найденный устройств</string>
@@ -92,7 +92,7 @@
     <string name="profile">Профиль</string>
     <string name="record_history">Запись истории</string>
     <string name="feedback">Обратная связь</string>
-    <string name="connecting_by_bt">Выполняется подключение по Bluetooth...</string>
+    <string name="connecting_by_bt">Выполняется подключение по Bluetooth…</string>
     <string name="input_vin">Введите VIN код в формате 4f2yu08102km26251</string>
     <string name="input_num_hint">Введите ваш код…</string>
     <string name="search_str">Поиск</string>
@@ -199,7 +199,7 @@
     <string name="clear_faults">Очистить</string>
     <string name="agree_with_policy">Пожалуйста согласитесь с политикой конфиденциальности</string>
     <string name="voltage">Напряжение</string>
-    <string name="pids_0_20">Список поддерживаемых PID[0-20]</string>
+    <string name="pids_0_20">Список поддерживаемых PID[0–20]</string>
     <string name="dtc_cleared_mil_dtc">Состояние монитора после очистки DTC.</string>
     <string name="freeze_dtc">Обнаруженные диагностические коды ошибок</string>
     <string name="fuel_system_status">Состояние топливной системы</string>
@@ -231,7 +231,7 @@
     <string name="oxy_sens_pres_4_banks">Присутствие датчиков кислорода</string>
     <string name="auxiliary_input_status">Power Transfer Output (PTO) поддерживается или нет</string>
     <string name="run_time_since_engine_start">Время, прошедшее с запуска двигателя</string>
-    <string name="pids_21_40">Список поддерживаемых PID[21-40]</string>
+    <string name="pids_21_40">Список поддерживаемых PID[21–40]</string>
     <string name="distance_travel_with_mal_on">Дистанция, пройденная с зажженной лампой «проверь двигатель»</string>
     <string name="fuel_rail_pressure_man_vacuum">Давление в топливной рампе (относительно вакуума коллектора)</string>
     <string name="furl_rail_gauge_pressure_diesel_gas_direct_inject">Давление в топливной рампе (дизельное топливо или прямой впрыск бензина)</string>
@@ -263,7 +263,7 @@
     <string name="catalyst_temp_bank_2_sens_1">Температура катализатора Bank 2, Sensor 1</string>
     <string name="catalyst_temp_bank_1_sens_2">Температура катализатора Bank 1, Sensor 2</string>
     <string name="catalyst_temp_bank_2_sens_2">Температура катализатора Bank 2, Sensor 2</string>
-    <string name="pids_41_60">Список поддерживаемых PID[41-60]</string>
+    <string name="pids_41_60">Список поддерживаемых PID[41–60]</string>
     <string name="monitor_status_this_drive_cycle">Мониторинг состояния цикла привода</string>
     <string name="control_module_voltage">Напряжение контрольного модуля</string>
     <string name="absolute_load_value">Абсолютное значение нагрузки</string>
@@ -284,10 +284,10 @@
     <string name="ethanol_fuel">Этаноловое топливо %</string>
     <string name="absolute_evap_system_vapor_pressure">Абсолютное давление в топливном баке</string>
     <string name="evap_system_vapor_pressure">"Абсолютное давление на топливной рампе "</string>
-    <string name="sh_term_seconday_oxy_sens_trim_a1_b3">SHORT_TERM_SECONDARY_OXY_SENS_TRIM_A1_B3</string>
-    <string name="sh_term_seconday_oxy_sens_trim_a2_b4">SHORT_TERM_SECONDARY_OXY_SENS_TRIM_A2_B4</string>
-    <string name="ln_term_seconday_oxy_sens_trim_a1_b3">LONG_TERM_SECONDARY_OXY_SENS_TRIM_A1_B3</string>
-    <string name="ln_term_seconday_oxy_sens_trim_a2_b4">LONG_TERM_SECONDARY_OXY_SENS_TRIM_A2_B4</string>
+    <string name="sh_term_seconday_oxy_sens_trim_a1_b3">Кратк. коррек. лямбда A1B3</string>
+    <string name="sh_term_seconday_oxy_sens_trim_a2_b4">Кратк. коррек. лямбда A2B4</string>
+    <string name="ln_term_seconday_oxy_sens_trim_a1_b3">Долг. коррек. лямбда A1B3</string>
+    <string name="ln_term_seconday_oxy_sens_trim_a2_b4">Долг. коррек. лямбда A2B4</string>
     <string name="fuel_rail_pressure">Абсолютное давление на топливной рампе</string>
     <string name="relative_accelerator_pedal_position">Относительное положение педали акселератора</string>
     <string name="hybrid_battery_pack_remaining_life">Заряд силовой батареи гибрида</string>
@@ -295,7 +295,7 @@
     <string name="fuel_injection_timing">Регулирование момента впрыска</string>
     <string name="engine_fuel_rate">Расход топлива</string>
     <string name="emission_requirements_to_which_vehicle_is_designed">Требования к выбросам, для которых предназначено транспортное средство</string>
-    <string name="pids_sup_61_80">Список поддерживаемых PID[61-80]</string>
+    <string name="pids_sup_61_80">Список поддерживаемых PID[61–80]</string>
     <string name="drivers_demand_engine_percent_torque">Запрашиваемый момент двигателя</string>
     <string name="actual_engine_percent_torque">Реальный момент двигателя</string>
     <string name="engine_reference_torque">Исходный момент двигателя</string>
@@ -327,4 +327,5 @@
     <string name="wifi_connect">Выполняется подключение по WIFI…</string>
     <string name="watch_graphs_online">Смотреть графики онлайн</string>
     <string name="watch_graph_s">Смотреть графики</string>
+    <string name="no_description_txt">нет описания</string>
 </resources>
