@@ -65,6 +65,14 @@ public class HistoryPresenter implements Presenter<HistoryView> {
 
     public void getCarMetric(String carName, String carId, String code, String from, String to) {
         view.showLoading(true);
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat
+                = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
+        Calendar mCalendar = new GregorianCalendar();
+        TimeZone mTimeZone = mCalendar.getTimeZone();
+        int mGMTOffset = mTimeZone.getRawOffset() + mTimeZone.getDSTSavings();
+
         api.getCarMetrics(token, carId, code, from, to).enqueue(new Callback<List<CarMetricResponse>>() {
             @Override
             public void onResponse(@NonNull Call<List<CarMetricResponse>> call, @NonNull Response<List<CarMetricResponse>> response) {
@@ -73,18 +81,9 @@ public class HistoryPresenter implements Presenter<HistoryView> {
                 if (response.code() == 200) {
                     for (CarMetricResponse item : response.body()) {
                         String timeCreated = item.getTimeCreated();
-                        Calendar cal = Calendar.getInstance();
-
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                         try {
                             cal.setTime(simpleDateFormat.parse(timeCreated));
-
-                            Calendar mCalendar = new GregorianCalendar();
-                            TimeZone mTimeZone = mCalendar.getTimeZone();
-                            int mGMTOffset = mTimeZone.getRawOffset() + mTimeZone.getDSTSavings();
-
                             cal.add(Calendar.MILLISECOND, mGMTOffset);
-
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -95,8 +94,6 @@ public class HistoryPresenter implements Presenter<HistoryView> {
                                 Long.toString(cal.getTimeInMillis()));
 
                         items.add(historyItem);
-
-                        Log.d("TAG", "onGetHistoryItems presenter: " + items);
                     }
                     view.onGetHistoryItems(items, carName);
                 }
@@ -112,38 +109,38 @@ public class HistoryPresenter implements Presenter<HistoryView> {
 
     public void getCarMetric(String carName, String carId, String code) {
         view.showLoading(true);
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat
+                = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
+        Calendar mCalendar = new GregorianCalendar();
+        TimeZone mTimeZone = mCalendar.getTimeZone();
+        int mGMTOffset = mTimeZone.getRawOffset() + mTimeZone.getDSTSavings();
+
         api.getCarMetrics(token, carId, code, "0", "999999999999999999").enqueue(new Callback<List<CarMetricResponse>>() {
             @Override
             public void onResponse(@NonNull Call<List<CarMetricResponse>> call, @NonNull Response<List<CarMetricResponse>> response) {
                 view.showLoading(false);
                 List<HistoryItem> items = new ArrayList<>();
                 if (response.code() == 200) {
-                    for (CarMetricResponse item : response.body()) {
-                        String timeCreated = item.getTimeCreated();
-                        Calendar cal = Calendar.getInstance();
+                    if (response.body() != null) {
+                        for (CarMetricResponse item : response.body()) {
+                            String timeCreated = item.getTimeCreated();
 
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                        try {
-                            cal.setTime(simpleDateFormat.parse(timeCreated));
+                            try {
+                                cal.setTime(simpleDateFormat.parse(timeCreated));
+                                cal.add(Calendar.MILLISECOND, mGMTOffset);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
 
-                            Calendar mCalendar = new GregorianCalendar();
-                            TimeZone mTimeZone = mCalendar.getTimeZone();
-                            int mGMTOffset = mTimeZone.getRawOffset() + mTimeZone.getDSTSavings();
+                            HistoryItem historyItem = new HistoryItem(carName,
+                                    item.getMetricCode(),
+                                    item.getMetricValue(),
+                                    Long.toString(cal.getTimeInMillis()));
 
-                            cal.add(Calendar.MILLISECOND, mGMTOffset);
-
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+                            items.add(historyItem);
                         }
-
-                        HistoryItem historyItem = new HistoryItem(carName,
-                                item.getMetricCode(),
-                                item.getMetricValue(),
-                                Long.toString(cal.getTimeInMillis()));
-
-                        items.add(historyItem);
-
-                        Log.d("TAG", "onGetHistoryItems presenter: " + items);
                     }
                     view.onGetHistoryItems(items, carName);
                 }
@@ -159,6 +156,14 @@ public class HistoryPresenter implements Presenter<HistoryView> {
 
     public void getAllCarMetric(String carId, String carName) {
         view.showLoading(true);
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat
+                = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
+        Calendar mCalendar = new GregorianCalendar();
+        TimeZone mTimeZone = mCalendar.getTimeZone();
+
+        int mGMTOffset = mTimeZone.getRawOffset() + mTimeZone.getDSTSavings();
         api.getCarMetrics(token, carId, "0", "999999999999999999").enqueue(new Callback<List<CarMetricResponse>>() {
             @Override
             public void onResponse(@NonNull Call<List<CarMetricResponse>> call, @NonNull Response<List<CarMetricResponse>> response) {
@@ -167,18 +172,10 @@ public class HistoryPresenter implements Presenter<HistoryView> {
                 if (response.code() == 200) {
                     for (CarMetricResponse item : response.body()) {
                         String timeCreated = item.getTimeCreated();
-                        Calendar cal = Calendar.getInstance();
 
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                         try {
                             cal.setTime(simpleDateFormat.parse(timeCreated));
-
-                            Calendar mCalendar = new GregorianCalendar();
-                            TimeZone mTimeZone = mCalendar.getTimeZone();
-                            int mGMTOffset = mTimeZone.getRawOffset() + mTimeZone.getDSTSavings();
-
                             cal.add(Calendar.MILLISECOND, mGMTOffset);
-
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -189,8 +186,6 @@ public class HistoryPresenter implements Presenter<HistoryView> {
                                 Long.toString(cal.getTimeInMillis()));
 
                         items.add(historyItem);
-
-                        Log.d("TAG", "onGetHistoryItems presenter: " + items);
                     }
                     view.showLoading(false);
                     view.onGetHistoryItems(items, carName);

@@ -13,7 +13,6 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.carzis.R;
 import com.carzis.main.MainActivity;
 
 import java.io.IOException;
@@ -45,7 +44,7 @@ public class WifiService {
     InetAddress serverAddr = null;
     private String serverIpAddress = "192.168.0.10";
     public static final int SERVERPORT = 35000;
-    private String deviceName = "OBDII";
+    private String deviceName = "Elm327";
     private WifiService.ConnectedThread mConnectedThread;
 
     private class SocketTask extends AsyncTask<Void, Void, Boolean> {        ;
@@ -94,14 +93,14 @@ public class WifiService {
 
             if (this.ioException != null) {
                 new AlertDialog.Builder(context)
-                        .setTitle(R.string.error_occured)
+                        .setTitle("An error occurrsed")
                         .setMessage(this.ioException.toString())
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
             }
             else
             {
-                Toast.makeText(context, deviceName + context.getString(R.string.wifi_connected), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"Elm327 wifi connected...", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -110,7 +109,7 @@ public class WifiService {
         // Send a failure phone back to the Activity
         Message msg = mWIFIHandler.obtainMessage(OBDReader.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(MainActivity.TOAST, mContext.getString(R.string.unable_to_connect_wifi));
+        bundle.putString(MainActivity.TOAST, "Unable to connect wifi device");
         msg.setData(bundle);
         mWIFIHandler.sendMessage(msg);
         setState(STATE_NONE);
@@ -120,7 +119,7 @@ public class WifiService {
         // Send a failure phone back to the Activity
         Message msg = mWIFIHandler.obtainMessage(OBDReader.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(MainActivity.TOAST, mContext.getString(R.string.wifi_connection_lost));
+        bundle.putString(MainActivity.TOAST, "Wifi device connection was lost");
         msg.setData(bundle);
         mWIFIHandler.sendMessage(msg);
         setState(STATE_NONE);
@@ -191,7 +190,7 @@ public class WifiService {
 
         Message msg = mWIFIHandler.obtainMessage(OBDReader.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(MainActivity.TOAST, mContext.getString(R.string.unable_to_connect_wifi));
+        bundle.putString(MainActivity.TOAST, "Unable to connect wifi device");
         msg.setData(bundle);
         mWIFIHandler.sendMessage(msg);
 

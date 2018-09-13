@@ -1,6 +1,8 @@
 package com.carzis.main;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -29,8 +31,9 @@ import com.carzis.CarzisApplication;
 import com.carzis.R;
 import com.carzis.additionalscreen.AdditionalActivity;
 import com.carzis.base.BaseActivity;
-import com.carzis.connect.ConnectActivity;
 import com.carzis.connect.ConnectionTypeActivity;
+import com.carzis.obd.BluetoothService;
+import com.carzis.connect.ConnectActivity;
 import com.carzis.dialoglist.DialogListActivity;
 import com.carzis.history.HistoryPresenter;
 import com.carzis.history.HistoryView;
@@ -48,7 +51,6 @@ import com.carzis.main.view.MyCarsView;
 import com.carzis.model.Car;
 import com.carzis.model.CarMetric;
 import com.carzis.model.HistoryItem;
-import com.carzis.obd.BluetoothService;
 import com.carzis.obd.OBDReader;
 import com.carzis.obd.OnReceiveDataListener;
 import com.carzis.obd.OnReceiveFaultCodeListener;
@@ -66,6 +68,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import static com.carzis.CarzisApplication.obdReader;
 import static com.carzis.dialoglist.DialogListActivity.DIALOG_LIST_ACTIVITY_CODE;
 import static com.carzis.dialoglist.DialogListActivity.STRING_EXTRA;
 
@@ -112,7 +115,7 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
     private LocalRepository localRepository;
     private KeyValueStorage keyValueStorage;
     private CarPresenter carPresenter;
-    private OBDReader obdReader;
+//    private OBDReader obdReader;
 
     public ActivityToDashboardCallbackListener activityToDashboardCallbackListener;
     public ActivityToTroublesCallbackListener activityToTroublesCallbackListener;
@@ -203,7 +206,7 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
 
         localRepository = new LocalRepository(this);
         keyValueStorage = new KeyValueStorage(this);
-        obdReader = new OBDReader(this);
+//        obdReader = new OBDReader(this);
         carPresenter = new CarPresenter(keyValueStorage.getUserToken());
         historyPresenter = new HistoryPresenter(keyValueStorage.getUserToken());
         mBillingClient = BillingClient.newBuilder(MainActivity.this).setListener(this).build();
@@ -213,8 +216,6 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
 //        obdReader.connectToBtDevice(deviceadress, devicename);
         obdReader.setOnReceiveFaultCodeListener(this);
         obdReader.setOnReceiveDataListener(this);
-
-
 //        localRepository = new LocalRepository(this);
 //        keyValueStorage = new KeyValueStorage(this);
 //
@@ -341,6 +342,7 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
     }
 
     private void exit() {
+        Log.d(TAG, "exit: ");
         if (obdReader.getBluetoothService() != null)
             obdReader.getBluetoothService().stop();
 //            wl.release();
@@ -385,47 +387,47 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
     private View.OnClickListener onMenuItemClickListener = view -> {
         switch (view.getId()) {
             case R.id.connect_to_bt_btn: {
-                Intent intent = new Intent(MainActivity.this, ConnectionTypeActivity.class);
-                startActivityForResult(intent, REQUEST_CHOOSE_CONNECTION_TYPE);
-//                mBillingClient.startConnection(new BillingClientStateListener() {
-//                    @Override
-//                    public void onBillingSetupFinished(@BillingClient.BillingResponse int billingResponseCode) {
-//                        if (billingResponseCode == BillingClient.BillingResponse.OK) {
-//
-//                            Purchase.PurchasesResult subsPurchaseResult = mBillingClient.queryPurchases(BillingClient.SkuType.SUBS);
-//                            boolean isSubscript = false;
-//                            for (Purchase purchase : subsPurchaseResult.getPurchasesList()) {
-//
-//                                if (purchase.getSku().equals(CarzisApplication.SUBSCRIPTION_BILLING_ID)) {
-//                                    isSubscript = true;
-//                                }
-//                            }
-//                            Purchase.PurchasesResult prodPurchaseResult = mBillingClient.queryPurchases(BillingClient.SkuType.INAPP);
-//                            boolean isBuyFull = false;
-//                            for (Purchase purchase : prodPurchaseResult.getPurchasesList()) {
-//                                if (purchase.getSku().equals(CarzisApplication.DIAGNOSTICS_BILLING_ID)) {
-//                                    isBuyFull = true;
-//                                }
-//                            }
-//
-//
-//                            if (!isSubscript && !isBuyFull) {
-//                                BillingFlowParams flowParams = BillingFlowParams.newBuilder()
-//                                        .setSku(CarzisApplication.SUBSCRIPTION_BILLING_ID)
-//                                        .setType(BillingClient.SkuType.SUBS) // SkuType.SUB for subscription
-//                                        .build();
-//                                mBillingClient.launchBillingFlow(MainActivity.this, flowParams);
-//                            } else {
-//
-//                            }
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onBillingServiceDisconnected() {
-//
-//                    }
-//                });
+
+                mBillingClient.startConnection(new BillingClientStateListener() {
+                    @Override
+                    public void onBillingSetupFinished(@BillingClient.BillingResponse int billingResponseCode) {
+                        if (billingResponseCode == BillingClient.BillingResponse.OK) {
+
+                            Purchase.PurchasesResult subsPurchaseResult = mBillingClient.queryPurchases(BillingClient.SkuType.SUBS);
+                            boolean isSubscript = false;
+                            for (Purchase purchase : subsPurchaseResult.getPurchasesList()) {
+
+                                if (purchase.getSku().equals(CarzisApplication.SUBSCRIPTION_BILLING_ID)) {
+                                    isSubscript = true;
+                                }
+                            }
+                            Purchase.PurchasesResult prodPurchaseResult = mBillingClient.queryPurchases(BillingClient.SkuType.INAPP);
+                            boolean isBuyFull = false;
+                            for (Purchase purchase : prodPurchaseResult.getPurchasesList()) {
+                                if (purchase.getSku().equals(CarzisApplication.DIAGNOSTICS_BILLING_ID)) {
+                                    isBuyFull = true;
+                                }
+                            }
+
+
+                            if (!isSubscript && !isBuyFull) {
+                                BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                                        .setSku(CarzisApplication.SUBSCRIPTION_BILLING_ID)
+                                        .setType(BillingClient.SkuType.SUBS) // SkuType.SUB for subscription
+                                        .build();
+                                mBillingClient.launchBillingFlow(MainActivity.this, flowParams);
+                            } else {
+                                Intent intent = new Intent(MainActivity.this, ConnectionTypeActivity.class);
+                                startActivityForResult(intent, REQUEST_CHOOSE_CONNECTION_TYPE);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onBillingServiceDisconnected() {
+
+                    }
+                });
 
 
 //                ConnectActivity.start(MainActivity.this);
@@ -487,6 +489,7 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
                         obdReader.getBluetoothService().getState() == BluetoothService.STATE_CONNECTED);
 //                troubleCodeInt++;
 //                String troubleCode = "P000" + troubleCodeInt;
+//
 //                activityToTroublesCallbackListener.onPassTroubleCode(troubleCode);
                 break;
             }
@@ -571,7 +574,8 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (obdReader.getBluetoothService() != null) obdReader.getBluetoothService().stop();
+        Log.d(TAG, "onDestroy: ");
+//        if (obdReader.getBluetoothService() != null) obdReader.getBluetoothService().stop();
     }
 
     @Override
@@ -609,17 +613,11 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
     @Override
     public void onReceiveVoltage(String voltage) {
         Log.d(TAG, "onReceiveVoltage: " + voltage);
-        voltage = voltage.replace("V", "");
-        if (activityToDashboardCallbackListener != null) {
+        if (activityToDashboardCallbackListener != null)
             activityToDashboardCallbackListener.onPassRealDataToFragment(PID.VOLTAGE, voltage);
-            Intent intent = new Intent(RECEIVED_DATA_FROM_CAR);
-            intent.putExtra(BROADCAST_PID_EXTRA, PID.VOLTAGE.getCommand());
-            intent.putExtra(BROADCAST_VALUE_EXTRA, voltage);
-            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-        }
 
         if (useAddingToHistorySwitch.isChecked() && carName != null) {
-            historyPresenter.addMetric(getCarIdByName(carName), PID.VOLTAGE.getCommand(), voltage);
+            historyPresenter.addMetric(getCarIdByName(carName), PID.VOLTAGE.getCommand(), voltage.replace("V", ""));
         }
     }
 

@@ -8,11 +8,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.carzis.R;
@@ -62,7 +60,6 @@ public class ConnectActivity extends BaseActivity {
     private ImageView iconBth;
     private PulsatorLayout pulsatorLayout;
     private KeyValueStorage keyValueStorage;
-    private TextView connectText;
 
     private static final int REQUEST_ENABLE_BT = 3;
     private static final int REQUEST_GET_BT_PARAMETERS = 24;
@@ -111,20 +108,23 @@ public class ConnectActivity extends BaseActivity {
         this.setFinishOnTouchOutside(false);
         iconBth = findViewById(R.id.bth_icon);
         pulsatorLayout = findViewById(R.id.pulsator);
-        connectText = findViewById(R.id.connect_text);
 
         keyValueStorage = new KeyValueStorage(ConnectActivity.this);
+
+        // every time ask user for his car name
         if (!keyValueStorage.getCurrentCarName().isEmpty())
             keyValueStorage.setCurrentCarName("");
 
         pulsatorLayout.start();
 
+//        iconBth.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                connectBt();
+//            }
+//        });
 
         if (currentConnectionType.equals(CONNECTION_BT)) {
-
-            iconBth.setImageResource(R.drawable.ic_bth);
-            connectText.setText(R.string.bt_connect);
-
             connectBt();
             newBTDevices = new ArrayList<>();
 
@@ -142,12 +142,6 @@ public class ConnectActivity extends BaseActivity {
                 Toast.makeText(this, R.string.bt_not_available, Toast.LENGTH_LONG).show();
             }
         } else {
-            iconBth.setImageResource(R.drawable.ic_wifi);
-            connectText.setText(R.string.wifi_connect);
-
-            WifiManager wifiManager = (WifiManager)this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            wifiManager.setWifiEnabled(true);
-
             Thread thread = new Thread(() -> {
                 try {
                     Thread.sleep(1500);

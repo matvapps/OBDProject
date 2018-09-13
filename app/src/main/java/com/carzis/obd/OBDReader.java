@@ -229,6 +229,7 @@ public class OBDReader {
 
     }
 
+
     public void disconnect() {
         if (bluetoothService != null) {
             bluetoothService.stop();

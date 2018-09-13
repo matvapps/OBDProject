@@ -245,6 +245,7 @@ public class TroubleCodesFragment extends BaseFragment implements ActivityToTrou
 //        if (!troubleCodesAdapter.contains(troubleCode))
 //            troubleCodesAdapter.addItem(new Trouble(troubleCode));
 
+        // TODO: check for brand
         Log.d(TAG, "onPassTroubleCode: " + troubleCode);
         troubleCodePresenter.getTroubleCodeDescription(keyValueStorage.getUserToken(), troubleCode, keyValueStorage.getLanguage(), "");
 //        localRepository.getTrouble(troubleCode);

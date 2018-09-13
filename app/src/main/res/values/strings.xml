@@ -329,6 +329,7 @@
     <string name="watch_graphs_online">Watch graphs online</string>
     <string name="watch_graph_s">Watch graph\'s</string>
     <string name="no_description_txt">no description</string>
+    <string name="select_sensors">Please select sensors</string>
 
 
 </resources>

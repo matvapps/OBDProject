@@ -28,6 +28,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import lecho.lib.hellocharts.model.Axis;
@@ -110,7 +112,7 @@ public class PlotsAdapter extends RecyclerView.Adapter<PlotsAdapter.PlotViewHold
             MyTimePickerFragment myTimePickerFragment = new MyTimePickerFragment();
             myTimePickerFragment.setTimeChangeListener(timePicker -> {
                 ((EditText) view)
-                        .setText(String.format("%d:%d", timePicker.getCurrentHour(), timePicker.getCurrentMinute()));
+                        .setText(String.format(Locale.getDefault(), "%d:%d", timePicker.getCurrentHour(), timePicker.getCurrentMinute()));
 
                 firstTime = Calendar.getInstance();
                 firstTime.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
@@ -139,7 +141,7 @@ public class PlotsAdapter extends RecyclerView.Adapter<PlotsAdapter.PlotViewHold
             MyTimePickerFragment myTimePickerFragment = new MyTimePickerFragment();
             myTimePickerFragment.setTimeChangeListener(timePicker -> {
                 ((EditText) view)
-                        .setText(String.format("%d:%d", timePicker.getCurrentHour(), timePicker.getCurrentMinute()));
+                        .setText(String.format(Locale.getDefault(), "%d:%d", timePicker.getCurrentHour(), timePicker.getCurrentMinute()));
 
                 secondTime = Calendar.getInstance();
                 secondTime.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
@@ -149,7 +151,7 @@ public class PlotsAdapter extends RecyclerView.Adapter<PlotsAdapter.PlotViewHold
                 myDatePickerFragment.setDateChangeListener(datePicker -> {
                     String str = ((EditText) view).getText().toString();
                     ((EditText) view)
-                            .setText(String.format("%s  %d/%d/%d", str, datePicker.getDayOfMonth(), datePicker.getMonth() + 1, datePicker.getYear()));
+                            .setText(String.format(Locale.getDefault(), "%s  %d/%d/%d", str, datePicker.getDayOfMonth(), datePicker.getMonth() + 1, datePicker.getYear()));
 
                     secondTime.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
                     secondTime.set(Calendar.MONTH, datePicker.getMonth());
@@ -165,21 +167,26 @@ public class PlotsAdapter extends RecyclerView.Adapter<PlotsAdapter.PlotViewHold
             myTimePickerFragment.show(activity.getSupportFragmentManager(), "time picker");
         });
 
+
         if (plotItems.get(position).getTitle() != null) {
-            String pid = plotItems.get(position).getHistoryItems().get(0).getPidId();
-            PID pidItem = PID.getEnumByString(pid);
+            if (plotItems.get(position).getHistoryItems().isEmpty()) {
+                generateData(new ArrayList<HistoryItem>(), holder.lineChartView);
+            } else {
+                String pid = plotItems.get(position).getHistoryItems().get(0).getPidId();
+                PID pidItem = PID.getEnumByString(pid);
 
-            String dimen = Utility.getDeviceDimenBy(
-                    holder.itemView.getContext(), pidItem);
+                String dimen = Utility.getDeviceDimenBy(
+                        holder.itemView.getContext(), pidItem);
 
-            String name = Utility.getDeviceNameBy(
-                    holder.itemView.getContext(), pidItem);
+                String name = Utility.getDeviceNameBy(
+                        holder.itemView.getContext(), pidItem);
 
-            holder.plotTitleTextView
-                    .setText(String.format("%s (%s)", name, dimen));
+                holder.plotTitleTextView
+                        .setText(String.format("%s (%s)", name, dimen));
 
-//            holder.plotTitleTextView.setText(plotItems.get(position).getTitle());
-            generateData(plotItems.get(position).getHistoryItems(), holder.lineChartView);
+                generateData(plotItems.get(position).getHistoryItems(), holder.lineChartView);
+            }
+
         }
 
     }
@@ -280,7 +287,7 @@ public class PlotsAdapter extends RecyclerView.Adapter<PlotsAdapter.PlotViewHold
         ArrayList<Calendar> itemLabels = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
             long millis = Long.parseLong(items.get(i).getTime());
-            Log.d(TAG, "TimeInMillis HistoryActivity: " + millis);
+            Log.d("HelloWorld", "TimeInMillis HistoryActivity: " + millis);
             Calendar time = Calendar.getInstance();
 //            Toast.makeText(this, time.get(Calendar.SECOND) + " second before", Toast.LENGTH_SHORT).show();
             time.setTimeInMillis(millis);
@@ -306,14 +313,14 @@ public class PlotsAdapter extends RecyclerView.Adapter<PlotsAdapter.PlotViewHold
         for (int i = 0; i < items.size(); i++) {
             values.add(new PointValue(i, Float.parseFloat(items.get(i).getValue())));
             if (isOneDay) {
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
                 Calendar time = itemLabels.get(i);
 
                 Log.d(TAG, "generateData: " + TimeZone.getDefault().getID());
 
                 axisValues.add(new AxisValue(i).setLabel(sdf.format(time.getTime())));
             } else {
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM HH:mm:ss");
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM HH:mm:ss", Locale.getDefault());
                 Calendar time = itemLabels.get(i);
 
                 axisValues.add(new AxisValue(i).setLabel(sdf.format(time.getTime())));
@@ -454,7 +461,7 @@ public class PlotsAdapter extends RecyclerView.Adapter<PlotsAdapter.PlotViewHold
                     pidIndex = i;
                 }
         }
-        String plotTitle = Utility.getDeviceNameBy(context, PID.getEnumByString(pids.get(pidIndex)));
+        String plotTitle = Utility.getDeviceNameBy(context, Objects.requireNonNull(PID.getEnumByString(pids.get(pidIndex))));
         plotItems.set(pidIndex, new PlotItem(plotTitle, items));
 
         notifyDataSetChanged();

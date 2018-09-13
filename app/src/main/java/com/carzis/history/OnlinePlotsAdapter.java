@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import lecho.lib.hellocharts.model.Axis;
@@ -82,7 +83,11 @@ public class OnlinePlotsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         plotViewHolder.plotTitleTextView
                 .setText(String.format("%s (%s)", name, dimen));
 
-        generateData(items.get(position).getHistoryItems(), plotViewHolder.lineChartView);
+
+        if (items.get(position).getHistoryItems() != null)
+            generateData(items.get(position).getHistoryItems(), plotViewHolder.lineChartView);
+        else
+            generateData(new ArrayList<>(), plotViewHolder.lineChartView);
 
     }
 
@@ -146,14 +151,14 @@ public class OnlinePlotsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         for (int i = 0; i < items.size(); i++) {
             values.add(new PointValue(i, Float.parseFloat(items.get(i).getValue())));
             if (isOneDay) {
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
                 Calendar time = itemLabels.get(i);
 
                 Log.d(TAG, "generateData: " + TimeZone.getDefault().getID());
 
                 axisValues.add(new AxisValue(i).setLabel(sdf.format(time.getTime())));
             } else {
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM HH:mm:ss");
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM HH:mm:ss", Locale.getDefault());
                 Calendar time = itemLabels.get(i);
 
                 axisValues.add(new AxisValue(i).setLabel(sdf.format(time.getTime())));

@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.carzis.R;
@@ -40,6 +41,7 @@ public class HistoryActivity extends BaseActivity {
     private View backBtn;
     private TextView timeTextView;
     private RecyclerView plotsRecycler;
+    private ProgressBar progressBar;
 
     private KeyValueStorage keyValueStorage;
     private PlotsAdapter plotsAdapter;
@@ -73,6 +75,7 @@ public class HistoryActivity extends BaseActivity {
 
         timeTextView = findViewById(R.id.time_text_view);
         plotsRecycler = findViewById(R.id.plots);
+        progressBar = findViewById(R.id.progress_bar);
         //        backBtn = findViewById(R.id.back_btn);
 
         carName = getIntent().getStringExtra(CAR_NAME);
@@ -84,9 +87,11 @@ public class HistoryActivity extends BaseActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(RECEIVED_DATA_FROM_CAR));
 
         if (isOnline) {
+            progressBar.setVisibility(View.VISIBLE);
             onlinePlotsAdapter = new OnlinePlotsAdapter();
             plotsRecycler.setAdapter(onlinePlotsAdapter);
         } else {
+            progressBar.setVisibility(View.GONE);
             keyValueStorage = new KeyValueStorage(this);
             plotsAdapter = new PlotsAdapter(keyValueStorage.getUserToken(), carName, carId);
             plotsAdapter.setPids(pidCodes);
@@ -142,6 +147,7 @@ public class HistoryActivity extends BaseActivity {
 
                 Log.d(TAG, "onReceive and add to plot: pid = " + pid + " value = " + value);
                 onlinePlotsAdapter.addItem(pidItem, new HistoryItem("", pid, value, String.valueOf(millis)));
+                progressBar.setVisibility(View.GONE);
             }
         }
     };

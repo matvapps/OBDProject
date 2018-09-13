@@ -105,11 +105,14 @@ public class PidListActvity extends BaseActivity implements HistoryView, PidItem
 
         backBtn.setOnClickListener(view -> finish());
         watchGraphsBtn.setOnClickListener(view -> {
-            ArrayList<String> pids = new ArrayList<>();
-            for (PidItem item : pidListAdapter.getSelected()) {
-                pids.add(item.getPid().getCommand());
+            if (pidListAdapter.getSelected().isEmpty()) {
+                Toast.makeText(this, R.string.select_sensors, Toast.LENGTH_SHORT).show();
+                return;
             }
-
+            ArrayList<String> pids = new ArrayList<>();
+                for (PidItem item : pidListAdapter.getSelected()) {
+                    pids.add(item.getPid().getCommand());
+                }
             HistoryActivity.start(PidListActvity.this, carName, carId, pids);
         });
 
@@ -220,7 +223,6 @@ public class PidListActvity extends BaseActivity implements HistoryView, PidItem
                                 .build();
                         mBillingClient.launchBillingFlow(PidListActvity.this, flowParams);
                     } else {
-
 
 
 //                        HistoryActivity.start(PidListActvity.this, carName, carId, pidId);
