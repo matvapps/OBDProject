@@ -1,8 +1,6 @@
 package com.carzis.main;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -31,9 +29,8 @@ import com.carzis.CarzisApplication;
 import com.carzis.R;
 import com.carzis.additionalscreen.AdditionalActivity;
 import com.carzis.base.BaseActivity;
-import com.carzis.connect.ConnectionTypeActivity;
-import com.carzis.obd.BluetoothService;
 import com.carzis.connect.ConnectActivity;
+import com.carzis.connect.ConnectionTypeActivity;
 import com.carzis.dialoglist.DialogListActivity;
 import com.carzis.history.HistoryPresenter;
 import com.carzis.history.HistoryView;
@@ -51,7 +48,7 @@ import com.carzis.main.view.MyCarsView;
 import com.carzis.model.Car;
 import com.carzis.model.CarMetric;
 import com.carzis.model.HistoryItem;
-import com.carzis.obd.OBDReader;
+import com.carzis.obd.BluetoothService;
 import com.carzis.obd.OnReceiveDataListener;
 import com.carzis.obd.OnReceiveFaultCodeListener;
 import com.carzis.obd.PID;
@@ -88,6 +85,8 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
     public static final String BROADCAST_VALUE_EXTRA = "value_extra";
 
     private static final String FRAGMENT = "fragment";
+    private static final String WRITE_TO_HISTORY = "write_to_history";
+    private static final String CAR_NAME = "car_name";
 
     private String currentFragment = "";
 
@@ -126,6 +125,7 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
     private String deviceadress = null;
     private String deviceprotocol = null;
     private String carName = null;
+    private boolean alreadyUseSaveToHistory = false;
 
 
     public static void start(Activity activity) {
@@ -528,10 +528,17 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
         useAddingToHistorySwitch.setOnClickListener(onMenuItemClickListener);
         feedbackBtn.setOnClickListener(onMenuItemClickListener);
 
+        useAddingToHistorySwitch.setChecked(alreadyUseSaveToHistory);
         useAddingToHistorySwitch.setOnCheckedChangeListener((compoundButton, b) -> {
 
+            // if not connected to device then you cannot write to history
+            if (!obdReader.isConnected()) {
+                useAddingToHistorySwitch.setChecked(false);
+                return;
+            }
+
             if (useAddingToHistorySwitch.isChecked()) {
-                carPresenter.getCars();
+                    carPresenter.getCars();
             } else {
                 if (carName != null)
                     Toast.makeText(this, getString(R.string.recording_history_canceled) + carName, Toast.LENGTH_SHORT).show();
@@ -605,6 +612,7 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
         }
 
         if (useAddingToHistorySwitch.isChecked() && carName != null) {
+            alreadyUseSaveToHistory = true;
             historyPresenter.addMetric(getCarIdByName(carName), pid.getCommand(), value);
         }
 
@@ -613,11 +621,19 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
     @Override
     public void onReceiveVoltage(String voltage) {
         Log.d(TAG, "onReceiveVoltage: " + voltage);
-        if (activityToDashboardCallbackListener != null)
+        voltage = voltage.replace("V", "");
+
+        if (activityToDashboardCallbackListener != null) {
             activityToDashboardCallbackListener.onPassRealDataToFragment(PID.VOLTAGE, voltage);
+            Intent intent = new Intent(RECEIVED_DATA_FROM_CAR);
+            intent.putExtra(BROADCAST_PID_EXTRA, PID.VOLTAGE.getCommand());
+            intent.putExtra(BROADCAST_VALUE_EXTRA, voltage);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        }
 
         if (useAddingToHistorySwitch.isChecked() && carName != null) {
-            historyPresenter.addMetric(getCarIdByName(carName), PID.VOLTAGE.getCommand(), voltage.replace("V", ""));
+            alreadyUseSaveToHistory = true;
+            historyPresenter.addMetric(getCarIdByName(carName), PID.VOLTAGE.getCommand(), voltage);
         }
     }
 
@@ -685,12 +701,16 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(FRAGMENT, currentFragment);
+        outState.putBoolean(WRITE_TO_HISTORY, alreadyUseSaveToHistory);
+        outState.putString(CAR_NAME, carName);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         currentFragment = savedInstanceState.getString(FRAGMENT);
+        alreadyUseSaveToHistory = savedInstanceState.getBoolean(WRITE_TO_HISTORY);
+        carName = savedInstanceState.getString(CAR_NAME);
     }
 
     @Override

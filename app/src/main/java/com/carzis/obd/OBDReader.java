@@ -249,7 +249,8 @@ public class OBDReader {
 
     public boolean isConnected() {
         return bluetoothAdapter != null && bluetoothAdapter.isEnabled()
-                && bluetoothAdapter.getProfileConnectionState(BluetoothHeadset.HEADSET) == BluetoothHeadset.STATE_CONNECTED;
+                && bluetoothAdapter.getProfileConnectionState(BluetoothHeadset.HEADSET) == BluetoothHeadset.STATE_CONNECTED
+                || wifiService != null && wifiService.isConnected();
     }
 
     public void reset() {
@@ -670,6 +671,7 @@ public class OBDReader {
 
     @SuppressLint("HandlerLeak")
     private final Handler wifiHandler = new Handler() {
+        @SuppressLint("StringFormatInvalid")
         @Override
         public void handleMessage(Message msg) {
 

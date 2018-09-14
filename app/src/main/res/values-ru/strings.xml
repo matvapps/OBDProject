@@ -6,7 +6,7 @@
     <string name="send">Отправить</string>
     <string name="not_connected">Вы не подключены к устройству</string>
     <string name="title_connecting">Подключение</string>
-    <string name="title_connected_to">Подключено к <xliff:g id="device_name">%1$s</xliff:g></string>
+    <string name="title_connected_to" formatted="true">Подключено к <xliff:g id="device_name">%1$s</xliff:g></string>
     <string name="title_not_connected">Не подключено</string>
     <string name="title_connected">Подключено</string>
 

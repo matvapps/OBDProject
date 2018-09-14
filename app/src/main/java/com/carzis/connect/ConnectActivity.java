@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.carzis.R;
@@ -60,6 +61,7 @@ public class ConnectActivity extends BaseActivity {
     private ImageView iconBth;
     private PulsatorLayout pulsatorLayout;
     private KeyValueStorage keyValueStorage;
+    private TextView textView;
 
     private static final int REQUEST_ENABLE_BT = 3;
     private static final int REQUEST_GET_BT_PARAMETERS = 24;
@@ -108,6 +110,7 @@ public class ConnectActivity extends BaseActivity {
         this.setFinishOnTouchOutside(false);
         iconBth = findViewById(R.id.bth_icon);
         pulsatorLayout = findViewById(R.id.pulsator);
+        textView = findViewById(R.id.connect_text);
 
         keyValueStorage = new KeyValueStorage(ConnectActivity.this);
 
@@ -125,6 +128,8 @@ public class ConnectActivity extends BaseActivity {
 //        });
 
         if (currentConnectionType.equals(CONNECTION_BT)) {
+            iconBth.setImageResource(R.drawable.ic_bth);
+            textView.setText(R.string.bt_connect);
             connectBt();
             newBTDevices = new ArrayList<>();
 
@@ -142,6 +147,9 @@ public class ConnectActivity extends BaseActivity {
                 Toast.makeText(this, R.string.bt_not_available, Toast.LENGTH_LONG).show();
             }
         } else {
+            iconBth.setImageResource(R.drawable.ic_wifi);
+            textView.setText(R.string.wifi_connect);
+
             Thread thread = new Thread(() -> {
                 try {
                     Thread.sleep(1500);

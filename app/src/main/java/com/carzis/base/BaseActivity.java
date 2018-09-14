@@ -11,7 +11,7 @@ import com.carzis.util.custom.view.NoInternetDialog;
 /**
  * Created by Alexandr.
  */
-public class BaseActivity extends AppCompatActivity implements BaseView{
+public class BaseActivity extends AppCompatActivity implements BaseView {
 
     private NoInternetDialog noInternetDialog;
     private LoadingDialog loadingDialog;
@@ -29,10 +29,12 @@ public class BaseActivity extends AppCompatActivity implements BaseView{
 
     @Override
     public void showLoading(boolean load) {
-        if (!loadingDialog.isShowing() && load)
-            loadingDialog.show(viewGroup);
-        else if (loadingDialog.isShowing() && !load)
-            loadingDialog.dismiss();
+        if (loadingDialog != null) {
+            if (!loadingDialog.isShowing() && load)
+                loadingDialog.show(viewGroup);
+            else if (loadingDialog.isShowing() && !load)
+                loadingDialog.dismiss();
+        }
     }
 
     @Override
