@@ -87,6 +87,9 @@
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".base.BaseActivity" />
         <activity android:name=".connect.ConnectionTypeActivity"></activity>
+        <activity android:name=".login.ForgetPasswordActivity" />
+        <activity android:name=".login.CreateAccountActivity" />
+        <activity android:name=".login.LoginActivity" />
     </application>
 
 </manifest>

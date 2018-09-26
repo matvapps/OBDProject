@@ -502,6 +502,12 @@ public class Utility {
     }
 
 
+    public static boolean isEmail(String str) {
+        EmailValidator validator = new EmailValidator();
+        return validator.validate(str);
+    }
+
+
     public static class EmailValidator {
 
         private Pattern pattern;

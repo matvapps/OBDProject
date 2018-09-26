@@ -330,6 +330,16 @@
     <string name="watch_graph_s">Watch graph\'s</string>
     <string name="no_description_txt">no description</string>
     <string name="select_sensors">Please select sensors</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="forget_password">forget password</string>
+    <string name="create_new_account">Create new account</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="create_new_account_and_login">Create new account and login</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="email_isnt_correct">Email isn\'t correct</string>
+    <string name="password_length_error">Password length must be equals or more than 6 symbols</string>
+    <string name="passwords_not_equals">Passwords not equals</string>
 
 
 </resources>
