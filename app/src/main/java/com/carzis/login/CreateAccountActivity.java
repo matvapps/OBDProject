@@ -42,7 +42,7 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
-        setContentView(R.layout.fragment_create_account);
+        setContentView(R.layout.activity_create_account);
 
         emailEdtxt = findViewById(R.id.email_edtxt);
         passwordEdtxt = findViewById(R.id.password_edtxt);

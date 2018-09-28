@@ -44,6 +44,7 @@
     <declare-styleable name="TroubleTypeBtn">
         <attr name="btnText" format="string"/>
         <attr name="btnImage" format="color|reference"/>
+        <attr name="useBtnImage" format="boolean"/>
     </declare-styleable>
 
 </resources>

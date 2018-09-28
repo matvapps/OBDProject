@@ -36,7 +36,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
-        setContentView(R.layout.fragment_forget_password);
+        setContentView(R.layout.activity_forget_password);
 
         emailEdtxt = findViewById(R.id.email_edtxt);
         sendEmailBtn = findViewById(R.id.send_email_btn);

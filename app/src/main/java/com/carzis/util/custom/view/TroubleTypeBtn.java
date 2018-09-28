@@ -24,6 +24,7 @@ public class TroubleTypeBtn extends LinearLayout {
     private ImageView background;
 
     private String textStr;
+    private boolean useBtnImage;
 
     private boolean enabled;
 
@@ -46,6 +47,12 @@ public class TroubleTypeBtn extends LinearLayout {
         textView.setAllCaps(true);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TroubleTypeBtn);
         textStr = a.getString(R.styleable.TroubleTypeBtn_btnText);
+        useBtnImage = a.getBoolean(R.styleable.TroubleTypeBtn_useBtnImage, true);
+
+        if (useBtnImage)
+            imageView.setVisibility(VISIBLE);
+        else
+            imageView.setVisibility(GONE);
 
         final Drawable drawable = a.getDrawable(R.styleable.TroubleTypeBtn_btnImage);
         if (drawable != null) {
@@ -61,7 +68,6 @@ public class TroubleTypeBtn extends LinearLayout {
         a.recycle();
 
     }
-
 
     public void setDefaults() {
         background

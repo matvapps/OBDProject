@@ -13,8 +13,10 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
 
     <application
         android:name=".CarzisApplication"
@@ -86,10 +88,11 @@
             android:theme="@style/DialogTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".base.BaseActivity" />
-        <activity android:name=".connect.ConnectionTypeActivity"></activity>
+        <activity android:name=".connect.ConnectionTypeActivity" />
         <activity android:name=".login.ForgetPasswordActivity" />
         <activity android:name=".login.CreateAccountActivity" />
         <activity android:name=".login.LoginActivity" />
+        <activity android:name=".fileadd.LoadFileActivity"></activity>
     </application>
 
 </manifest>

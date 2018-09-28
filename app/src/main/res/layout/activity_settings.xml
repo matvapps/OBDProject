@@ -183,6 +183,34 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:includeFontPadding="false"
+                android:text="Add new *.csv files"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                app:fontFamily="@font/gte_esti_pto_text_bold"
+                app:layout_constraintBottom_toBottomOf="@+id/add_file_btn"
+                app:layout_constraintStart_toEndOf="@+id/add_file_btn"
+                app:layout_constraintTop_toTopOf="@+id/add_file_btn" />
+
+            <Button
+                android:id="@+id/add_file_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Add"
+                android:background="@drawable/button_blue_rect_selector"
+                android:textColor="@android:color/white"
+                app:fontFamily="@font/gte_esti_pto_text_bold"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="@+id/init_string_edtxt"
+                app:layout_constraintTop_toBottomOf="@+id/init_string_edtxt" />
+
+
         </android.support.constraint.ConstraintLayout>
 
     </LinearLayout>

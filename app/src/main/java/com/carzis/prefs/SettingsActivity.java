@@ -11,10 +11,12 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.carzis.R;
+import com.carzis.fileadd.LoadFileActivity;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 import com.carzis.util.custom.view.CustomSpinner;
 import com.carzis.util.custom.view.CustomWhiteSpinnerAdapter;
@@ -31,6 +33,7 @@ public class SettingsActivity extends AppCompatActivity {
     private TextView title;
     private TextView deviceName;
     private EditText initStringEdtxt;
+    private Button addFileBtn;
 
     private CustomWhiteSpinnerAdapter languageSpinnerAdapter;
     private CustomWhiteSpinnerAdapter connectTypeSpinnerAdapter;
@@ -51,10 +54,13 @@ public class SettingsActivity extends AppCompatActivity {
         title = findViewById(R.id.title);
         deviceName = findViewById(R.id.device_name);
         initStringEdtxt = findViewById(R.id.init_string_edtxt);
+        addFileBtn = findViewById(R.id.add_file_btn);
 
         deviceName.setText(getLocalBluetoothName());
         title.setText(R.string.settings);
         backBtn.setOnClickListener(view -> finish());
+
+        addFileBtn.setOnClickListener(view -> LoadFileActivity.start(SettingsActivity.this));
 
         protocolSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

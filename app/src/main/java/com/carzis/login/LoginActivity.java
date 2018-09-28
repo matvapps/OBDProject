@@ -41,7 +41,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
-        setContentView(R.layout.fragment_login);
+        setContentView(R.layout.activity_login);
 
         emailEdtxt = findViewById(R.id.email_edtxt);
         passwordEdtxt = findViewById(R.id.password_edtxt);
