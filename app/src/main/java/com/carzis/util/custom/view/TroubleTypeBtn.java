@@ -70,6 +70,7 @@ public class TroubleTypeBtn extends LinearLayout {
     }
 
     public void setDefaults() {
+        enabled = false;
         background
                 .setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.light_gray_field_background));
 
@@ -80,12 +81,17 @@ public class TroubleTypeBtn extends LinearLayout {
 
     public void setSelected(boolean selected) {
         if (selected) {
+            enabled = true;
             background.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.button_blue_rect_selector));
             imageView.setAlpha(1f);
             textView.setTextColor(Color.WHITE);
         } else {
             setDefaults();
         }
+    }
+
+    public boolean isSelected() {
+        return enabled;
     }
 
 }

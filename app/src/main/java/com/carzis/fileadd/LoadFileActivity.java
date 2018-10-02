@@ -1,15 +1,19 @@
 package com.carzis.fileadd;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
+import android.os.Build;
 import android.os.PowerManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -23,6 +27,9 @@ import com.carzis.R;
 import com.carzis.util.AndroidUtility;
 import com.carzis.util.custom.view.TroubleTypeBtn;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +41,9 @@ public class LoadFileActivity extends AppCompatActivity implements View.OnClickL
 
     private final String TAG = LoadFileActivity.class.getSimpleName();
 
+    private static final int CHOOSE_FILE_REQUEST_CODE = 42;
+
+
     private TroubleTypeBtn remoteBtn;
     private TroubleTypeBtn localBtn;
     private LinearLayout linkContainerView;
@@ -43,6 +53,9 @@ public class LoadFileActivity extends AppCompatActivity implements View.OnClickL
     private Button addFileBtn;
     private ImageButton backBtn;
     private ProgressBar progressBar;
+    private ImageView btnPaste;
+
+    private File file;
 
     public static void start(Activity activity) {
         Intent intent = new Intent(activity, LoadFileActivity.class);
@@ -63,45 +76,167 @@ public class LoadFileActivity extends AppCompatActivity implements View.OnClickL
         addFileBtn = findViewById(R.id.add_file_btn);
         backBtn = findViewById(R.id.back_btn);
         progressBar = findViewById(R.id.progressBar);
+        btnPaste = findViewById(R.id.btn_paste);
 
         remoteBtn.setOnClickListener(this);
         localBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
+        addFileBtn.setOnClickListener(this);
         fileImageView.setOnClickListener(this);
+        btnPaste.setOnClickListener(this);
 
-//        https://elm3.ru/wp-content/uploads/2018/04/Yanvar_5_1.csv
+        remoteBtn.callOnClick();
 
-        new DownloadTask(this).execute("https://elm3.ru/wp-content/uploads/2018/04/Yanvar_5_1.csv");
 
+    }
+
+
+//    private void showFileChooser() {
+//
+//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//        //intent.setType("*/*");      //all files
+//        intent.setType("text/*");   //XML file only
+////        intent.addCategory(Intent.CATEGORY_OPENABLE);
+//
+//        try {
+//            startActivityForResult(Intent.createChooser(intent, "Select a File to Upload"), CHOOSE_FILE_REQUEST_CODE);
+//        } catch (android.content.ActivityNotFoundException ex) {
+//            // Potentially direct the user to the Market with a Dialog
+//            Toast.makeText(this, "Please install a File Manager.", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+
+    public void performFileSearch() {
+        Intent intent = new Intent();
+        intent.setType("*/*");
+        if (Build.VERSION.SDK_INT < 19) {
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            intent = Intent.createChooser(intent, "Select file");
+        } else {
+            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            String[] mimetypes = { "*/*"};
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
+        }
+        startActivityForResult(intent, CHOOSE_FILE_REQUEST_CODE);
+    }
+
+    public void writeFileToAppFolder(File file) {
+        FileOutputStream outputStream;
+        try {
+            byte[] fileContent = read(file);
+            String fileLoc = AndroidUtility.getAppFolderPath() + file.getName();
+            outputStream = new FileOutputStream(fileLoc);
+            outputStream.write(fileContent);
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CHOOSE_FILE_REQUEST_CODE
+                && resultCode == Activity.RESULT_OK && data != null) {
+            Uri uri = data.getData();
+            if (uri != null) {
+                Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show();
+                file = new File(uri.getPath());
+                fileNameTxt.setText(file.getName());
+            }
+        }
+    }
+
+    public byte[] read(File file) throws IOException {
+        ByteArrayOutputStream ous = null;
+        InputStream ios = null;
+        try {
+            byte[] buffer = new byte[4096];
+            ous = new ByteArrayOutputStream();
+            ios = new FileInputStream(file);
+            int read = 0;
+            while ((read = ios.read(buffer)) != -1) {
+                ous.write(buffer, 0, read);
+            }
+        }finally {
+            try {
+                if (ous != null)
+                    ous.close();
+            } catch (IOException e) {
+            }
+
+            try {
+                if (ios != null)
+                    ios.close();
+            } catch (IOException e) {
+            }
+        }
+        return ous.toByteArray();
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_remote_file:
-                if (remoteBtn.isSelected()) {
-                    linkContainerView.setVisibility(View.VISIBLE);
+                linkContainerView.setVisibility(View.VISIBLE);
 
-                    remoteBtn.setSelected(true);
-                    localBtn.setSelected(false);
-                }
+                fileImageView.setVisibility(View.GONE);
+                fileNameTxt.setVisibility(View.GONE);
+
+                remoteBtn.setSelected(true);
+                localBtn.setSelected(false);
                 break;
             case R.id.btn_local_file:
-                if (remoteBtn.isSelected()) {
-                    linkContainerView.setVisibility(View.GONE);
+                performFileSearch();
 
-                    remoteBtn.setSelected(false);
-                    localBtn.setSelected(true);
-                }
+                linkContainerView.setVisibility(View.GONE);
+
+                fileImageView.setVisibility(View.VISIBLE);
+                fileNameTxt.setVisibility(View.VISIBLE);
+
+                remoteBtn.setSelected(false);
+                localBtn.setSelected(true);
                 break;
             case R.id.add_file_btn:
-
+                if (remoteBtn.isSelected()) {
+                    //        new DownloadTask(this).execute("https://elm3.ru/wp-content/uploads/2018/04/Yanvar_5_1.csv");
+                    String url = linkEdtxt.getText().toString();
+                    if (!url.isEmpty()) {
+                        if (URLUtil.isValidUrl(url))
+                            new DownloadTask(this).execute(url);
+                        else
+                            Toast.makeText(this, "Not a valid URL", Toast.LENGTH_SHORT).show();
+                    } else
+                        Toast.makeText(this, "Please enter a link", Toast.LENGTH_SHORT).show();
+                } else if (localBtn.isSelected()) {
+                    if (file != null) {
+                        if (file.getName().contains("csv"))
+                            writeFileToAppFolder(file);
+                        else
+                            Toast.makeText(this, "Not a valid file", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "Please select a file", Toast.LENGTH_SHORT).show();
+                        performFileSearch();
+                    }
+                }
                 break;
             case R.id.file_image:
-
+                performFileSearch();
                 break;
             case R.id.back_btn:
                 finish();
+                break;
+            case R.id.btn_paste:
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                ClipData abc = clipboard.getPrimaryClip();
+                if (abc != null) {
+                    ClipData.Item item = abc.getItemAt(0);
+                    String textBuf = item.getText().toString();
+
+                    if (!textBuf.isEmpty())
+                        linkEdtxt.setText(textBuf);
+                }
                 break;
         }
     }
@@ -114,7 +249,7 @@ public class LoadFileActivity extends AppCompatActivity implements View.OnClickL
         private PowerManager.WakeLock mWakeLock;
 
         public DownloadTask(Context context) {
-        this.context = context;
+            this.context = context;
         }
 
         @Override
@@ -146,7 +281,7 @@ public class LoadFileActivity extends AppCompatActivity implements View.OnClickL
 
                 AndroidUtility.createAppFolder(LoadFileActivity.this);
 
-                String fileLoc =  AndroidUtility.getAppFolderPath() + fileName;
+                String fileLoc = AndroidUtility.getAppFolderPath() + fileName;
 
                 // download the file
                 input = connection.getInputStream();
@@ -212,9 +347,9 @@ public class LoadFileActivity extends AppCompatActivity implements View.OnClickL
             mWakeLock.release();
 //            mProgressDialog.dismiss();
             if (result != null)
-                Toast.makeText(context,"Download error: "+result, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Download error: " + result, Toast.LENGTH_LONG).show();
             else
-                Toast.makeText(context,"File downloaded", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "File downloaded", Toast.LENGTH_SHORT).show();
         }
 
     }
