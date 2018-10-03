@@ -107,6 +107,8 @@ dependencies {
     // String to math formula
     implementation group: 'org.mariuszgromada.math', name: 'MathParser.org-mXparser', version: '4.1.1'
 
+    //CSV file reader
+    implementation 'de.siegmar:fastcsv:1.0.2'
 
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'

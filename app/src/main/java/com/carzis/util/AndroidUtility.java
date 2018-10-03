@@ -21,9 +21,9 @@ public class AndroidUtility {
         return deviceId;
     }
 
-    public static String getAppFolderPath(Context context) {
-        return context.getApplicationInfo().dataDir;
-    }
+//    public static String getAppFolderPath(Context context) {
+//        return context.getApplicationInfo().dataDir;
+//    }
 
     public static String getAppFolderPath() {
         return Environment.getExternalStorageDirectory() + "/com.carzis/";

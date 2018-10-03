@@ -35,10 +35,10 @@ public class ConnectionTypeActivity extends AppCompatActivity implements View.On
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_wifi_type:
-                ConnectActivity.start(ConnectionTypeActivity.this, ConnectActivity.CONNECTION_WIFI);
+                SelectModeActivity.start(ConnectionTypeActivity.this, ConnectActivity.CONNECTION_WIFI);
                 break;
             case R.id.btn_bt_type:
-                ConnectActivity.start(ConnectionTypeActivity.this, ConnectActivity.CONNECTION_BT);
+                SelectModeActivity.start(ConnectionTypeActivity.this, ConnectActivity.CONNECTION_BT);
                 break;
         }
     }

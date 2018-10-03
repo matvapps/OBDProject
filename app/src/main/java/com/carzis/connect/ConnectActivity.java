@@ -69,7 +69,7 @@ public class ConnectActivity extends BaseActivity {
     public static final String CONNECTION_WIFI = "connection_wifi";
     public static final String CONNECTION_BT = "connection_bt";
 
-    private static final String CONNECTION_TYPE_EXTRA = "connection_type";
+    public static final String CONNECTION_TYPE_EXTRA = "connection_type";
 
     private BluetoothAdapter mBluetoothAdapter = null;
     private Intent serverIntent;

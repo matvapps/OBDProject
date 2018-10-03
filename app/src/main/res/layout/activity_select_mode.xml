@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/gradient_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/back_btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/btn_rounded_right"
+        android:padding="15dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginStart="24dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose Fast mode, if you want to use a fast connection with a standard set of PID's, and start reading data from your car: "
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:fontFamily="@font/gte_esti_pto_text_medium" />
+
+        <Button
+            android:id="@+id/btn_fast_mode"
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_blue_rect_selector"
+            android:text="Fast mode"
+            android:layout_marginTop="24dp"
+            android:textAllCaps="false"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:fontFamily="@font/gte_esti_pto_text_bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose Specialist mode, if you understand how to use custom settings for connecting to a car, also using custom PID's in the form of configuration files: "
+            android:textColor="@android:color/white"
+            android:layout_marginTop="24dp"
+            android:textSize="16sp"
+            app:fontFamily="@font/gte_esti_pto_text_medium" />
+
+
+        <Button
+            android:id="@+id/btn_specialist_mode"
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_blue_rect_selector"
+            android:text="Specialist mode"
+            android:layout_marginTop="24dp"
+            android:textAllCaps="false"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:fontFamily="@font/gte_esti_pto_text_bold" />
+
+
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

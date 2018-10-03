@@ -92,7 +92,9 @@
         <activity android:name=".login.ForgetPasswordActivity" />
         <activity android:name=".login.CreateAccountActivity" />
         <activity android:name=".login.LoginActivity" />
-        <activity android:name=".fileadd.LoadFileActivity"></activity>
+        <activity android:name=".fileadd.LoadFileActivity" />
+        <activity android:name=".connect.SelectModeActivity" />
+        <activity android:name=".specialistmode.SpecialistActivity"></activity>
     </application>
 
 </manifest>

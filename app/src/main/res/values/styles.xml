@@ -42,6 +42,11 @@
         <item name="trackTint">@color/color_track</item>
     </style>
 
+    <style name="checkBoxStyle" parent="Base.Theme.AppCompat">
+        <item name="colorAccent">@color/bright_cyan</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+    </style>
+
     <style name="AlertDialog" parent="Theme.AppCompat.Dialog">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
