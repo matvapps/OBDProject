@@ -32,6 +32,10 @@ public class PidItem {
         this.formula = formula;
     }
 
+    public PidItem(String pid, String formula, String name, String units, String header) {
+
+    }
+
     public int getCommandAsInt() {
         return Integer.parseInt(pid.getCommand().substring(2), 16);
     }

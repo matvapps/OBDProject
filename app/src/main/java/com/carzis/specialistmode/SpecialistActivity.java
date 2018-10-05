@@ -14,9 +14,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.carzis.R;
+import com.carzis.obd.PidItem;
 import com.carzis.util.AndroidUtility;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,6 +94,62 @@ public class SpecialistActivity extends AppCompatActivity implements View.OnClic
 
                 break;
         }
+    }
+
+    private List<PidItem> getPidsFromFiles(List<File> files) {
+        List<PidItem> pids = new ArrayList<>();
+
+        for (File file: files) {
+            try {
+                InputStream is = new FileInputStream(file);
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(is, Charset.forName("UTF-8"))
+                );
+
+                // Initialization
+                String line = "";
+
+                // Initialization
+                try {
+                    // Step over headers
+                    reader.readLine();
+
+                    // If buffer is not empty
+                    while ((line = reader.readLine()) != null) {
+                        Log.d("MyActivity","Line: " + line);
+                        // use comma as separator columns of CSV
+                        String[] tokens = line.split(",");
+                        // Read the data
+//                        PidItem pidItem = new PidItem();
+
+//                        // Setters
+//                        sample.setMonth(tokens[0]);
+//                        sample.setRainfall(Double.parseDouble(tokens[1]));
+//                        sample.setSumHours(Integer.parseInt(tokens[2]));
+//
+//                        // Adding object to a class
+//                        weatherSamples.add(sample);
+//
+//                        // Log the object
+//                        Log.d("My Activity", "Just created: " + sample);
+                    }
+
+                } catch (IOException e) {
+                    // Logs error with priority level
+                    Log.wtf("MyActivity", "Error reading data file on line" + line, e);
+
+                    // Prints throwable details
+                    e.printStackTrace();
+                }
+
+
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return pids;
     }
 
     private List<File> getAllFiles() {

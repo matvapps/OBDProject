@@ -73,11 +73,13 @@ public class OBDReader {
 
     final List<String> defaultCommandsList = new ArrayList<>();
     private final List<Double> avgconsumption = new ArrayList<>();
-    final List<String> troubleCodesArray = new ArrayList<>();
-
+    private final List<String> troubleCodesArray = new ArrayList<>();
+    private List<String> supportedPidCommands;
     private List<String> initializeCommands;
+    private List<String> additionalPidCommands;
+    private List<PidItem> additionalPids;
+
     private int protocolNum;
-    private List<String> supportedPids;
 
     private final static char[] dtcLetters = {'P', 'C', 'B', 'U'};
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
@@ -171,8 +173,12 @@ public class OBDReader {
         //ATSTHH Set timeout to 4ms
         initializeCommands
                 = Arrays.asList("ATZ", "ATL0", "ATE1", "ATH1", "ATAT1", "ATSTFF", "ATI", "ATDP");
+
         protocolNum = 0;
-        supportedPids = new ArrayList<>();
+
+        supportedPidCommands = new ArrayList<>();
+        additionalPidCommands = new ArrayList<>();
+        additionalPids = new ArrayList<>();
 
         defaultCommandsList.clear();
         defaultCommandsList.add(VOLTAGE);
@@ -224,11 +230,7 @@ public class OBDReader {
             Log.d(TAG, "connectToWifiDevice: connection start");
             wifiService.connect();
         }
-
-
-
     }
-
 
     public void disconnect() {
         if (bluetoothService != null) {
@@ -240,12 +242,6 @@ public class OBDReader {
             onReceiveDataListener.onDisconnected();
         }
     }
-
-//    public void sendCommandForCheckPids() {
-//        sendEcuMessage(PID.PIDS_SUP_0_20.getCommand());
-//        sendEcuMessage(PID.PIDS_SUP_21_40.getCommand());
-//        sendEcuMessage(PID.PIDS_SUP_41_60.getCommand());
-//    }
 
     public boolean isConnected() {
         return bluetoothAdapter != null && bluetoothAdapter.isEnabled()
@@ -311,11 +307,6 @@ public class OBDReader {
         if (!initialized) {
             sendInitCommands();
         } else {
-//            if (trycount < 10) {
-//                sendCommandForCheckPids();
-//                trycount++;
-//            }
-
             checkPids(tmpmsg);
             getFaultInfo(tmpmsg);
             try {
@@ -382,10 +373,6 @@ public class OBDReader {
         if (deviceprotocol != null && devicename != null) {
             devicename = devicename.replaceAll("STOPPED", "");
             deviceprotocol = deviceprotocol.replaceAll("STOPPED", "");
-
-//            Toast.makeText(context, "Device name: " + devicename, Toast.LENGTH_SHORT).show();
-//            Toast.makeText(context, "Device protocol: " + deviceprotocol, Toast.LENGTH_SHORT).show();
-//            Status.setText(devicename + " " + deviceprotocol);
         }
     }
 
@@ -412,13 +399,28 @@ public class OBDReader {
         }
     }
 
-    private void sendDefaultCommands() {
+    private void sendAdditionalCommands() {
+        if (additionalPidCommands.size() == 0)
+            return;
 
-        // Add supported pids to default command list
-        for (String item : supportedPids) {
+        for (String item : additionalPidCommands) {
             if (!defaultCommandsList.contains(item))
                 defaultCommandsList.add(item);
         }
+
+        for (String item : additionalPidCommands) {
+            sendEcuMessage(item);
+        }
+    }
+
+    private void sendDefaultCommands() {
+
+        // Add supported pids to default command list
+        for (String item : supportedPidCommands) {
+            if (!defaultCommandsList.contains(item))
+                defaultCommandsList.add(item);
+        }
+
 
         if (defaultCommandsList.size() != 0) {
 
@@ -547,7 +549,7 @@ public class OBDReader {
                     tmpmsg.contains("0140") || tmpmsg.contains("0160")) {
 
                 String pidmsg = tmpmsg.substring(index, tmpmsg.length());
-                setSupportedPids(pidmsg);
+                setSupportedPidCommands(pidmsg);
             }
         }
     }
@@ -564,7 +566,7 @@ public class OBDReader {
         return val;
     }
 
-    private void setSupportedPids(String buffer) {
+    private void setSupportedPidCommands(String buffer) {
         String buf = buffer.toString();
         buf = buf.trim();
         buf = buf.replace("\t", "");
@@ -573,7 +575,7 @@ public class OBDReader {
 
         int index;
 
-        Log.d(TAG, "setSupportedPids: " + buf);
+        Log.d(TAG, "setSupportedPidCommands: " + buf);
         if ((index = buf.indexOf("4100")) == 0) {
             buf = buf.substring(index + 4, index + 12);
             int decNum = hex2decimal(buf);
@@ -581,8 +583,8 @@ public class OBDReader {
 
             for (int i = 1; i < binary.length() + 1; i++) {
                 if (binary.charAt(i - 1) == '1')
-                    if (!supportedPids.contains(PidItem.PIDS[i]))
-                        supportedPids.add(PidItem.PIDS[i]);
+                    if (!supportedPidCommands.contains(PidItem.PIDS[i]))
+                        supportedPidCommands.add(PidItem.PIDS[i]);
             }
 
         } else if ((index = buf.indexOf("4120")) == 0) {
@@ -592,8 +594,8 @@ public class OBDReader {
 
             for (int i = 1; i < binary.length() + 1; i++) {
                 if (binary.charAt(i - 1) == '1')
-                    if (!supportedPids.contains(PidItem.PIDS[i + 32]))
-                        supportedPids.add(PidItem.PIDS[i + 32]);
+                    if (!supportedPidCommands.contains(PidItem.PIDS[i + 32]))
+                        supportedPidCommands.add(PidItem.PIDS[i + 32]);
             }
         } else if ((index = buf.indexOf("4140")) == 0) {
             buf = buf.substring(index + 4, index + 12);
@@ -602,16 +604,16 @@ public class OBDReader {
 
             for (int i = 1; i < binary.length() + 1; i++) {
                 if (binary.charAt(i - 1) == '1')
-                    if (!supportedPids.contains(PidItem.PIDS[i + 64]))
-                        supportedPids.add(PidItem.PIDS[i + 64]);
+                    if (!supportedPidCommands.contains(PidItem.PIDS[i + 64]))
+                        supportedPidCommands.add(PidItem.PIDS[i + 64]);
             }
         }
 
-        Log.d(TAG, "setSupportedPids: " + supportedPids.toString());
+        Log.d(TAG, "setSupportedPidCommands: " + supportedPidCommands.toString());
     }
 
     private boolean hasPidInSupportedSuchAs(String pid) {
-        for (String item : supportedPids) {
+        for (String item : supportedPidCommands) {
             if (item.equals(pid))
                 return true;
         }
@@ -629,44 +631,6 @@ public class OBDReader {
                 onReceiveDataListener.onReceiveData(pidItem.getPid(), pidItem.getValue(A, B));
             }
         }
-//            case PIDS_SUP_0_20:
-//                return "";
-//            case DTCS_CLEARED_MIL_DTCS :
-//                return "";
-//            case FREEZE_DTCS:
-//                return "";
-//            case FUEL_SYSTEM_STATUS :
-//                return "";
-//            case COMMANDED_SECONDARY_AIR_STATUS :
-//                return "";
-//            case OXY_SENS_PRESENT_2_BANKS:
-//                return "";
-//            case OBD_STANDARDS_VEHICLE_CONFORMS_TO :
-//                return "";
-//            case OXY_SENS_PRESENT_4_BANKS:
-//                return "";
-//            case AUXILIARY_INPUT_STATUS:
-//                return "";
-//            case PIDS_SUP_21_40  :
-//                return "";
-//            case PIDS_SUP_41_60  :
-//                return "";
-//            case MONITOR_STATUS_THIS_DRIVE_CYCLE :
-//                return "";
-//            case MAX_VAL_FOR_FUEL_AIR_EQUIVALENCE_RATIO_OXY_SENS_VOLT_OXY_SENS_CURRENT_INTAKE_MANIFOLD_PRESSURE:
-//                return "";
-//            case MAX_VAL_FOR_AIR_FLOW_RATE_FROM_MASS_AIR_FLOW_SENS:
-//                return "";
-//            case FUEL_TYPE:
-//                return "";
-//            case EMISSION_REQUIREMENTS_TO_WHICH_VEHICLE_IS_DESIGNED:
-//                return "";
-//            case PIDS_SUP_61_80:
-//                return "";
-//            case ENGINE_PERCENT_TORQUE_DATA:
-//                return "";
-//            case AUXILIARY_IN_OUT_SUPPORTED:
-//                return "";
     }
 
     @SuppressLint("HandlerLeak")
@@ -697,12 +661,10 @@ public class OBDReader {
 
                             break;
                         case WifiService.STATE_NONE:
-
 //                            if (wifiService != null)wifiService.disconnect();
 //                            wifiService = null;
 //
 //                            resetvalues();
-
                             connected = true;
                             if (tryconnect) {
                                 wifiService.connect();
@@ -836,13 +798,28 @@ public class OBDReader {
         }
     };
 
+    public List<String> getAdditionalPidCommands() {
+        return additionalPidCommands;
+    }
 
-    public List<String> getSupportedPids() {
-        return supportedPids;
+    public void setAdditionalPidCommands(List<String> additionalPidCommands) {
+        this.additionalPidCommands = additionalPidCommands;
+    }
+
+    public List<PidItem> getAdditionalPids() {
+        return additionalPids;
+    }
+
+    public void setAdditionalPids(List<PidItem> additionalPids) {
+        this.additionalPids = additionalPids;
+    }
+
+    public List<String> getSupportedPidCommands() {
+        return supportedPidCommands;
     }
 
     public void setSupportedPids(List<String> supportedPids) {
-        this.supportedPids = supportedPids;
+        this.supportedPidCommands = supportedPids;
     }
 
     public List<String> getInitializeCommands() {

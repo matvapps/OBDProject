@@ -148,7 +148,7 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
 
         initMenu();
 
-        addView.setOnClickListener(view -> activityToDashboardCallbackListener.onAddNewDevice(obdReader.getSupportedPids()));
+        addView.setOnClickListener(view -> activityToDashboardCallbackListener.onAddNewDevice(obdReader.getSupportedPidCommands()));
         addCarView.setOnClickListener(view -> AdditionalActivity.start(MainActivity.this, AdditionalActivity.ADD_CAR_FRAGMENT));
 
         menuBtn.setOnClickListener(view -> {
@@ -436,8 +436,8 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
             case R.id.dashboard_menu_btn: {
                 addCarView.setVisibility(View.INVISIBLE);
                 DashboardFragment dashboardFragment = new DashboardFragment();
-//                dashboardFragment.setSupportedDevices((ArrayList<String>) obdReader.getSupportedPids());
-//                Log.d(TAG, "setSupportedDevices: " + obdReader.getSupportedPids());
+//                dashboardFragment.setSupportedDevices((ArrayList<String>) obdReader.getSupportedPidCommands());
+//                Log.d(TAG, "setSupportedDevices: " + obdReader.getSupportedPidCommands());
                 showFragment(dashboardFragment);
 
                 addView.setVisibility(View.VISIBLE);
