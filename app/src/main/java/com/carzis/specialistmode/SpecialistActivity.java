@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 
 import com.carzis.R;
 import com.carzis.obd.PidItem;
+import com.carzis.obd.PidNew;
 import com.carzis.util.AndroidUtility;
 
 import java.io.BufferedReader;
@@ -28,6 +29,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.carzis.CarzisApplication.obdReader;
 import static com.carzis.connect.ConnectActivity.CONNECTION_TYPE_EXTRA;
 
 public class SpecialistActivity extends AppCompatActivity implements View.OnClickListener{
@@ -96,8 +98,8 @@ public class SpecialistActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    private List<PidItem> getPidsFromFiles(List<File> files) {
-        List<PidItem> pids = new ArrayList<>();
+    private ArrayList<PidNew> getPidsFromFiles(List<File> files) {
+        ArrayList<PidNew> pids = new ArrayList<>();
 
         for (File file: files) {
             try {
@@ -116,27 +118,25 @@ public class SpecialistActivity extends AppCompatActivity implements View.OnClic
 
                     // If buffer is not empty
                     while ((line = reader.readLine()) != null) {
-                        Log.d("MyActivity","Line: " + line);
+                        Log.d(TAG,"Line: " + line);
                         // use comma as separator columns of CSV
                         String[] tokens = line.split(",");
-                        // Read the data
-//                        PidItem pidItem = new PidItem();
 
-//                        // Setters
-//                        sample.setMonth(tokens[0]);
-//                        sample.setRainfall(Double.parseDouble(tokens[1]));
-//                        sample.setSumHours(Integer.parseInt(tokens[2]));
-//
-//                        // Adding object to a class
-//                        weatherSamples.add(sample);
-//
-//                        // Log the object
-//                        Log.d("My Activity", "Just created: " + sample);
+                        String name = tokens[0];
+                        String mode = tokens[1].substring(0, 2);
+                        String pid = tokens[1].substring(2);
+                        String equation = tokens[3];
+                        String header = tokens[7];
+
+                        PidNew pidItem = new PidNew(pid, mode, name, equation, header);
+                        pids.add(pidItem);
+
+                        Log.d(TAG, "getPidsFromFiles: " + pidItem.getName());
                     }
 
                 } catch (IOException e) {
                     // Logs error with priority level
-                    Log.wtf("MyActivity", "Error reading data file on line" + line, e);
+                    Log.wtf(TAG, "Error reading data file on line" + line, e);
 
                     // Prints throwable details
                     e.printStackTrace();
@@ -148,6 +148,7 @@ public class SpecialistActivity extends AppCompatActivity implements View.OnClic
                 e.printStackTrace();
             }
         }
+
 
         return pids;
     }

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.carzis.R;
+import com.carzis.repository.local.database.LocalRepository;
 import com.carzis.util.Utility;
 
 import java.util.ArrayList;
@@ -77,7 +78,8 @@ public class OBDReader {
     private List<String> supportedPidCommands;
     private List<String> initializeCommands;
     private List<String> additionalPidCommands;
-    private List<PidItem> additionalPids;
+
+    private List<PidNew> defaultPidCommands;
 
     private int protocolNum;
 
@@ -88,47 +90,6 @@ public class OBDReader {
     private final String PROTOCOL = "ATDP";
     private final String RESET = "ATZ";
     private final String SET_PROTOCOL = "ATSP";
-
-//    private String ENGINE_LOAD = "0104",  // A*100/255
-//            ENGINE_COOLANT_TEMP = "0105",  //A-40
-//            SH_TERM_FUEL_TRIM_1 = "0106", // (A / 1.28) - 100
-//            LN_TERM_FUEL_PERCENT_TRIM_1 = "0107", // (A / 1.28) - 100
-//            SH_TERM_FUEL_TRIM_2 = "0108", // (A / 1.28) - 100
-//            LN_TERM_FUEL_PERCENT_TRIM_2 = "0109", // (A / 1.28) - 100
-//            FUEL_PRESSURE = "010A", // 3*A
-//            INTAKE_MAN_PRESSURE = "010B", // A,  Intake manifold absolute pressure 0 - 255 kPa
-//            ENGINE_RPM = "010C",  //((A*256)+B)/4
-//            VEHICLE_SPEED = "010D",  //A
-//            TIMING_ADVANCE = "010E", // (A / 2) - 64
-//            INTAKE_AIR_TEMP = "010F",  //A-40
-//            MAF_AIR_FLOW = "0110", //MAF air flow rate 0 - 655.35	grams/sec ((256*A)+B) / 100  [g/s]
-//            THROTTLE_POSITION = "0111", //Throttle position 0 -100 % A*100/255
-//            OXY_SENS_VOLT_B_1_SENS_1 = "0114", // (A / 200) - voltage; (100 / 128) * B - 100 - short term fuel trim
-//            OXY_SENS_VOLT_B_1_SENS_2 = "0115",
-//            OXY_SENS_VOLT_B_1_SENS_3 = "0116",
-//            OXY_SENS_VOLT_B_1_SENS_4 = "0117",
-//            OXY_SENS_VOLT_B_2_SENS_1 = "0118",
-//            OXY_SENS_VOLT_B_2_SENS_2 = "0119",
-//            OXY_SENS_VOLT_B_2_SENS_3 = "011A",
-//            OXY_SENS_VOLT_B_2_SENS_4 = "011B",
-//            FUEL_RAIL_PRESSURE = "0122", // ((A*256)+B)*0.079
-//            FUEL_RAIL_PRESSURE_DIESEL = "0123", // 10 * (256 * A + B)
-//            COMMANDED_EGR = "012C", // 	A*100/255
-//            FUEL_LEVEL = "012F", // FUEL level 	0-100%	A*100/255
-//            BAROMETRIC_PRESSURE = "0133", // A
-//            CATALYST_TEMP_B1S1 = "013C",  // (((A*256)+B)/10)-40
-//            CATALYST_TEMP_B2S1 = "013D", // (((A*256)+B)/10)-40
-//            CATALYST_TEMP_B1S2 = "013E", // (((A*256)+B)/10)-40
-//            CATALYST_TEMP_B2S2 = "013F", // (((A*256)+B)/10)-40
-//            THROTTLE_POS_2 = "0145", // A*100 / 255
-//            ENGINE_OIL_TEMP = "015C",  //A-40
-//
-//
-//            CONT_MODULE_VOLT = "0142",  //((A*256)+B)/1000
-//            AMBIENT_AIR_TEMP = "0146",  //A-40
-//            STATUS_DTC = "0101", //Status since DTC Cleared
-//            OBD_STANDARDS = "011C", //OBD standards this vehicle
-//            PIDS_SUPPORTED = "0120"; //PIDs supported
 
     private boolean tryconnect = false;
     private boolean connected = false;
@@ -178,7 +139,7 @@ public class OBDReader {
 
         supportedPidCommands = new ArrayList<>();
         additionalPidCommands = new ArrayList<>();
-        additionalPids = new ArrayList<>();
+        defaultPidCommands = new ArrayList<>();
 
         defaultCommandsList.clear();
         defaultCommandsList.add(VOLTAGE);
@@ -583,8 +544,8 @@ public class OBDReader {
 
             for (int i = 1; i < binary.length() + 1; i++) {
                 if (binary.charAt(i - 1) == '1')
-                    if (!supportedPidCommands.contains(PidItem.PIDS[i]))
-                        supportedPidCommands.add(PidItem.PIDS[i]);
+                    if (!supportedPidCommands.contains(PidNew.PIDS[i]))
+                        supportedPidCommands.add(PidNew.PIDS[i]);
             }
 
         } else if ((index = buf.indexOf("4120")) == 0) {
@@ -594,8 +555,8 @@ public class OBDReader {
 
             for (int i = 1; i < binary.length() + 1; i++) {
                 if (binary.charAt(i - 1) == '1')
-                    if (!supportedPidCommands.contains(PidItem.PIDS[i + 32]))
-                        supportedPidCommands.add(PidItem.PIDS[i + 32]);
+                    if (!supportedPidCommands.contains(PidNew.PIDS[i + 32]))
+                        supportedPidCommands.add(PidNew.PIDS[i + 32]);
             }
         } else if ((index = buf.indexOf("4140")) == 0) {
             buf = buf.substring(index + 4, index + 12);
@@ -604,8 +565,8 @@ public class OBDReader {
 
             for (int i = 1; i < binary.length() + 1; i++) {
                 if (binary.charAt(i - 1) == '1')
-                    if (!supportedPidCommands.contains(PidItem.PIDS[i + 64]))
-                        supportedPidCommands.add(PidItem.PIDS[i + 64]);
+                    if (!supportedPidCommands.contains(PidNew.PIDS[i + 64]))
+                        supportedPidCommands.add(PidNew.PIDS[i + 64]);
             }
         }
 
@@ -798,20 +759,17 @@ public class OBDReader {
         }
     };
 
+    public void setDefaultPidCommands(List<PidNew> pids) {
+        this.defaultPidCommands.clear();
+        this.defaultPidCommands.addAll(pids);
+    }
+
     public List<String> getAdditionalPidCommands() {
         return additionalPidCommands;
     }
 
     public void setAdditionalPidCommands(List<String> additionalPidCommands) {
         this.additionalPidCommands = additionalPidCommands;
-    }
-
-    public List<PidItem> getAdditionalPids() {
-        return additionalPids;
-    }
-
-    public void setAdditionalPids(List<PidItem> additionalPids) {
-        this.additionalPids = additionalPids;
     }
 
     public List<String> getSupportedPidCommands() {

@@ -10,6 +10,7 @@ import com.carzis.main.view.TroubleCodesView;
 import com.carzis.model.Car;
 import com.carzis.model.HistoryItem;
 import com.carzis.model.Trouble;
+import com.carzis.obd.PidView;
 import com.huma.room_for_asset.RoomAsset;
 
 import io.reactivex.Completable;
@@ -35,6 +36,7 @@ public class LocalRepository {
     private TroubleCodesView troubleCodesView;
     private MyCarsView myCarsView;
     private HistoryView historyView;
+    private PidView pidView;
 
 
     public void attachView(TroubleCodesView troubleCodesView) {
@@ -47,6 +49,10 @@ public class LocalRepository {
 
     public void attachView(HistoryView historyView) {
         this.historyView = historyView;
+    }
+
+    public void attachView(PidView pidView) {
+        this.pidView = pidView;
     }
 
     public LocalRepository(Context context) {
@@ -89,6 +95,18 @@ public class LocalRepository {
                 .subscribe(troubles -> {
                     troubleCodesView.showLoading(false);
                     troubleCodesView.onGetTroubleCodes(troubles);
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    public void getDefaultPids() {
+//        pidView.showLoading(true);
+
+        appDatabase.pidItemDao().getDefaultPids()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(pids -> {
+//                    pidView.showLoading(false);
+                    pidView.onGetPids(pids);
                 });
     }
 

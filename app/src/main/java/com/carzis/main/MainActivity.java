@@ -45,6 +45,7 @@ import com.carzis.main.listener.DashboardToActivityCallbackListener;
 import com.carzis.main.listener.TroublesToActivityCallbackListener;
 import com.carzis.main.presenter.CarPresenter;
 import com.carzis.main.view.MyCarsView;
+import com.carzis.model.AppError;
 import com.carzis.model.Car;
 import com.carzis.model.CarMetric;
 import com.carzis.model.HistoryItem;
@@ -52,6 +53,8 @@ import com.carzis.obd.BluetoothService;
 import com.carzis.obd.OnReceiveDataListener;
 import com.carzis.obd.OnReceiveFaultCodeListener;
 import com.carzis.obd.PID;
+import com.carzis.obd.PidNew;
+import com.carzis.obd.PidView;
 import com.carzis.prefs.SettingsActivity;
 import com.carzis.repository.local.database.LocalRepository;
 import com.carzis.repository.local.prefs.KeyValueStorage;
@@ -216,6 +219,30 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
 //        obdReader.connectToBtDevice(deviceadress, devicename);
         obdReader.setOnReceiveFaultCodeListener(this);
         obdReader.setOnReceiveDataListener(this);
+
+        localRepository.attachView(new PidView() {
+            @Override
+            public void onGetPids(List<PidNew> pids) {
+                for (PidNew pid: pids) {
+                    Log.d(TAG, "onGetPids: " + pid.getName());
+                }
+
+                obdReader.setDefaultPidCommands(pids);
+            }
+
+            @Override
+            public void showLoading(boolean load) {
+
+            }
+
+            @Override
+            public void showError(AppError appError) {
+
+            }
+        });
+
+        localRepository.getDefaultPids();
+
 //        localRepository = new LocalRepository(this);
 //        keyValueStorage = new KeyValueStorage(this);
 //
