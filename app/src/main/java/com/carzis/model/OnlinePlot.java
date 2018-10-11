@@ -6,13 +6,13 @@ import java.util.List;
 
 public class OnlinePlot {
 
-    private PID pid;
+    private String pid;
     private List<HistoryItem> historyItems;
 
     public OnlinePlot() {
     }
 
-    public OnlinePlot(PID pid, List<HistoryItem> historyItems) {
+    public OnlinePlot(String pid, List<HistoryItem> historyItems) {
         this.pid = pid;
         this.historyItems = historyItems;
     }
@@ -21,11 +21,11 @@ public class OnlinePlot {
         historyItems.add(historyItem);
     }
 
-    public PID getPid() {
+    public String getPid() {
         return pid;
     }
 
-    public void setPid(PID pid) {
+    public void setPid(String pid) {
         this.pid = pid;
     }
 

@@ -26,7 +26,7 @@ import com.carzis.model.AppError;
 import com.carzis.model.CarMetric;
 import com.carzis.model.HistoryItem;
 import com.carzis.obd.PID;
-import com.carzis.obd.PidItem;
+import com.carzis.obd.PidNew;
 import com.carzis.repository.local.database.LocalRepository;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 
@@ -110,8 +110,8 @@ public class PidListActvity extends BaseActivity implements HistoryView, PidItem
                 return;
             }
             ArrayList<String> pids = new ArrayList<>();
-                for (PidItem item : pidListAdapter.getSelected()) {
-                    pids.add(item.getPid().getCommand());
+                for (PidNew item : pidListAdapter.getSelected()) {
+                    pids.add(item.getPidCode());
                 }
             HistoryActivity.start(PidListActvity.this, carName, carId, pids);
         });
@@ -124,7 +124,7 @@ public class PidListActvity extends BaseActivity implements HistoryView, PidItem
     @Override
     public void onGetHistoryItems(List<HistoryItem> items, String carName) {
 
-        List<PidItem> pidItems = new ArrayList<>();
+        List<PidNew> pidItems = new ArrayList<>();
         if (items != null) {
             for (HistoryItem item : items) {
                 if (!existInList(pidItems, item.getPidId())) {
@@ -140,7 +140,7 @@ public class PidListActvity extends BaseActivity implements HistoryView, PidItem
                             !pidCommand.equals(PID.DTCS_CLEARED_MIL_DTCS.getCommand()) &&
                             !pidCommand.equals(PID.AUXILIARY_IN_OUT_SUPPORTED.getCommand())) {
 
-                        pidItems.add(new PidItem(PID.getEnumByString(pidCommand)));
+                        pidItems.add(new PidNew(pidCommand));
 
                         Log.d(TAG, "onGetHistoryItems: " + item.getPidId());
                     }
@@ -160,9 +160,9 @@ public class PidListActvity extends BaseActivity implements HistoryView, PidItem
         localRepository.getAllHistoryItemsByCar(carName);
     }
 
-    private boolean existInList(List<PidItem> items, String pidCode) {
-        for (PidItem item : items) {
-            if (item.getPid().getCommand().equals(pidCode))
+    private boolean existInList(List<PidNew> items, String pidCode) {
+        for (PidNew item : items) {
+            if (item.getPidCode().equals(pidCode))
                 return true;
         }
         return false;

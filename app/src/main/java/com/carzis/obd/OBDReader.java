@@ -11,7 +11,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.carzis.R;
-import com.carzis.repository.local.database.LocalRepository;
 import com.carzis.util.Utility;
 
 import java.util.ArrayList;
@@ -77,9 +76,10 @@ public class OBDReader {
     private final List<String> troubleCodesArray = new ArrayList<>();
     private List<String> supportedPidCommands;
     private List<String> initializeCommands;
-    private List<String> additionalPidCommands;
+    private List<String> additionalPids;
 
     private List<PidNew> defaultPidCommands;
+    private List<PidNew> additionalPidCommands;
 
     private int protocolNum;
 
@@ -138,8 +138,9 @@ public class OBDReader {
         protocolNum = 0;
 
         supportedPidCommands = new ArrayList<>();
-        additionalPidCommands = new ArrayList<>();
+        additionalPids = new ArrayList<>();
         defaultPidCommands = new ArrayList<>();
+        additionalPidCommands = new ArrayList<>();
 
         defaultCommandsList.clear();
         defaultCommandsList.add(VOLTAGE);
@@ -361,15 +362,15 @@ public class OBDReader {
     }
 
     private void sendAdditionalCommands() {
-        if (additionalPidCommands.size() == 0)
+        if (additionalPids.size() == 0)
             return;
 
-        for (String item : additionalPidCommands) {
+        for (String item : additionalPids) {
             if (!defaultCommandsList.contains(item))
                 defaultCommandsList.add(item);
         }
 
-        for (String item : additionalPidCommands) {
+        for (String item : additionalPids) {
             sendEcuMessage(item);
         }
     }
@@ -469,7 +470,6 @@ public class OBDReader {
             }
         }
     }
-
     private void performCalculations(String fault) {
         final String result = fault;
         String workingData = "";
@@ -584,14 +584,57 @@ public class OBDReader {
     private void calculateEcuValues(int pidInDec, int A, int B) {
         String pidStr = String.format("%s%02X", "01", pidInDec);
 
-        if (PidItem.contains(pidStr)) {
-            PID pid = PID.getEnumByString(pidStr);
-            PidItem pidItem = new PidItem(pid);
+        PidNew currentPid = null;
 
-            if (onReceiveDataListener != null) {
-                onReceiveDataListener.onReceiveData(pidItem.getPid(), pidItem.getValue(A, B));
+        // if pidStr from default pids
+        if (PidNew.contains(pidStr)) {
+            // if pid from default commands
+            for (PidNew pid :defaultPidCommands) {
+                if (pid.getPidCode().equals(pidStr)) {
+                    currentPid = pid;
+                }
+            }
+        } else {
+            // if pid from user-additional commmands
+            for (PidNew pid: additionalPidCommands) {
+                currentPid = pid;
             }
         }
+
+        if (currentPid != null) {
+            if (onReceiveDataListener != null) {
+                onReceiveDataListener.onReceiveData(currentPid.getPidCode(), currentPid.getValue(A, B));
+            }
+        }
+
+
+//        if (PidItem.contains(pidStr)) {
+//            PID pid = PID.getEnumByString(pidStr);
+//            PidItem pidItem = new PidItem(pid);
+//
+//            if (onReceiveDataListener != null) {
+//                onReceiveDataListener.onReceiveData(pidItem.getPid(), pidItem.getValue(A, B));
+//            }
+//        }
+    }
+
+    public PidNew getPidByCode(String code) {
+        // if pidStr from default pids
+        if (PidNew.contains(code)) {
+            // if pid from default commands
+            for (PidNew pid :defaultPidCommands) {
+                if (pid.getPidCode().equals(code)) {
+                    return pid;
+                }
+            }
+        } else {
+            // if pid from user-additional commmands
+            for (PidNew pid: additionalPidCommands) {
+                return pid;
+            }
+        }
+
+        return null;
     }
 
     @SuppressLint("HandlerLeak")
@@ -764,12 +807,12 @@ public class OBDReader {
         this.defaultPidCommands.addAll(pids);
     }
 
-    public List<String> getAdditionalPidCommands() {
-        return additionalPidCommands;
+    public List<String> getAdditionalPids() {
+        return additionalPids;
     }
 
-    public void setAdditionalPidCommands(List<String> additionalPidCommands) {
-        this.additionalPidCommands = additionalPidCommands;
+    public void setAdditionalPids(List<String> additionalPids) {
+        this.additionalPids = additionalPids;
     }
 
     public List<String> getSupportedPidCommands() {

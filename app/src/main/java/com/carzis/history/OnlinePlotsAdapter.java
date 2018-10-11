@@ -42,9 +42,9 @@ public class OnlinePlotsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         items = new ArrayList<>();
     }
 
-    public void addItem(PID pid, HistoryItem historyItem) {
+    public void addItem(String pid, HistoryItem historyItem) {
         for (OnlinePlot plot : items) {
-            if (plot.getPid().getCommand().equals(pid.getCommand())) {
+            if (plot.getPid().equals(pid)) {
                 plot.addHistoryItem(historyItem);
                 notifyDataSetChanged();
                 return;

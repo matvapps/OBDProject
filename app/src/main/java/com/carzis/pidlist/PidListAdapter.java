@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.carzis.R;
 import com.carzis.model.PidListItem;
-import com.carzis.obd.PidItem;
+import com.carzis.obd.PidNew;
 import com.carzis.util.Utility;
 
 import java.util.ArrayList;
@@ -23,15 +23,15 @@ public class PidListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private List<PidListItem> items;
     private PidItemClickListener pidItemClickListener;
 
-    public void setItems(List<PidItem> items) {
+    public void setItems(List<PidNew> items) {
         this.items.clear();
-        for (PidItem pidItem :items) {
+        for (PidNew pidItem :items) {
             this.items.add(new PidListItem(pidItem, false));
         }
         notifyDataSetChanged();
     }
 
-    public void addItem(PidItem item) {
+    public void addItem(PidNew item) {
         this.items.add(new PidListItem(item, false));
         notifyDataSetChanged();
     }
@@ -52,8 +52,8 @@ public class PidListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         PidViewHolder pidViewHolder = (PidViewHolder) holder;
         PidListItem pidItem = items.get(position);
 
-        int imageID = Utility.getDeviceIconIdBy(pidItem.getPidItem().getPid());
-        String name = Utility.getDeviceNameBy(holder.itemView.getContext(), pidItem.getPidItem().getPid());
+        int imageID = Utility.getDeviceIconIdBy(pidItem.getPidItem().getPidCode());
+        String name = Utility.getDeviceNameBy(holder.itemView.getContext(), pidItem.getPidItem().getPidCode());
 
         pidViewHolder.container.setBackgroundResource(
                 pidItem.isChecked()
@@ -62,7 +62,7 @@ public class PidListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         if (pidItemClickListener != null) {
             pidViewHolder.itemView.setOnClickListener(view -> {
-                pidItemClickListener.onClick(pidItem.getPidItem().getPid().getCommand());
+                pidItemClickListener.onClick(pidItem.getPidItem().getPidCode());
                 pidItem.setChecked(!pidItem.isChecked());
                 pidViewHolder.container.setBackgroundResource(
                         pidItem.isChecked()
@@ -76,8 +76,8 @@ public class PidListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     }
 
-    public List<PidItem> getSelected() {
-        List<PidItem> selectedPidItems = new ArrayList<>();
+    public List<PidNew> getSelected() {
+        List<PidNew> selectedPidItems = new ArrayList<>();
         for (PidListItem pidItem :items) {
             if (pidItem.isChecked())
                 selectedPidItems.add(pidItem.getPidItem());

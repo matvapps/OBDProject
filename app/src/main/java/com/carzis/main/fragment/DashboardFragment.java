@@ -18,7 +18,6 @@ import com.carzis.main.listener.ActivityToDashboardCallbackListener;
 import com.carzis.main.listener.DashboardToActivityCallbackListener;
 import com.carzis.model.DashboardItem;
 import com.carzis.obd.PID;
-import com.carzis.obd.PidItem;
 import com.carzis.repository.local.database.LocalRepository;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 import com.github.matvapps.dashboarddevices.Speedometer;
@@ -98,19 +97,19 @@ public class DashboardFragment extends BaseFragment implements ActivityToDashboa
         for (int i = 0; i < devicesStr.length(); i += 4) {
             String pidStr = devicesStr.substring(i, i + 4);
 
-            if (PidItem.contains(pidStr)) {
-                PID pid = PID.getEnumByString(pidStr);
+//            if (PidItem.contains(pidStr)) {
+//                PID pid = PID.getEnumByString(pidStr);
 //                Log.d(TAG, "setupDevices: supportedPIDS: " + supportedDevices);
 //                Log.d(TAG, "setupDevices: supportedPIDS preaddDashboardItem" + pid.getCommand());
 //                Log.d(TAG, "setupDevices: supportedPIDS pids" + supportedDevices);
 //                if (isInSupportedPids(pid.getCommand())) {
 //                    Log.d(TAG, "setupDevices: supportedPIDS addDashboardItem" + pid.getCommand());
-                dashboardItemsAdapter.addItem(new DashboardItem("-", pid));
+                dashboardItemsAdapter.addItem(new DashboardItem("-", pidStr));
 //                }
 //                else {
 //                    keyValueStorage.removeDeviceFromDashboard(pid);
 //                }
-            }
+//            }
         }
 
 
@@ -136,16 +135,38 @@ public class DashboardFragment extends BaseFragment implements ActivityToDashboa
         setupDevices(keyValueStorage.getUserDashboardDevices());
     }
 
+//    @Override
+//    public void onPassRealDataToFragment(PID pid, String value) {
+//        Log.d(TAG, "onPassRealDataToFragment: PID: " + pid + ", value=" + value);
+//
+//        switch (pid) {
+//            case ENGINE_RPM:
+//                float turnovers = Float.parseFloat(value);
+//                tachometer.moveTo(turnovers);
+//                break;
+//            case VEHICLE_SPEED:
+//                float speed = Float.parseFloat(value);
+//                if (!Locale.getDefault().getLanguage().equals("ru"))
+//                    speed = speed / 1.609344f;
+//                speedometer.moveTo(speed);
+//                break;
+//            default:
+//                dashboardItemsAdapter.updateItem(new DashboardItem(value, pid));
+//                break;
+//        }
+//
+//    }
+
     @Override
-    public void onPassRealDataToFragment(PID pid, String value) {
+    public void onPassRealDataToFragment(String pid, String value) {
         Log.d(TAG, "onPassRealDataToFragment: PID: " + pid + ", value=" + value);
 
         switch (pid) {
-            case ENGINE_RPM:
+            case "010C":
                 float turnovers = Float.parseFloat(value);
                 tachometer.moveTo(turnovers);
                 break;
-            case VEHICLE_SPEED:
+            case "010D":
                 float speed = Float.parseFloat(value);
                 if (!Locale.getDefault().getLanguage().equals("ru"))
                     speed = speed / 1.609344f;
@@ -155,7 +176,6 @@ public class DashboardFragment extends BaseFragment implements ActivityToDashboa
                 dashboardItemsAdapter.updateItem(new DashboardItem(value, pid));
                 break;
         }
-
     }
 
     @Override

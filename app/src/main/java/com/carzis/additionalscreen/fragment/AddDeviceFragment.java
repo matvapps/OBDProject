@@ -90,7 +90,7 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
             }
             ArrayList<String> pidCodes = new ArrayList<>();
             for (DashboardItem item : deviceListAdapter.getSelectedItems()) {
-                pidCodes.add(item.getPid().getCommand());
+                pidCodes.add(item.getPid());
             }
             HistoryActivity.start(getContext(), true, pidCodes);
         });
@@ -143,7 +143,7 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
                     } else {
                         deviceListAdapter.setOnItemClickListener(new OnDeviceClickListener() {
                             @Override
-                            public void onClick(PID pid, boolean enabled) {
+                            public void onClick(String pid, boolean enabled) {
 
                                 if (enabled) {
                                     keyValueStorage.addDeviceToDashboard(pid);
@@ -185,33 +185,33 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
 
     }
 
-    private List<DashboardItem> getPidDevicesFrom(List<String> supportedPids) {
-        List<DashboardItem> items = new ArrayList<>();
-        if (supportedPids.size() == 0)
-            return items;
-
-        for (String item : supportedPids) {
-            PID pid = PID.getEnumByString(item);
-            String pidCommand = pid.getCommand();
-
-            if (!pidCommand.equals(PID.PIDS_SUP_0_20.getCommand()) &&
-                    !pidCommand.equals(PID.FREEZE_DTCS.getCommand()) &&
-                    !pidCommand.equals(PID.ENGINE_RPM.getCommand()) &&
-                    !pidCommand.equals(PID.VEHICLE_SPEED.getCommand()) &&
-                    !pidCommand.equals(PID.OBD_STANDARDS_VEHICLE_CONFORMS_TO.getCommand()) &&
-                    !pidCommand.equals(PID.PIDS_SUP_21_40.getCommand()) &&
-                    !pidCommand.equals(PID.PIDS_SUP_41_60.getCommand()) &&
-                    !pidCommand.equals(PID.EMISSION_REQUIREMENTS_TO_WHICH_VEHICLE_IS_DESIGNED.getCommand()) &&
-                    !pidCommand.equals(PID.PIDS_SUP_61_80.getCommand()) &&
-                    !pidCommand.equals(PID.AUXILIARY_IN_OUT_SUPPORTED.getCommand())) {
-
-                DashboardItem dashboardItem = new DashboardItem("-", pid);
-                items.add(dashboardItem);
-            }
-        }
-
-        return items;
-    }
+//    private List<DashboardItem> getPidDevicesFrom(List<String> supportedPids) {
+//        List<DashboardItem> items = new ArrayList<>();
+//        if (supportedPids.size() == 0)
+//            return items;
+//
+//        for (String item : supportedPids) {
+//            PID pid = PID.getEnumByString(item);
+//            String pidCommand = pid.getCommand();
+//
+//            if (!pidCommand.equals(PID.PIDS_SUP_0_20.getCommand()) &&
+//                    !pidCommand.equals(PID.FREEZE_DTCS.getCommand()) &&
+//                    !pidCommand.equals(PID.ENGINE_RPM.getCommand()) &&
+//                    !pidCommand.equals(PID.VEHICLE_SPEED.getCommand()) &&
+//                    !pidCommand.equals(PID.OBD_STANDARDS_VEHICLE_CONFORMS_TO.getCommand()) &&
+//                    !pidCommand.equals(PID.PIDS_SUP_21_40.getCommand()) &&
+//                    !pidCommand.equals(PID.PIDS_SUP_41_60.getCommand()) &&
+//                    !pidCommand.equals(PID.EMISSION_REQUIREMENTS_TO_WHICH_VEHICLE_IS_DESIGNED.getCommand()) &&
+//                    !pidCommand.equals(PID.PIDS_SUP_61_80.getCommand()) &&
+//                    !pidCommand.equals(PID.AUXILIARY_IN_OUT_SUPPORTED.getCommand())) {
+//
+//                DashboardItem dashboardItem = new DashboardItem("-", pid);
+//                items.add(dashboardItem);
+//            }
+//        }
+//
+//        return items;
+//    }
 
     @Override
     public void onPurchasesUpdated(int responseCode, @Nullable List<Purchase> purchases) {
@@ -224,7 +224,7 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
                 }
 
                 @Override
-                public void onClick(PID pid, boolean enabled) {
+                public void onClick(String pid, boolean enabled) {
 
                     if (enabled) {
                         keyValueStorage.addDeviceToDashboard(pid);
@@ -250,7 +250,7 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
                 }
 
                 @Override
-                public void onClick(PID pid, boolean enabled) {
+                public void onClick(String pid, boolean enabled) {
 
                     if (enabled) {
                         keyValueStorage.addDeviceToDashboard(pid);
@@ -277,7 +277,7 @@ public class AddDeviceFragment extends BaseFragment implements PurchasesUpdatedL
             Log.d(TAG, "onReceive: PID = " + intent.getStringExtra(BROADCAST_PID_EXTRA) + ", value = " + intent.getStringExtra(BROADCAST_VALUE_EXTRA));
 
             deviceListAdapter.addItem(new DashboardItem(intent.getStringExtra(BROADCAST_VALUE_EXTRA),
-                    PID.getEnumByString(intent.getStringExtra(BROADCAST_PID_EXTRA))));
+                    intent.getStringExtra(BROADCAST_PID_EXTRA)));
             if (deviceListAdapter.getSelectedItems().size() > 0)
                 btnWatchGraphsOnline.setVisibility(View.VISIBLE);
             else

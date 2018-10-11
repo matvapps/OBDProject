@@ -173,13 +173,12 @@ public class PlotsAdapter extends RecyclerView.Adapter<PlotsAdapter.PlotViewHold
                 generateData(new ArrayList<HistoryItem>(), holder.lineChartView);
             } else {
                 String pid = plotItems.get(position).getHistoryItems().get(0).getPidId();
-                PID pidItem = PID.getEnumByString(pid);
 
                 String dimen = Utility.getDeviceDimenBy(
-                        holder.itemView.getContext(), pidItem);
+                        holder.itemView.getContext(), pid);
 
                 String name = Utility.getDeviceNameBy(
-                        holder.itemView.getContext(), pidItem);
+                        holder.itemView.getContext(), pid);
 
                 holder.plotTitleTextView
                         .setText(String.format("%s (%s)", name, dimen));
@@ -461,7 +460,7 @@ public class PlotsAdapter extends RecyclerView.Adapter<PlotsAdapter.PlotViewHold
                     pidIndex = i;
                 }
         }
-        String plotTitle = Utility.getDeviceNameBy(context, Objects.requireNonNull(PID.getEnumByString(pids.get(pidIndex))));
+        String plotTitle = Utility.getDeviceNameBy(context, Objects.requireNonNull(pids.get(pidIndex)));
         plotItems.set(pidIndex, new PlotItem(plotTitle, items));
 
         notifyDataSetChanged();

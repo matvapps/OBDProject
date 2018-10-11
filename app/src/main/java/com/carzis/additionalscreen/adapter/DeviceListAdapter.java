@@ -39,27 +39,27 @@ public class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public void addItem(DashboardItem item) {
         // if item in list of selected devices then select it
-        item.setChecked(isSelectedDashboardDevice(item.getPid().getCommand()));
+        item.setChecked(isSelectedDashboardDevice(item.getPid()));
 
         for (int i = 0; i < items.size(); i++) {
             DashboardItem currentItem = items.get(i);
             // if item already added then update value of it
-            if (currentItem.getPid().getCommand().equals(item.getPid().getCommand())) {
+            if (currentItem.getPid().equals(item.getPid())) {
                 updateItem(i, item);
                 return;
             }
         }
-        if (!item.getPid().getCommand().equals(PID.PIDS_SUP_0_20.getCommand()) &&
-                !item.getPid().getCommand().equals(PID.FREEZE_DTCS.getCommand()) &&
-                !item.getPid().getCommand().equals(PID.ENGINE_RPM.getCommand()) &&
-                !item.getPid().getCommand().equals(PID.VEHICLE_SPEED.getCommand()) &&
-                !item.getPid().getCommand().equals(PID.OBD_STANDARDS_VEHICLE_CONFORMS_TO.getCommand()) &&
-                !item.getPid().getCommand().equals(PID.PIDS_SUP_21_40.getCommand()) &&
-                !item.getPid().getCommand().equals(PID.PIDS_SUP_41_60.getCommand()) &&
-                !item.getPid().getCommand().equals(PID.EMISSION_REQUIREMENTS_TO_WHICH_VEHICLE_IS_DESIGNED.getCommand()) &&
-                !item.getPid().getCommand().equals(PID.DTCS_CLEARED_MIL_DTCS.getCommand()) &&
-                !item.getPid().getCommand().equals(PID.PIDS_SUP_61_80.getCommand()) &&
-                !item.getPid().getCommand().equals(PID.AUXILIARY_IN_OUT_SUPPORTED.getCommand()))
+        if (!item.getPid().equals(PID.PIDS_SUP_0_20.getCommand()) &&
+                !item.getPid().equals(PID.FREEZE_DTCS.getCommand()) &&
+                !item.getPid().equals(PID.ENGINE_RPM.getCommand()) &&
+                !item.getPid().equals(PID.VEHICLE_SPEED.getCommand()) &&
+                !item.getPid().equals(PID.OBD_STANDARDS_VEHICLE_CONFORMS_TO.getCommand()) &&
+                !item.getPid().equals(PID.PIDS_SUP_21_40.getCommand()) &&
+                !item.getPid().equals(PID.PIDS_SUP_41_60.getCommand()) &&
+                !item.getPid().equals(PID.EMISSION_REQUIREMENTS_TO_WHICH_VEHICLE_IS_DESIGNED.getCommand()) &&
+                !item.getPid().equals(PID.DTCS_CLEARED_MIL_DTCS.getCommand()) &&
+                !item.getPid().equals(PID.PIDS_SUP_61_80.getCommand()) &&
+                !item.getPid().equals(PID.AUXILIARY_IN_OUT_SUPPORTED.getCommand()))
             this.items.add(item);
         notifyDataSetChanged();
     }

@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.carzis.R;
-import com.carzis.obd.PidItem;
 import com.carzis.obd.PidNew;
 import com.carzis.util.AndroidUtility;
 

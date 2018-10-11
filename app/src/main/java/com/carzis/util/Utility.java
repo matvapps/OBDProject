@@ -22,7 +22,13 @@ public class Utility {
     }
 
 
-    public static String getDeviceDimenBy(Context context, PID pid) {
+    public static String getDeviceDimenBy(Context context, String pidCode) {
+        PID pid = PID.getEnumByString(pidCode);
+
+        if (pid  == null) {
+            return "";
+        }
+
         switch (pid) {
             case VOLTAGE:
                 return context.getString(R.string.dimen_title_voltage);
@@ -258,7 +264,13 @@ public class Utility {
 //        return "";
 //    }
 
-    public static int getDeviceIconIdBy(PID pid) {
+    public static int getDeviceIconIdBy(String pidCode) {
+        PID pid = PID.getEnumByString(pidCode);
+
+        if (pid  == null) {
+            return R.drawable.ic_zaglush;
+        }
+
         switch (pid) {
             case VOLTAGE:
                 return R.drawable.ac;
@@ -286,7 +298,12 @@ public class Utility {
     }
 
 
-    public static String getDeviceNameBy(Context context, PID pid) {
+    public static String getDeviceNameBy(Context context, String pidCode) {
+        PID pid = PID.getEnumByString(pidCode);
+
+        if (pid  == null) {
+            return context.getString(R.string.no_description_str);
+        }
 
         switch (pid) {
             case VOLTAGE:
@@ -497,7 +514,7 @@ public class Utility {
                 return context.getString(R.string.auxiliary_in_out_supported);
         }
 
-        return "Нет описания";
+        return context.getString(R.string.no_description_str);
 
     }
 

@@ -9,6 +9,6 @@ import java.util.List;
  */
 public interface ActivityToDashboardCallbackListener {
 
-    void onPassRealDataToFragment(PID pid, String value);
+    void onPassRealDataToFragment(String pid, String value);
     void onAddNewDevice(List<String> supportedPIDS);
 }

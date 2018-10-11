@@ -1,6 +1,6 @@
 package com.carzis.model;
 
-import com.carzis.obd.PidItem;
+import com.carzis.obd.PidNew;
 
 /**
  * Created by Alexandr
@@ -8,21 +8,21 @@ import com.carzis.obd.PidItem;
 
 public class PidListItem {
 
-    private PidItem pidItem;
+    private PidNew pidItem;
     private boolean isChecked;
 
     public PidListItem() {
     }
-    public PidListItem(PidItem pidItem, boolean isChecked) {
+    public PidListItem(PidNew pidItem, boolean isChecked) {
         this.pidItem = pidItem;
         this.isChecked = isChecked;
     }
 
 
-    public PidItem getPidItem() {
+    public PidNew getPidItem() {
         return pidItem;
     }
-    public void setPidItem(PidItem pidItem) {
+    public void setPidItem(PidNew pidItem) {
         this.pidItem = pidItem;
     }
     public boolean isChecked() {

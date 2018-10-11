@@ -627,22 +627,39 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
         obdReader.cleanSavedTroubleCodes();
     }
 
+//    @Override
+//    public void onReceiveData(PID pid, String value) {
+//        Log.d(TAG, "onReceiveData: PID: " + pid + ", " + value);
+//        if (activityToDashboardCallbackListener != null) {
+//            activityToDashboardCallbackListener.onPassRealDataToFragment(pid, value);
+//            Intent intent = new Intent(RECEIVED_DATA_FROM_CAR);
+//            intent.putExtra(BROADCAST_PID_EXTRA, pid.getCommand());
+//            intent.putExtra(BROADCAST_VALUE_EXTRA, value);
+//            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+//        }
+//
+//        if (useAddingToHistorySwitch.isChecked() && carName != null) {
+//            alreadyUseSaveToHistory = true;
+//            historyPresenter.addMetric(getCarIdByName(carName), pid.getCommand(), value);
+//        }
+//
+//    }
+
     @Override
-    public void onReceiveData(PID pid, String value) {
-        Log.d(TAG, "onReceiveData: PID: " + pid + ", " + value);
+    public void onReceiveData(String pid, String value) {
+        Log.d(TAG, "onReceiveData: Pid: " + pid + ", " + value);
         if (activityToDashboardCallbackListener != null) {
             activityToDashboardCallbackListener.onPassRealDataToFragment(pid, value);
             Intent intent = new Intent(RECEIVED_DATA_FROM_CAR);
-            intent.putExtra(BROADCAST_PID_EXTRA, pid.getCommand());
+            intent.putExtra(BROADCAST_PID_EXTRA, pid);
             intent.putExtra(BROADCAST_VALUE_EXTRA, value);
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
         }
 
         if (useAddingToHistorySwitch.isChecked() && carName != null) {
             alreadyUseSaveToHistory = true;
-            historyPresenter.addMetric(getCarIdByName(carName), pid.getCommand(), value);
+            historyPresenter.addMetric(getCarNameById(carName), pid, value);
         }
-
     }
 
     @Override
@@ -651,7 +668,7 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
         voltage = voltage.replace("V", "");
 
         if (activityToDashboardCallbackListener != null) {
-            activityToDashboardCallbackListener.onPassRealDataToFragment(PID.VOLTAGE, voltage);
+            activityToDashboardCallbackListener.onPassRealDataToFragment(PID.VOLTAGE.getCommand(), voltage);
             Intent intent = new Intent(RECEIVED_DATA_FROM_CAR);
             intent.putExtra(BROADCAST_PID_EXTRA, PID.VOLTAGE.getCommand());
             intent.putExtra(BROADCAST_VALUE_EXTRA, voltage);

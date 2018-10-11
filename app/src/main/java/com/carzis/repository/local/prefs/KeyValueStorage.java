@@ -145,17 +145,17 @@ public class KeyValueStorage {
         editor.commit();
     }
 
-    public void addDeviceToDashboard(PID pid) {
+    public void addDeviceToDashboard(String pid) {
         String devices = preferences.getString(USER_DASHBOARD_DEVICES, "");
-        devices += " " + pid.getCommand();
+        devices += " " + pid;
 
         editor.putString(USER_DASHBOARD_DEVICES, devices);
         editor.commit();
     }
 
-    public void removeDeviceFromDashboard(PID pid) {
+    public void removeDeviceFromDashboard(String pid) {
         String devices = preferences.getString(USER_DASHBOARD_DEVICES, "");
-        devices = devices.replace(pid.getCommand(), "");
+        devices = devices.replace(pid, "");
 
         editor.putString(USER_DASHBOARD_DEVICES, devices);
         editor.commit();

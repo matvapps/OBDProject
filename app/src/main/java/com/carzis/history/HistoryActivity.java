@@ -146,7 +146,7 @@ public class HistoryActivity extends BaseActivity {
                 long millis = now.getTimeInMillis();
 
                 Log.d(TAG, "onReceive and add to plot: pid = " + pid + " value = " + value);
-                onlinePlotsAdapter.addItem(pidItem, new HistoryItem("", pid, value, String.valueOf(millis)));
+                onlinePlotsAdapter.addItem(pid, new HistoryItem("", pid, value, String.valueOf(millis)));
                 progressBar.setVisibility(View.GONE);
             }
         }

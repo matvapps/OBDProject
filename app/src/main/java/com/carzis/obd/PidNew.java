@@ -36,6 +36,13 @@ public class PidNew {
             "0160", "0161", "0162", "0163", "0164", "0165"};
 
 
+    @Ignore
+    public PidNew(@NonNull String pidCode) {
+        this.pid = pidCode.substring(0, 2);
+        this.pid = pidCode.substring(2, 4);
+    }
+
+
     public PidNew(@NonNull String pid, String mode, String name, String equation, String header) {
         this.pid = pid;
         this.mode = mode;
