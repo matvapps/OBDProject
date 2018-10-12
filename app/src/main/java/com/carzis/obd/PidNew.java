@@ -38,6 +38,10 @@ public class PidNew {
 
     @Ignore
     public PidNew(@NonNull String pidCode) {
+        if (pidCode.equals(PID.VOLTAGE.getCommand())) {
+            this.pid = pidCode;
+            return;
+        }
         this.pid = pidCode.substring(0, 2);
         this.pid = pidCode.substring(2, 4);
     }
@@ -77,6 +81,8 @@ public class PidNew {
     }
 
     public String getPidCode() {
+        if (mode == null || mode.equals("null")) mode = "01";
+        if (pid.equals(PID.VOLTAGE.getCommand())) return PID.VOLTAGE.getCommand();
         return mode + pid;
     }
 

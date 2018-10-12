@@ -1,5 +1,6 @@
 package com.carzis.additionalscreen.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -89,6 +90,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         DeviceViewHolder deviceViewHolder = (DeviceViewHolder) holder;
         DashboardItem device = items.get(position);
+        Context context = deviceViewHolder.itemView.getContext();
 
         if (device.isChecked()) {
             deviceViewHolder.itemView.setBackgroundResource(R.drawable.item_background_active);
@@ -106,8 +108,11 @@ public class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
         });
 
+        String name = Utility.getDeviceNameBy(deviceViewHolder.itemView.getContext(), device.getPid());
+//        if (name.equals(deviceViewHolder.itemView.getContext().getString(R.string.no_description_str)))
+
         deviceViewHolder.itemView.setOnLongClickListener(view -> {
-            onItemClickListener.onLongClick(Utility.getDeviceNameBy(deviceViewHolder.itemView.getContext(), device.getPid()));
+            onItemClickListener.onLongClick(Utility.getDeviceNameBy(context, device.getPid()));
             return true;
         });
 

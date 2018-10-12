@@ -1,5 +1,6 @@
 package com.carzis.main.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,10 +11,13 @@ import android.widget.TextView;
 
 import com.carzis.R;
 import com.carzis.model.DashboardItem;
+import com.carzis.obd.PidNew;
 import com.carzis.util.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.carzis.CarzisApplication.obdReader;
 
 /**
  * Created by Alexandr.
@@ -71,16 +75,24 @@ public class DashboardItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         DashboardItemViewHolder dashboardItemViewHolder = (DashboardItemViewHolder) holder;
         DashboardItem device = items.get(position);
+        Context context = holder.itemView.getContext();
 
         dashboardItemViewHolder.value.setText(String.valueOf(device.getValue()));
 
-        dashboardItemViewHolder.dimen.setText(
-                Utility.getDeviceDimenBy(
-                        holder.itemView.getContext(), device.getPid()));
+        String deviceDimen = Utility.getDeviceDimenBy(context, device.getPid());
+
+//        if (deviceDimen.equals("")) {
+//            List<PidNew> additionalPids = obdReader.getAdditionalPidCommands();
+//            for (PidNew pid :additionalPids) {
+//                if (device.getPid().equals(pid.getPidCode()))
+//
+//            }
+//        }
+
+        dashboardItemViewHolder.dimen.setText(deviceDimen);
 
         dashboardItemViewHolder.icon.setImageResource(
-                Utility.getDeviceIconIdBy(
-                        device.getPid()));
+                Utility.getDeviceIconIdBy(device.getPid()));
 
     }
 

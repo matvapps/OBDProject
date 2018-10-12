@@ -139,6 +139,7 @@ public class OBDReader {
 
         supportedPidCommands = new ArrayList<>();
         additionalPids = new ArrayList<>();
+
         defaultPidCommands = new ArrayList<>();
         additionalPidCommands = new ArrayList<>();
 
@@ -805,6 +806,14 @@ public class OBDReader {
     public void setDefaultPidCommands(List<PidNew> pids) {
         this.defaultPidCommands.clear();
         this.defaultPidCommands.addAll(pids);
+    }
+
+    public List<PidNew> getAdditionalPidCommands() {
+        return additionalPidCommands;
+    }
+
+    public void setAdditionalPidCommands(List<PidNew> additionalPidCommands) {
+        this.additionalPidCommands = additionalPidCommands;
     }
 
     public List<String> getAdditionalPids() {

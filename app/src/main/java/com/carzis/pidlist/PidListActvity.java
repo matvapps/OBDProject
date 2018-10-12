@@ -162,8 +162,10 @@ public class PidListActvity extends BaseActivity implements HistoryView, PidItem
 
     private boolean existInList(List<PidNew> items, String pidCode) {
         for (PidNew item : items) {
-            if (item.getPidCode().equals(pidCode))
+            Log.d(TAG, "existInList: item.getPidCode = " + item.getPidCode());
+            if (item.getPidCode().equals(pidCode)) {
                 return true;
+            }
         }
         return false;
     }
