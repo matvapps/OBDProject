@@ -23,6 +23,7 @@ public class PidNew {
     private String mode;
     private String name;
     private String equation;
+    private String units;
     private String header;
 
     @Ignore
@@ -47,11 +48,12 @@ public class PidNew {
     }
 
 
-    public PidNew(@NonNull String pid, String mode, String name, String equation, String header) {
+    public PidNew(@NonNull String pid, String mode, String name, String equation, String units, String header) {
         this.pid = pid;
         this.mode = mode;
         this.name = name;
         this.equation = equation;
+        this.units = units;
         this.header = header;
     }
 
@@ -84,6 +86,14 @@ public class PidNew {
         if (mode == null || mode.equals("null")) mode = "01";
         if (pid.equals(PID.VOLTAGE.getCommand())) return PID.VOLTAGE.getCommand();
         return mode + pid;
+    }
+
+    public String getUnits() {
+        return units;
+    }
+
+    public void setUnits(String units) {
+        this.units = units;
     }
 
     public String getMode() {

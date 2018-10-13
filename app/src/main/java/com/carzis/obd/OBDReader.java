@@ -3,7 +3,6 @@ package com.carzis.obd;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothHeadset;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
@@ -76,12 +75,14 @@ public class OBDReader {
     private final List<String> troubleCodesArray = new ArrayList<>();
     private List<String> supportedPidCommands;
     private List<String> initializeCommands;
-    private List<String> additionalPids;
 
+    private List<String> additionalPids;
     private List<PidNew> defaultPidCommands;
     private List<PidNew> additionalPidCommands;
 
     private int protocolNum;
+
+    private boolean isConnected = false;
 
     private final static char[] dtcLetters = {'P', 'C', 'B', 'U'};
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
@@ -207,8 +208,7 @@ public class OBDReader {
     }
 
     public boolean isConnected() {
-        return bluetoothAdapter != null && bluetoothAdapter.isEnabled()
-                && bluetoothAdapter.getProfileConnectionState(BluetoothHeadset.HEADSET) == BluetoothHeadset.STATE_CONNECTED
+        return bluetoothService != null && bluetoothService.getState() == BluetoothService.STATE_CONNECTED
                 || wifiService != null && wifiService.isConnected();
     }
 
@@ -652,6 +652,8 @@ public class OBDReader {
                             Log.d(TAG, "Status: " + context.getString(R.string.title_connected_to, mConnectedDeviceName));
                             Log.d(TAG, "INFO: " + context.getString(R.string.title_connected));
 
+                            isConnected = true;
+
                             Toast.makeText(context,
                                     context.getString(R.string.title_connected_to, mConnectedDeviceName), Toast.LENGTH_SHORT).show();
 
@@ -737,6 +739,7 @@ public class OBDReader {
                             Log.d(TAG, "Status: " + context.getString(R.string.title_connected_to, mConnectedDeviceName));
                             Log.d(TAG, "INFO: " + context.getString(R.string.title_connected));
 
+                            isConnected = true;
                             Toast.makeText(context,
                                     context.getString(R.string.title_connected_to, mConnectedDeviceName), Toast.LENGTH_SHORT).show();
 
@@ -813,16 +816,20 @@ public class OBDReader {
     }
 
     public void setAdditionalPidCommands(List<PidNew> additionalPidCommands) {
+        additionalPids.clear();
+        for (PidNew item :additionalPidCommands) {
+            additionalPids.add(item.getPidCode());
+        }
         this.additionalPidCommands = additionalPidCommands;
     }
 
-    public List<String> getAdditionalPids() {
-        return additionalPids;
-    }
-
-    public void setAdditionalPids(List<String> additionalPids) {
-        this.additionalPids = additionalPids;
-    }
+//    public List<String> getAdditionalPids() {
+//        return additionalPids;
+//    }
+//
+//    public void setAdditionalPids(List<String> additionalPids) {
+//        this.additionalPids = additionalPids;
+//    }
 
     public List<String> getSupportedPidCommands() {
         return supportedPidCommands;

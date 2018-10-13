@@ -4,7 +4,18 @@ import android.content.Context;
 
 import com.carzis.R;
 import com.carzis.obd.PID;
+import com.carzis.obd.PidNew;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,6 +37,11 @@ public class Utility {
         PID pid = PID.getEnumByString(pidCode);
 
         if (pid  == null) {
+            List<PidNew> pids = getPidsFromFiles(getAllFiles());
+            for (PidNew pidItem :pids) {
+                if (pidItem.getPidCode().equals(pidCode))
+                    return pidItem.getUnits();
+            }
             return "";
         }
 
@@ -206,64 +222,6 @@ public class Utility {
         return "";
     }
 
-
-//    public static String getDeviceDimenBy(Context context, DashboardDevice deviceType) {
-//        switch (deviceType) {
-//            case RPM: {
-//                return context.getString(R.string.dimen_title_rpm);
-//            }
-//            case SPEED: {
-//                return context.getString(R.string.dimen_title_speed);
-//            }
-//            case OXY_SENS_VOLT_B_1_SENS_1:
-//            case OXY_SENS_VOLT_B_1_SENS_2:
-//            case OXY_SENS_VOLT_B_1_SENS_3:
-//            case OXY_SENS_VOLT_B_1_SENS_4:
-//            case OXY_SENS_VOLT_B_2_SENS_1:
-//            case OXY_SENS_VOLT_B_2_SENS_2:
-//            case OXY_SENS_VOLT_B_2_SENS_3:
-//            case OXY_SENS_VOLT_B_2_SENS_4:
-//            case VOLTAGE: {
-//                return context.getString(R.string.dimen_title_voltage);
-//            }
-//
-//            case COMMANDED_EGR:
-//            case THROTTLE_POS_2:
-//            case THROTTLE_POSITION:
-//            case SH_TERM_FUEL_TRIM_1 :
-//            case LN_TERM_FUEL_PERCENT_TRIM_1:
-//            case SH_TERM_FUEL_TRIM_2 :
-//            case LN_TERM_FUEL_PERCENT_TRIM_2:
-//            case ENGINE_LOAD:
-//            case FUEL_AMOUNT: {
-//                return context.getString(R.string.dimen_title_gas);
-//            }
-//            case ENGINE_OIL_TEMP:
-//            case INTAKE_AIR_TEMP:
-//            case ENGINE_COOLANT_TEMP:
-//            case CATALYST_TEMP_B1S1:
-//            case CATALYST_TEMP_B1S2:
-//            case CATALYST_TEMP_B2S1:
-//            case CATALYST_TEMP_B2S2:
-//                return context.getString(R.string.dimen_title_engine_temp);
-//
-//            case BAROMETRIC_PRESSURE:
-//            case FUEL_RAIL_PRESSURE:
-//            case FUEL_RAIL_PRESSURE_DIESEL:
-//            case INTAKE_MAN_PRESSURE:
-//            case FUEL_PRESSURE:
-//                return "кПа";
-//
-//            case TIMING_ADVANCE:
-//                return "°";
-//
-//            case MAF_AIR_FLOW:
-//                return "г/с";
-//        }
-//
-//        return "";
-//    }
-
     public static int getDeviceIconIdBy(String pidCode) {
         PID pid = PID.getEnumByString(pidCode);
 
@@ -302,6 +260,11 @@ public class Utility {
         PID pid = PID.getEnumByString(pidCode);
 
         if (pid  == null) {
+            List<PidNew> pids = getPidsFromFiles(getAllFiles());
+            for (PidNew pidItem :pids) {
+                if (pidItem.getPidCode().equals(pidCode))
+                    return pidItem.getName();
+            }
             return context.getString(R.string.no_description_str);
         }
 
@@ -516,6 +479,75 @@ public class Utility {
 
         return context.getString(R.string.no_description_str);
 
+    }
+
+
+    public static ArrayList<PidNew> getPidsFromFiles(List<File> files) {
+        ArrayList<PidNew> pids = new ArrayList<>();
+
+        for (File file: files) {
+            try {
+                InputStream is = new FileInputStream(file);
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(is, Charset.forName("UTF-8"))
+                );
+
+                // Initialization
+                String line = "";
+
+                // Initialization
+                try {
+                    // Step over headers
+                    reader.readLine();
+
+                    // If buffer is not empty
+                    while ((line = reader.readLine()) != null) {
+//                        Log.d(TAG,"Line: " + line);
+                        // use comma as separator columns of CSV
+                        String[] tokens = line.split(",");
+
+                        String name = tokens[0];
+                        String mode = tokens[1].substring(0, 2);
+                        String pid = tokens[1].substring(2);
+                        String equation = tokens[3];
+                        String units = tokens[6];
+                        String header = tokens[7];
+
+                        PidNew pidItem = new PidNew(pid, mode, name, equation, units, header);
+                        pids.add(pidItem);
+
+//                        Log.d(TAG, "getPidsFromFiles: " + pidItem.getName());
+                    }
+
+                } catch (IOException e) {
+                    // Logs error with priority level
+//                    Log.wtf(TAG, "Error reading data file on line" + line, e);
+
+                    // Prints throwable details
+                    e.printStackTrace();
+                }
+
+
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        return pids;
+    }
+
+    public static List<File> getAllFiles() {
+        List<File> fileList = new ArrayList<>();
+        File directory = new File(AndroidUtility.getAppFolderPath());
+        File[] files = directory.listFiles();
+
+        for (int i = 0; i < files.length; i++) {
+            if (files[i].getName().contains("csv"))
+                fileList.add(files[i]);
+        }
+        return fileList;
     }
 
 

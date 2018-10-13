@@ -161,7 +161,8 @@
                     android:layout_height="34dp"
                     android:layout_gravity="center_vertical|end"
                     android:padding="5dp"
-                    android:src="@drawable/ic_content_paste" />
+                    />
+                <!-- android:src="@drawable/ic_content_paste"-->
 
             </FrameLayout>
 

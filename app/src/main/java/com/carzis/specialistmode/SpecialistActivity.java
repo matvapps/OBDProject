@@ -2,33 +2,18 @@ package com.carzis.specialistmode;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.carzis.R;
-import com.carzis.obd.PidNew;
-import com.carzis.util.AndroidUtility;
+import com.carzis.util.Utility;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.carzis.CarzisApplication.obdReader;
 import static com.carzis.connect.ConnectActivity.CONNECTION_TYPE_EXTRA;
 
 public class SpecialistActivity extends AppCompatActivity implements View.OnClickListener{
@@ -72,7 +57,7 @@ public class SpecialistActivity extends AppCompatActivity implements View.OnClic
         fileListView.setLayoutManager(new LinearLayoutManager(this));
         fileListView.setAdapter(fileListAdapter);
 
-        fileListAdapter.setItems(getAllFiles());
+        fileListAdapter.setItems(Utility.getAllFiles());
 
     }
 
@@ -92,75 +77,78 @@ public class SpecialistActivity extends AppCompatActivity implements View.OnClic
                 }
                 break;
             case R.id.btn_next:
-
+                // TODO:
+                //obdReader.setAdditionalPidCommands(Utility.getPidsFromFiles(fileListAdapter.getCheckedItems()));
+                //obdReader.connectTo ... device
                 break;
         }
     }
 
-    private ArrayList<PidNew> getPidsFromFiles(List<File> files) {
-        ArrayList<PidNew> pids = new ArrayList<>();
-
-        for (File file: files) {
-            try {
-                InputStream is = new FileInputStream(file);
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(is, Charset.forName("UTF-8"))
-                );
-
-                // Initialization
-                String line = "";
-
-                // Initialization
-                try {
-                    // Step over headers
-                    reader.readLine();
-
-                    // If buffer is not empty
-                    while ((line = reader.readLine()) != null) {
-                        Log.d(TAG,"Line: " + line);
-                        // use comma as separator columns of CSV
-                        String[] tokens = line.split(",");
-
-                        String name = tokens[0];
-                        String mode = tokens[1].substring(0, 2);
-                        String pid = tokens[1].substring(2);
-                        String equation = tokens[3];
-                        String header = tokens[7];
-
-                        PidNew pidItem = new PidNew(pid, mode, name, equation, header);
-                        pids.add(pidItem);
-
-                        Log.d(TAG, "getPidsFromFiles: " + pidItem.getName());
-                    }
-
-                } catch (IOException e) {
-                    // Logs error with priority level
-                    Log.wtf(TAG, "Error reading data file on line" + line, e);
-
-                    // Prints throwable details
-                    e.printStackTrace();
-                }
-
-
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        return pids;
-    }
-
-    private List<File> getAllFiles() {
-        List<File> fileList = new ArrayList<>();
-        File directory = new File(AndroidUtility.getAppFolderPath());
-        File[] files = directory.listFiles();
-
-        for (int i = 0; i < files.length; i++) {
-            if (files[i].getName().contains("csv"))
-                fileList.add(files[i]);
-        }
-        return fileList;
-    }
+//    private ArrayList<PidNew> getPidsFromFiles(List<File> files) {
+//        ArrayList<PidNew> pids = new ArrayList<>();
+//
+//        for (File file: files) {
+//            try {
+//                InputStream is = new FileInputStream(file);
+//                BufferedReader reader = new BufferedReader(
+//                        new InputStreamReader(is, Charset.forName("UTF-8"))
+//                );
+//
+//                // Initialization
+//                String line = "";
+//
+//                // Initialization
+//                try {
+//                    // Step over headers
+//                    reader.readLine();
+//
+//                    // If buffer is not empty
+//                    while ((line = reader.readLine()) != null) {
+//                        Log.d(TAG,"Line: " + line);
+//                        // use comma as separator columns of CSV
+//                        String[] tokens = line.split(",");
+//
+//                        String name = tokens[0];
+//                        String mode = tokens[1].substring(0, 2);
+//                        String pid = tokens[1].substring(2);
+//                        String equation = tokens[3];
+//                        String units = tokens[6];
+//                        String header = tokens[7];
+//
+//                        PidNew pidItem = new PidNew(pid, mode, name, equation, units, header);
+//                        pids.add(pidItem);
+//
+//                        Log.d(TAG, "getPidsFromFiles: " + pidItem.getName());
+//                    }
+//
+//                } catch (IOException e) {
+//                    // Logs error with priority level
+//                    Log.wtf(TAG, "Error reading data file on line" + line, e);
+//
+//                    // Prints throwable details
+//                    e.printStackTrace();
+//                }
+//
+//
+//
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//
+//        return pids;
+//    }
+//
+//    private List<File> getAllFiles() {
+//        List<File> fileList = new ArrayList<>();
+//        File directory = new File(AndroidUtility.getAppFolderPath());
+//        File[] files = directory.listFiles();
+//
+//        for (int i = 0; i < files.length; i++) {
+//            if (files[i].getName().contains("csv"))
+//                fileList.add(files[i]);
+//        }
+//        return fileList;
+//    }
 }
