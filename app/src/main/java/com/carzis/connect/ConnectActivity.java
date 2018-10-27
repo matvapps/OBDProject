@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
+import static com.carzis.CarzisApplication.obdReader;
 import static com.carzis.connect.ConnectionTypeActivity.REQUEST_GET_DEVICE_DATA;
 
 /**
@@ -153,12 +154,13 @@ public class ConnectActivity extends BaseActivity {
             Thread thread = new Thread(() -> {
                 try {
                     Thread.sleep(1500);
-                    Intent intent = new Intent();
-                    intent.putExtra(EXTRA_DEVICE_ADDRESS, "WIFI");
-                    intent.putExtra(EXTRA_DEVICE_NAME, "WIFI");
-
-                    // Set result and finish this Activity
-                    setResult(Activity.RESULT_OK, intent);
+//                    Intent intent = new Intent();
+//                    intent.putExtra(EXTRA_DEVICE_ADDRESS, "WIFI");
+//                    intent.putExtra(EXTRA_DEVICE_NAME, "WIFI");
+//
+//                    // Set result and finish this Activity
+//                    setResult(Activity.RESULT_OK, intent);
+                    obdReader.connectToWifiDevice();
                     finish();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -322,12 +324,13 @@ public class ConnectActivity extends BaseActivity {
                     String name = data.getStringExtra(EXTRA_DEVICE_NAME);
 
                     // Create the result Intent and include the MAC address
-                    Intent intent = new Intent();
-                    intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
-                    intent.putExtra(EXTRA_DEVICE_NAME, name);
+//                    Intent intent = new Intent();
+//                    intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
+//                    intent.putExtra(EXTRA_DEVICE_NAME, name);
 
                     // Set result and finish this Activity
-                    setResult(Activity.RESULT_OK, intent);
+//                    setResult(Activity.RESULT_OK, intent);
+                    obdReader.connectToBtDevice(address, name);
                     finish();
                 } else {
                     finish();

@@ -19,6 +19,11 @@ public class ConnectionTypeActivity extends AppCompatActivity implements View.On
     private Button btnWifiType;
     private Button btnBtType;
 
+    public static void start(Activity activity) {
+        Intent intent = new Intent(activity, ConnectionTypeActivity.class);
+        activity.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,9 +41,11 @@ public class ConnectionTypeActivity extends AppCompatActivity implements View.On
         switch (view.getId()) {
             case R.id.btn_wifi_type:
                 SelectModeActivity.start(ConnectionTypeActivity.this, ConnectActivity.CONNECTION_WIFI);
+                finish();
                 break;
             case R.id.btn_bt_type:
                 SelectModeActivity.start(ConnectionTypeActivity.this, ConnectActivity.CONNECTION_BT);
+                finish();
                 break;
         }
     }

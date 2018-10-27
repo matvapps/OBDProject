@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
@@ -58,6 +59,7 @@ import com.carzis.obd.PidView;
 import com.carzis.prefs.SettingsActivity;
 import com.carzis.repository.local.database.LocalRepository;
 import com.carzis.repository.local.prefs.KeyValueStorage;
+import com.carzis.util.AndroidUtility;
 import com.carzis.util.Utility;
 import com.github.florent37.viewanimator.ViewAnimator;
 
@@ -173,6 +175,29 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        int PERMISSION_ALL = 1;
+        String[] PERMISSIONS = {
+                android.Manifest.permission.CHANGE_WIFI_STATE,
+                android.Manifest.permission.INTERNET,
+                android.Manifest.permission.ACCESS_NETWORK_STATE,
+                android.Manifest.permission.ACCESS_WIFI_STATE,
+                android.Manifest.permission.BLUETOOTH_ADMIN,
+                android.Manifest.permission.BLUETOOTH,
+                android.Manifest.permission.READ_PHONE_STATE,
+                android.Manifest.permission.WAKE_LOCK,
+                android.Manifest.permission.RECEIVE_SMS,
+                android.Manifest.permission.READ_SMS,
+                android.Manifest.permission.SEND_SMS,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        };
+
+        if (!AndroidUtility.hasPermissions(this, PERMISSIONS)) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+        }
+
+
         initView();
 
         if (savedInstanceState != null) {
@@ -445,7 +470,7 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
                                 mBillingClient.launchBillingFlow(MainActivity.this, flowParams);
                             } else {
                                 Intent intent = new Intent(MainActivity.this, ConnectionTypeActivity.class);
-                                startActivityForResult(intent, REQUEST_CHOOSE_CONNECTION_TYPE);
+                                startActivity(intent);
                             }
                         }
                     }
@@ -701,30 +726,30 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
 
         switch (requestCode) {
             case REQUEST_CHOOSE_CONNECTION_TYPE: {
-                if (resultCode == RESULT_OK) {
-                    String deviceName = data.getStringExtra(ConnectActivity.EXTRA_DEVICE_NAME);
-                    String deviceAddress = data.getStringExtra(ConnectActivity.EXTRA_DEVICE_ADDRESS);
-
-                    if (menuView.getVisibility() == View.VISIBLE)
-                        hideMenu();
-
-                    obdReader.setProtocolNum(keyValueStorage.getProtocol());
-                    obdReader.setInitializeCommands(
-                            Arrays.asList(keyValueStorage.getInitString().split(";")));
-
-                    if (deviceName.equals("WIFI") && deviceAddress.equals("WIFI")) {
-                        obdReader.connectToWifiDevice();
-                        return;
-                    }
-
-
-                    obdReader.connectToBtDevice(deviceAddress, deviceName);
-
-                } else {
-                    Toast.makeText(this, R.string.canceled_by_use, Toast.LENGTH_SHORT).show();
-                    if (menuView.getVisibility() == View.VISIBLE)
-                        hideMenu();
-                }
+//                if (resultCode == RESULT_OK) {
+//                    String deviceName = data.getStringExtra(ConnectActivity.EXTRA_DEVICE_NAME);
+//                    String deviceAddress = data.getStringExtra(ConnectActivity.EXTRA_DEVICE_ADDRESS);
+//
+//                    if (menuView.getVisibility() == View.VISIBLE)
+//                        hideMenu();
+//
+//                    obdReader.setProtocolNum(keyValueStorage.getProtocol());
+//                    obdReader.setInitializeCommands(
+//                            Arrays.asList(keyValueStorage.getInitString().split(";")));
+//
+//                    if (deviceName.equals("WIFI") && deviceAddress.equals("WIFI")) {
+//                        obdReader.connectToWifiDevice();
+//                        return;
+//                    }
+//
+//
+//                    obdReader.connectToBtDevice(deviceAddress, deviceName);
+//
+//                } else {
+//                    Toast.makeText(this, R.string.canceled_by_use, Toast.LENGTH_SHORT).show();
+//                    if (menuView.getVisibility() == View.VISIBLE)
+//                        hideMenu();
+//                }
                 break;
             }
             case DIALOG_LIST_ACTIVITY_CODE: {

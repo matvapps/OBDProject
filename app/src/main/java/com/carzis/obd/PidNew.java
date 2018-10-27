@@ -58,9 +58,9 @@ public class PidNew {
     }
 
     public String getValue(int A, int B/*, int C, int D*/) {
-        equation = equation.toLowerCase();
-        if (equation.equals(""))
+        if (equation == null || equation.equals(""))
             return "-";
+        equation = equation.toLowerCase();
 
         Function At = new Function("At(a,b) = " + equation);
 

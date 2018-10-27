@@ -1,6 +1,7 @@
 package com.carzis.util;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.carzis.R;
 import com.carzis.obd.PID;
@@ -507,8 +508,8 @@ public class Utility {
                         String[] tokens = line.split(",");
 
                         String name = tokens[0];
-                        String mode = tokens[1].substring(0, 2);
-                        String pid = tokens[1].substring(2);
+                        String mode = tokens[2].substring(0, 2);
+                        String pid = tokens[2].substring(2);
                         String equation = tokens[3];
                         String units = tokens[6];
                         String header = tokens[7];
@@ -516,7 +517,7 @@ public class Utility {
                         PidNew pidItem = new PidNew(pid, mode, name, equation, units, header);
                         pids.add(pidItem);
 
-//                        Log.d(TAG, "getPidsFromFiles: " + pidItem.getName());
+                        Log.d("Utility.class", "getPidsFromFiles: " + pidItem.getName());
                     }
 
                 } catch (IOException e) {
@@ -543,10 +544,12 @@ public class Utility {
         File directory = new File(AndroidUtility.getAppFolderPath());
         File[] files = directory.listFiles();
 
-        for (int i = 0; i < files.length; i++) {
-            if (files[i].getName().contains("csv"))
-                fileList.add(files[i]);
-        }
+        if (files != null)
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].getName().contains("csv"))
+                    fileList.add(files[i]);
+            }
+
         return fileList;
     }
 

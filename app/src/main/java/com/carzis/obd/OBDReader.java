@@ -98,6 +98,7 @@ public class OBDReader {
     private boolean checkedPids = false;
 
     private int whichCommand = 0;
+    private int whichAdditionalCommand = 0;
     private int connectcount = 0;
     private int trycount = 0;
     private int Enginetype = 0;
@@ -119,6 +120,7 @@ public class OBDReader {
     public OBDReader(Context context) {
         this.context = context;
         whichCommand = 0;
+        whichAdditionalCommand = 0;
 
         //ATZ reset all
         //ATDP Describe the current Protocol
@@ -134,7 +136,7 @@ public class OBDReader {
         //ATSTFF Set time out to maximum
         //ATSTHH Set timeout to 4ms
         initializeCommands
-                = Arrays.asList("ATZ", "ATL0", "ATE1", "ATH1", "ATAT1", "ATSTFF", "ATI", "ATDP");
+                = Arrays.asList("ATZ", "ATL0", "ATE1", "ATH1", "ATAT1", "ATSTFF", "ATI", "ATDP", "ATSP0");
 
         protocolNum = 0;
 
@@ -214,6 +216,7 @@ public class OBDReader {
 
     public void reset() {
         whichCommand = 0;
+        whichAdditionalCommand = 0;
         initialized = false;
         avgconsumption.clear();
 
@@ -229,6 +232,8 @@ public class OBDReader {
     }
 
     public void sendEcuMessage(String message) {
+        Log.d(TAG, "sendEcuMessage: " + message);
+
         if (wifiService != null) {
             if (wifiService.isConnected()) {
                 try {
@@ -279,6 +284,7 @@ public class OBDReader {
             }
 
             sendDefaultCommands();
+            sendAdditionalCommands();
         }
     }
 
@@ -342,11 +348,16 @@ public class OBDReader {
     private void sendInitCommands() {
         if (initializeCommands.size() != 0) {
 
-            if (!initializeCommands.get(initializeCommands.size() - 1).contains(SET_PROTOCOL))
+            if (!initializeCommands.get(initializeCommands.size() - 1).contains(SET_PROTOCOL)) {
                 initializeCommands.add(SET_PROTOCOL + protocolNum);
+            }
 
             if (whichCommand < 0) {
                 whichCommand = 0;
+            }
+
+            if (whichAdditionalCommand < 0) {
+                whichAdditionalCommand = 0;
             }
 
             String send = initializeCommands.get(whichCommand);
@@ -355,8 +366,11 @@ public class OBDReader {
             if (whichCommand == initializeCommands.size() - 1) {
                 initialized = true;
                 whichCommand = 0;
+                whichAdditionalCommand = 0;
                 sendDefaultCommands();
+                sendAdditionalCommands();
             } else {
+                whichAdditionalCommand ++;
                 whichCommand++;
             }
         }
@@ -366,13 +380,21 @@ public class OBDReader {
         if (additionalPids.size() == 0)
             return;
 
-        for (String item : additionalPids) {
-            if (!defaultCommandsList.contains(item))
-                defaultCommandsList.add(item);
-        }
+        if (additionalPids.size() != 0) {
 
-        for (String item : additionalPids) {
-            sendEcuMessage(item);
+            if (whichAdditionalCommand < 0) {
+                whichAdditionalCommand = 0;
+            }
+
+            String send = additionalPids.get(whichAdditionalCommand);
+            Log.d(TAG, "sendDefaultCommands: send " + send);
+            sendEcuMessage(send);
+
+            if (whichAdditionalCommand >= additionalPids.size() - 1) {
+                whichAdditionalCommand = 0;
+            } else {
+                whichAdditionalCommand++;
+            }
         }
     }
 
@@ -587,6 +609,8 @@ public class OBDReader {
 
         PidNew currentPid = null;
 
+        Log.d(TAG, "calculateEcuValues: " + pidStr);
+
         // if pidStr from default pids
         if (PidNew.contains(pidStr)) {
             // if pid from default commands
@@ -598,7 +622,8 @@ public class OBDReader {
         } else {
             // if pid from user-additional commmands
             for (PidNew pid: additionalPidCommands) {
-                currentPid = pid;
+                if (pid.getPidCode().equals(pidStr))
+                    currentPid = pid;
             }
         }
 

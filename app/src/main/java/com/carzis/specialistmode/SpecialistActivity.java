@@ -10,10 +10,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.carzis.R;
+import com.carzis.connect.ConnectActivity;
+import com.carzis.connect.SelectModeActivity;
 import com.carzis.util.Utility;
 
+import static com.carzis.CarzisApplication.obdReader;
 import static com.carzis.connect.ConnectActivity.CONNECTION_TYPE_EXTRA;
 
 public class SpecialistActivity extends AppCompatActivity implements View.OnClickListener{
@@ -65,6 +69,7 @@ public class SpecialistActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.back_btn:
+                SelectModeActivity.start(this, connectionType);
                 finish();
                 break;
             case R.id.btn_select_all:
@@ -78,7 +83,11 @@ public class SpecialistActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.btn_next:
                 // TODO:
-                //obdReader.setAdditionalPidCommands(Utility.getPidsFromFiles(fileListAdapter.getCheckedItems()));
+//                Toast.makeText(this, "Checked item size: " + fileListAdapter.getCheckedItems().size(), Toast.LENGTH_SHORT).show();
+                obdReader.setAdditionalPidCommands(Utility.getPidsFromFiles(fileListAdapter.getCheckedItems()));
+//                Toast.makeText(this, "Additional pidCommands: " + obdReader.getAdditionalPidCommands().size(), Toast.LENGTH_SHORT).show();
+                ConnectActivity.start(this, connectionType);
+                finish();
                 //obdReader.connectTo ... device
                 break;
         }

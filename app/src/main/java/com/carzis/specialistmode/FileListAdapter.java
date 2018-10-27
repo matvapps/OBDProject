@@ -49,8 +49,12 @@ public class FileListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         fileViewHolder.checkBox.setChecked(fileItem.isChecked());
         fileViewHolder.fileNameTxt.setText(getItem(position).getName());
-        fileViewHolder.itemView.setOnClickListener(
-                view -> fileViewHolder.checkBox.setChecked(!fileViewHolder.checkBox.isChecked()));
+        fileViewHolder.itemView.setOnClickListener(v -> {
+            fileViewHolder.checkBox.setChecked(!fileViewHolder.checkBox.isChecked());
+            items.get(position).setChecked(fileViewHolder.checkBox.isChecked());
+            notifyDataSetChanged();
+        });
+//              view -> fileViewHolder.checkBox.setChecked(!fileViewHolder.checkBox.isChecked()));
 
     }
 
@@ -89,6 +93,8 @@ public class FileListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             fileNameTxt = itemView.findViewById(R.id.file_name);
             checkBox = itemView.findViewById(R.id.file_checkbox);
+            checkBox.setClickable(false);
+
         }
     }
 

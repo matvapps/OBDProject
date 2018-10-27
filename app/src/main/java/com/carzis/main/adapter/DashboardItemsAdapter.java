@@ -51,7 +51,7 @@ public class DashboardItemsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public void updateItem(DashboardItem device) {
         for (int i = 0; i < items.size(); i++) {
-            if (items.get(i).getPid() == device.getPid()) {
+            if (items.get(i).getPid().equals(device.getPid())) {
                 items.get(i).setValue(device.getValue());
                 notifyDataSetChanged();
             }

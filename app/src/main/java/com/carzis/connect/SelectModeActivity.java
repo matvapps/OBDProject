@@ -51,11 +51,14 @@ public class SelectModeActivity extends AppCompatActivity implements View.OnClic
         switch (view.getId()) {
             case R.id.btn_fast_mode:
                 ConnectActivity.start(this, connectionType);
+                finish();
                 break;
             case R.id.btn_specialist_mode:
                 SpecialistActivity.start(this, connectionType);
+                finish();
                 break;
             case R.id.back_btn:
+                ConnectionTypeActivity.start(this);
                 finish();
                 break;
         }
