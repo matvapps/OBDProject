@@ -41,14 +41,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
         android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,8 +68,8 @@
                 android:layout_height="38dp"
                 android:background="@drawable/gray_field_background"
                 android:hint="@string/email_profile"
-                android:maxLines="1"
                 android:imeOptions="actionNext"
+                android:maxLines="1"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:singleLine="true"
@@ -97,12 +96,12 @@
                 android:layout_height="38dp"
                 android:background="@drawable/gray_field_background"
                 android:hint="@string/password"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
                 android:maxLines="1"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:inputType="textPassword"
                 android:singleLine="true"
-                android:imeOptions="actionDone"
                 android:textColor="@android:color/white"
                 android:textColorHint="#85858a"
                 android:textSize="11sp" />
@@ -111,14 +110,13 @@
                 android:id="@+id/password_visibility"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:padding="9dp"
                 android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:src="@drawable/ic_visibility"
-                android:layout_marginEnd="8dp" />
+                android:padding="9dp"
+                android:src="@drawable/ic_visibility" />
 
         </FrameLayout>
-
 
 
         <FrameLayout
@@ -138,12 +136,12 @@
                 android:layout_height="38dp"
                 android:background="@drawable/gray_field_background"
                 android:hint="@string/repeat_password"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
                 android:maxLines="1"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:inputType="textPassword"
                 android:singleLine="true"
-                android:imeOptions="actionDone"
                 android:textColor="@android:color/white"
                 android:textColorHint="#85858a"
                 android:textSize="11sp" />
@@ -152,21 +150,20 @@
                 android:id="@+id/repeat_password_visibility"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:padding="9dp"
                 android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:src="@drawable/ic_visibility"
-                android:layout_marginEnd="8dp" />
+                android:padding="9dp"
+                android:src="@drawable/ic_visibility" />
 
         </FrameLayout>
-
 
 
     </android.support.constraint.ConstraintLayout>
 
 
     <Button
-        android:id="@+id/login_btn"
+        android:id="@+id/create_account_btn"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:background="@drawable/button_blue_rect_selector"

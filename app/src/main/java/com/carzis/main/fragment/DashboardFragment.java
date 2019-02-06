@@ -17,7 +17,6 @@ import com.carzis.main.adapter.DashboardItemsAdapter;
 import com.carzis.main.listener.ActivityToDashboardCallbackListener;
 import com.carzis.main.listener.DashboardToActivityCallbackListener;
 import com.carzis.model.DashboardItem;
-import com.carzis.obd.PID;
 import com.carzis.repository.local.database.LocalRepository;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 import com.github.matvapps.dashboarddevices.Speedometer;
@@ -63,6 +62,9 @@ public class DashboardFragment extends BaseFragment implements ActivityToDashboa
 
         // reset gauges on dashboard start
         resetgauges();
+
+        Log.d(TAG, "onCreateView: user token: " + keyValueStorage.getUserToken());
+
 
         return rootView;
     }

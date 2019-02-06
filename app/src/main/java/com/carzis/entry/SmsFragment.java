@@ -7,6 +7,7 @@ import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +59,8 @@ public class SmsFragment extends BaseFragment implements ActivityToSmsFragmentCa
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_sms_code, container, false);
+
+        Log.d(TAG, "onCreateView: ");
 
         nextBtn = rootView.findViewById(R.id.next_btn);
         smsTextTitle = rootView.findViewById(R.id.sms_text);

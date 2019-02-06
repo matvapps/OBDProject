@@ -30,7 +30,6 @@ import com.carzis.CarzisApplication;
 import com.carzis.R;
 import com.carzis.additionalscreen.AdditionalActivity;
 import com.carzis.base.BaseActivity;
-import com.carzis.connect.ConnectActivity;
 import com.carzis.connect.ConnectionTypeActivity;
 import com.carzis.dialoglist.DialogListActivity;
 import com.carzis.history.HistoryPresenter;
@@ -65,7 +64,6 @@ import com.github.florent37.viewanimator.ViewAnimator;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -184,11 +182,7 @@ public class MainActivity extends BaseActivity implements DashboardToActivityCal
                 android.Manifest.permission.ACCESS_WIFI_STATE,
                 android.Manifest.permission.BLUETOOTH_ADMIN,
                 android.Manifest.permission.BLUETOOTH,
-                android.Manifest.permission.READ_PHONE_STATE,
                 android.Manifest.permission.WAKE_LOCK,
-                android.Manifest.permission.RECEIVE_SMS,
-                android.Manifest.permission.READ_SMS,
-                android.Manifest.permission.SEND_SMS,
                 android.Manifest.permission.READ_EXTERNAL_STORAGE,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE
         };

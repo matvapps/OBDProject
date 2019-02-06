@@ -8,6 +8,8 @@ import com.carzis.model.response.ConfirmRegisterResponse;
 import com.carzis.model.response.InfoResponse;
 import com.carzis.model.response.ProfileResponse;
 import com.carzis.model.response.RegisterResponse;
+import com.carzis.model.response.ResultResponse;
+import com.carzis.model.response.TokenResponse;
 import com.carzis.model.response.TroubleResponse;
 
 import java.util.List;
@@ -52,7 +54,6 @@ public interface CarzisApi {
     Call<ProfileResponse> getProfile(@Header("Authorization") String token);
 
 
-
     @Multipart
     @POST("profile")
     Call<ProfileResponse> updateProfile(@Header("Authorization") String token,
@@ -70,13 +71,13 @@ public interface CarzisApi {
                                         @Nullable @Query("birthday") String birthday);
 
     @POST("add_car")
-    Call<BaseResponse>  addCar(@Header("Authorization") String token,
-                               @Nullable @Query("car_identifier") String carIdentifier,
-                               @Nullable @Query("user_car_name") String userCarName,
-                               @Nullable @Query("car_mark") String carMark,
-                               @Nullable @Query("car_model") String carModel,
-                               @Nullable @Query("engine_number") String engineNumber,
-                               @Nullable @Query("body_number") String bodyNumber);
+    Call<BaseResponse> addCar(@Header("Authorization") String token,
+                              @Nullable @Query("car_identifier") String carIdentifier,
+                              @Nullable @Query("user_car_name") String userCarName,
+                              @Nullable @Query("car_mark") String carMark,
+                              @Nullable @Query("car_model") String carModel,
+                              @Nullable @Query("engine_number") String engineNumber,
+                              @Nullable @Query("body_number") String bodyNumber);
 
     @POST("car_metric")
     Call<BaseResponse> addCarMetric(@Header("Authorization") String token,
@@ -108,11 +109,30 @@ public interface CarzisApi {
 
     @GET("load_info_by_auto_num")
     Call<InfoResponse> getInfoByNum(@Header("Authorization") String token,
-                                 @NonNull @Query("number") String number);
+                                    @NonNull @Query("number") String number);
 
 
     @GET("cars")
     Call<List<CarResponse>> getCars(@Header("Authorization") String token);
 
+    /// new registration
+
+    @POST("register_with_email")
+    Call<TokenResponse> registerWithEmail(@NonNull @Query("device_id") String deviceId,
+                                          @NonNull @Query("device_name") String deviceName,
+                                          @NonNull @Query("email") String email,
+                                          @NonNull @Query("password") String password);
+
+    @POST("auth_with_email")
+    Call<TokenResponse> authWithEmail(@NonNull @Query("device_id") String deviceId,
+                                      @NonNull @Query("device_name") String deviceName,
+                                      @NonNull @Query("email") String email,
+                                      @NonNull @Query("password") String password);
+
+    @POST("restore_password")
+    Call<ResultResponse> restorePassword(@NonNull @Query("email") String email);
+
+    @POST("user_pay")
+    Call<ResultResponse> userPay(@Header("Authorization") String token);
 
 }

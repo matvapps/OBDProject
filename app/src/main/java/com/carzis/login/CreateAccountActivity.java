@@ -4,10 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.text.InputType;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +16,7 @@ import android.widget.Toast;
 
 import com.carzis.R;
 import com.carzis.base.BaseActivity;
+import com.carzis.main.MainActivity;
 import com.carzis.util.Utility;
 
 /**
@@ -32,6 +32,7 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
     private Button createAccountBtn;
     private ImageButton backBtn;
 
+    private LoginPresenter loginPresenter;
 
     public static void start(Activity activity) {
         Intent intent = new Intent(activity, CreateAccountActivity.class);
@@ -40,8 +41,8 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
 
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
 
         emailEdtxt = findViewById(R.id.email_edtxt);
@@ -57,32 +58,35 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
         createAccountBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
 
+        loginPresenter = new LoginPresenter(this);
+        loginPresenter.attachView(this);
+
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.password_visibility:
-                if (passVisibilityBtn.getDrawable()
-                        == ContextCompat.getDrawable(this, R.drawable.ic_visibility_off)) {
+                if (!passwordEdtxt.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())) {
+                    passwordEdtxt.setTransformationMethod(PasswordTransformationMethod.getInstance());
                     passVisibilityBtn.setImageResource(R.drawable.ic_visibility);
-                    passwordEdtxt.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-
                 } else {
                     passVisibilityBtn.setImageResource(R.drawable.ic_visibility_off);
-                    passwordEdtxt.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    passwordEdtxt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                 }
+
+                passwordEdtxt.setSelection(passwordEdtxt.length());
                 break;
             case R.id.repeat_password_visibility:
-                if (repPassVisibilityBtn.getDrawable()
-                        == ContextCompat.getDrawable(this, R.drawable.ic_visibility_off)) {
+                if (!repPasswordEdtxt.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())) {
+                    repPasswordEdtxt.setTransformationMethod(PasswordTransformationMethod.getInstance());
                     repPassVisibilityBtn.setImageResource(R.drawable.ic_visibility);
-                    passwordEdtxt.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-
                 } else {
                     repPassVisibilityBtn.setImageResource(R.drawable.ic_visibility_off);
-                    passwordEdtxt.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    repPasswordEdtxt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                 }
+
+                repPasswordEdtxt.setSelection(repPasswordEdtxt.length());
                 break;
             case R.id.create_account_btn:
                 String email = emailEdtxt.getText().toString();
@@ -92,7 +96,7 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
                 if (Utility.isEmail(email)) {
                     if (password.length() >= 6) {
                         if (password.equals(repPassword)) {
-                            // TODO: Create account
+                            loginPresenter.createAccount(email, password);
                         } else {
                             passwordEdtxt.setText("");
                             repPasswordEdtxt.setText("");
@@ -116,16 +120,18 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void onLogin() {
-
+//        MainActivity.start(this);
+//        finish();
     }
 
     @Override
     public void onSendMailForRestorePassword() {
-
+        Toast.makeText(this, "Сообщение с паролем было отправлено на ваш email", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onCreateAccount() {
-
+        MainActivity.start(this);
+        finish();
     }
 }

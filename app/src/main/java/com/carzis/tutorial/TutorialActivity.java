@@ -7,7 +7,8 @@ import android.widget.Button;
 
 import com.carzis.R;
 import com.carzis.base.BaseActivity;
-import com.carzis.entry.LogRegActivity;
+import com.carzis.login.LoginActivity;
+import com.carzis.main.MainActivity;
 import com.carzis.repository.local.prefs.KeyValueStorage;
 
 import me.relex.circleindicator.CircleIndicator;
@@ -21,16 +22,22 @@ public class TutorialActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         KeyValueStorage keyValueStorage = new KeyValueStorage(this);
         keyValueStorage.resetDashboardDevices();
-        if (!keyValueStorage.isFirstTimeLaunch() && savedInstanceState == null) {
-            LogRegActivity.start(this);
+        if (!keyValueStorage.getUserToken().isEmpty()) {
+            MainActivity.start(this);
             finish();
+            return;
+        }
+        if (!keyValueStorage.isFirstTimeLaunch() && savedInstanceState == null) {
+            LoginActivity.start(this);
+            finish();
+            return;
         }
         keyValueStorage.setFirstTimeLaunch(false);
 
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial);
         nextBtn = findViewById(R.id.next_btn);
 
@@ -44,7 +51,7 @@ public class TutorialActivity extends BaseActivity {
         indicator.setViewPager(viewpager);
 
         nextBtn.setOnClickListener(view -> {
-            LogRegActivity.start(TutorialActivity.this);
+            LoginActivity.start(TutorialActivity.this);
             finish();
         });
         viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

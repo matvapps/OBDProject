@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.carzis">
 
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -10,9 +11,6 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
@@ -20,7 +18,7 @@
 
     <application
         android:name=".CarzisApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -54,18 +52,15 @@
         <activity
             android:name=".tutorial.TutorialActivity"
             android:windowSoftInputMode="stateHidden">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
-        <activity
-            android:name=".main.MainActivity"
-            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".main.MainActivity"
+            android:windowSoftInputMode="stateHidden">
+
         </activity>
         <activity
             android:name=".entry.LogRegActivity"
@@ -91,14 +86,36 @@
             android:configChanges="orientation|screenSize"
             android:theme="@style/DialogTheme"
             android:windowSoftInputMode="stateHidden" />
+
         <activity android:name=".base.BaseActivity" />
-        <activity android:name=".connect.ConnectionTypeActivity" />
-        <activity android:name=".login.ForgetPasswordActivity" />
-        <activity android:name=".login.CreateAccountActivity" />
-        <activity android:name=".login.LoginActivity" />
-        <activity android:name=".fileadd.LoadFileActivity" />
-        <activity android:name=".connect.SelectModeActivity" />
-        <activity android:name=".specialistmode.SpecialistActivity"></activity>
+        <activity android:name=".connect.ConnectionTypeActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".login.ForgetPasswordActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".login.CreateAccountActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".login.LoginActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden">
+
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+
+        </activity>
+
+        <activity android:name=".fileadd.LoadFileActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".connect.SelectModeActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".specialistmode.SpecialistActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
